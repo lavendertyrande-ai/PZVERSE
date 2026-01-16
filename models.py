@@ -1,9 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
-from db import db
 import os
 import requests
-
+from datetime import datetime
 
 # Instancia global de SQLAlchemy
 db = SQLAlchemy()
@@ -44,9 +42,7 @@ def get_twitch_status():
         "title": "Stream offline por ahora"
     }
 
-import os
-import requests
-from datetime import datetime
+
 
 # ---------------------------------------------------------
 # FUNCIÓN PARA SABER SI PATZ ESTÁ ONLINE
