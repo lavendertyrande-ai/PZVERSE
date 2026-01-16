@@ -44,7 +44,7 @@ def inject_user():
 
 # Configuración de YouTube
 params = {
-    "key": "AIzaSyDK0zkpmGYl45_SP1noFIwwZVyldhId8OI",
+    "key": os.getenv("YOUTUBE_API_KEY"),
     "channelId": "UCnt9ud1ghqOsRPEun5p3RQQ",
     "part": "snippet",
     "order": "date",
