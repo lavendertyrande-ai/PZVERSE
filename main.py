@@ -14,21 +14,13 @@ from firebase_admin import credentials, messaging
 
 
 # ============================================================
-# Cargar credenciales del archivo JSON desde variable secreta
+# Cargar credenciales desde archivo local
 # ============================================================
 
-cred_json = os.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON")
-
-if not cred_json:
-    raise RuntimeError("La variable GOOGLE_APPLICATION_CREDENTIALS_JSON no está definida o está vacía")
-
-try:
-    cred_dict = json.loads(cred_json)
-except json.JSONDecodeError as e:
-    raise RuntimeError(f"Error al decodificar el JSON de credenciales: {e}")
-
-cred = credentials.Certificate(cred_dict)
+cred_path = os.path.join("secrets", "firebase_credentials.json")
+cred = credentials.Certificate(cred_path)
 firebase_admin.initialize_app(cred)
+
 
 
 
