@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Patz Oficial</title>
+
+  <link rel="stylesheet" href="/static/main.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Trade+Winds&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Lugrasimo&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+
+  <!-- Logo fijo -->
+  <a href="/" class="logo-pz {% if twitch.online %}online-patz{% else %}offline-patz{% endif %}">
+    <img src="/static/logo.png" alt="Logo PZVERSE" />
+  </a>
+
+  <!-- Banner -->
+  <section class="banner-titulo">
+    <div class="banner-contenedor">
+      <img src="/static/Patz.png" alt="Banner Patz">
+
+      <nav class="menu-superpuesto">
+        <a href="/" class="btn">Inicio</a>
+        <a href="/twitch-mio" class="btn">Patz Oficial</a>
+        <a href="/twitch-pareja" class="btn">Zhoomm Oficial</a>
+        <a href="/youtube" class="btn">YouTube</a>
+        <a href="/blog" class="btn">Blog</a>
+        <a href="/interactivo" class="btn">Social</a>
+      </nav>
+    </div>
+  </section>
+
+  <!-- Botón seguir -->
+  <div class="boton-debajo-banner">
+    <a href="https://www.twitch.tv/patzoficial" target="_blank" class="btn-seguir">
+      💖 Seguir canal en Twitch
+    </a>
+  </div>
+
+  <main>
+    <section class="card">
+      <h2>Directo</h2>
+
+      <!-- Estado del canal -->
+      <div class="estado-canal">
+        {% if twitch.online %}
+          <p class="estado-online">🔴 EN DIRECTO — {{ twitch.title }}</p>
+        {% else %}
+          <p class="estado-offline">⚫ Offline</p>
+        {% endif %}
+      </div>
+
+      <div class="contenedor-stream">
+        <div class="stream-frame">
+          <iframe src="https://player.twitch.tv/?channel=patzoficial&parent=localhost" allowfullscreen></iframe>
+        </div>
+
+        <!-- Bloque lateral con botón + chat -->
+        <div class="bloque-chat">
+          <div class="boton-calendario">
+            <a href="#calendario-directo" class="btn-calendario">📅 Ver calendario de directos</a>
+          </div>
+          <div class="chat-frame">
+            <iframe src="https://www.twitch.tv/embed/patzoficial/chat?parent=localhost" frameborder="0"></iframe>
+          </div>
+        </div>
+      </div>
+
+      <!-- Calendario -->
+      <h2 class="titulo-calendario" id="calendario">Calendario de Directos</h2>
+
+      <div class="calendario-directos" id="calendario-directo">
+        <iframe
+          src="https://calendar.google.com/calendar/embed?src=patzoficial%40gmail.com&ctz=Europe/Madrid"
+          style="border: 0"
+          width="100%"
+          height="400"
+          frameborder="0"
+          scrolling="no">
+        </iframe>
+      </div>
+
+    </section>
+  </main>
+
+  <footer class="footer-pz">
+    <p>&copy; 2026 PZVERSE — Todos los derechos reservados.</p>
+    <p>Propiedad de PatzOficial. Diseño y contenido protegido.</p>
+  </footer>
+
+</body>
+</html>

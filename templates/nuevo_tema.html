@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+
+  <!-- ============================================================
+       CONFIGURACIÓN BÁSICA Y ESTILOS
+       ============================================================ -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nuevo Tema</title>
+  <link rel="stylesheet" href="/static/main.css">
+
+  <!-- ============================================================
+       EDITOR ENRIQUECIDO TINYMCE
+       ============================================================ -->
+  <script src="https://cdn.tiny.cloud/1/6jx7qyidtukmfff4gmeyhxurwq6u7xuox5ul0mk07b4i8ddb/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+  <script>
+    tinymce.init({
+      selector: '#editor-contenido',
+      menubar: false,
+      plugins: 'link lists emoticons code image',
+      toolbar: 'undo redo | bold italic underline | bullist numlist | link image emoticons | code',
+      skin: 'oxide-dark',
+      height: 300
+    });
+  </script>
+</head>
+
+<body>
+
+  <!-- ============================================================
+       FORMULARIO PARA CREAR UN NUEVO TEMA
+       ============================================================ -->
+  <section class="editor-contenedor">
+    <h2 class="editor-titulo">Crear nuevo tema</h2>
+
+    <form method="POST" action="/publicar-tema" enctype="multipart/form-data">
+
+      <div class="editor-marco">
+
+        <!-- Campo de texto para el título del tema -->
+        <input type="text" name="titulo" placeholder="Título del tema" required>
+
+        <!-- Editor enriquecido -->
+        <textarea id="editor-contenido" name="contenido" placeholder="Escribe tu mensaje completo..."></textarea>
+
+      </div>
+
+      <!-- Campo para subir imagen (opcional) -->
+      <input type="file" name="imagen" accept="image/*">
+
+      <!-- Botón para publicar -->
+      <button type="submit" class="editor-boton">Publicar</button>
+    </form>
+
+    <!-- Botón para volver -->
+    <a href="/interactivo" class="editor-volver">← Volver al foro</a>
+  </section>
+
+</body>
+</html>
+

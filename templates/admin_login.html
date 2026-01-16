@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Login Admin</title>
+  <link rel="stylesheet" href="/static/main.css">
+</head>
+<body>
+  <main style="max-width: 600px; margin: 80px auto; text-align: center;">
+    <h2 class="titulo-blog">🔐 Acceso Admin</h2>
+
+    <form method="POST" action="/admin/login">
+      <label>Contraseña:</label>
+      <input type="password" name="password" required>
+      <button type="submit" class="btn-neon">Entrar</button>
+    </form>
+
+    <a href="/blog" class="btn-neon" style="margin-top:20px; display:inline-block;">← Volver al blog</a>
+  </main>
+</body>
+</html>
