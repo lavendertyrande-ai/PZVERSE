@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestionar Blog</title>
+
+  <link rel="stylesheet" href="/static/main.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Trade+Winds&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lugrasimo&display=swap" rel="stylesheet">
+
+  <style>
+    .tabla-posts {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 30px;
+    }
+
+    .tabla-posts th, .tabla-posts td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ff00cc55;
+      color: #fff;
+    }
+
+    .tabla-posts th {
+      color: #ff00cc;
+      font-size: 1.2em;
+      text-shadow: 0 0 6px #ff00cc;
+    }
+
+    .btn-accion {
+      padding: 8px 14px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      margin-right: 10px;
+      display: inline-block;
+    }
+
+    .btn-editar {
+      background: #00eaff;
+      color: #000;
+      box-shadow: 0 0 10px #00eaff;
+    }
+
+    .btn-eliminar {
+      background: #ff0044;
+      color: #fff;
+      box-shadow: 0 0 10px #ff0044;
+    }
+
+    .btn-volver {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #ff00cc;
+      color: #fff;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 0 10px #ff00cc;
+    }
+  </style>
+</head>
+
+<body>
+
+  <a href="/" class="logo-pz">
+    <img src="/static/logo.png" alt="Logo PZVERSE">
+  </a>
+
+  <main>
+    <section class="card" style="max-width: 800px; margin: 40px auto;">
+
+      <h2 class="titulo-blog">Gestionar publicaciones</h2>
+
+      <table class="tabla-posts">
+        <tr>
+          <th>Título</th>
+          <th>Fecha</th>
+          <th>Imagen</th>
+          <th>Acciones</th>
+        </tr>
+
+        {% for post in posts %}
+        <tr>
+          <td>{{ post.title }}</td>
+          <td>{{ post.date }}</td>
+          <td>
+            {% if post.image %}
+              <img src="{{ post.image }}" style="width:80px; border-radius:6px;">
+            {% else %}
+              Sin imagen
+            {% endif %}
+          </td>
+          <td>
+            <a href="/admin/blog/editar/{{ post.slug }}" class="btn-accion btn-editar">Editar</a>
+            <a href="/admin/blog/eliminar/{{ post.slug }}" class="btn-accion btn-eliminar"
+               onclick="return confirm('¿Seguro que quieres eliminar este post?')">
+               Eliminar
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+
+      <a href="/admin/blog" class="btn-volver">← Volver al panel</a>
+
+    </section>
+  </main>
+
+</body>
+</html>

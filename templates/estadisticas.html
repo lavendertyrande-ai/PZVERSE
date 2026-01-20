@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Estadísticas de Usuarios</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body style="background:black; color:white; font-family:Arial;">
+
+<h1>Estadísticas Mensuales de Usuarios</h1>
+
+<canvas id="graficaUsuarios" width="600" height="300"></canvas>
+
+<script>
+    const ctx = document.getElementById('graficaUsuarios').getContext('2d');
+
+    const grafica = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {{ meses|tojson }},
+            datasets: [{
+                label: 'Usuarios por mes',
+                data: {{ valores|tojson }},
+                backgroundColor: 'rgba(255, 0, 204, 0.5)',
+                borderColor: '#FF00CC',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

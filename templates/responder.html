@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+
+  <!-- ============================================================
+       🔥 TÍTULO DE LA PÁGINA — SE MUESTRA EN LA PESTAÑA DEL NAVEGADOR
+       ============================================================ -->
+  <title>Responder a {{ tema.titulo }}</title>
+
+  <!-- ============================================================
+       🔥 ARCHIVO CSS PRINCIPAL DE TU WEB
+       ============================================================ -->
+  <link rel="stylesheet" href="/static/main.css">
+
+  <!-- ============================================================
+       🔥 FUENTES DE GOOGLE — TIPOGRAFÍAS PERSONALIZADAS
+       ============================================================ -->
+  <link href="https://fonts.googleapis.com/css2?family=Trade+Winds&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lugrasimo&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- ============================================================
+       🔥 LOGO FIJO SUPERIOR IZQUIERDA — BOTÓN PARA VOLVER AL INICIO
+       ============================================================ -->
+  <a href="/" class="logo-pz">
+    <img src="/static/logo.png" alt="Logo PZVERSE">
+  </a>
+
+  <!-- ============================================================
+       🔥 BANNER SUPERIOR DEL FORO — TÍTULO GRANDE "RESPONDER"
+       ============================================================ -->
+  <section class="banner-foro">
+    <div class="banner-contenido">
+      <h1 class="titulo-foro">RESPONDER</h1>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       🔥 CONTENIDO PRINCIPAL DE LA PÁGINA
+       ============================================================ -->
+  <main class="tema-contenido">
+
+    <!-- ============================================================
+         🔥 TARJETA QUE MUESTRA EL TÍTULO DEL TEMA Y EL AUTOR
+         ============================================================ -->
+    <div class="tarjeta-tema">
+
+      <!-- TÍTULO DEL TEMA AL QUE SE RESPONDE -->
+      <h2>Responder al tema: {{ tema.titulo }}</h2>
+
+      <!-- AUTOR DEL TEMA -->
+      <p class="tema-autor">Publicado por: {{ tema.autor }}</p>
+
+      <!-- ============================================================
+           🔥 FORMULARIO PARA ESCRIBIR Y ENVIAR UNA RESPUESTA
+           ============================================================ -->
+      <form action="/responder/{{ tema.id }}" method="POST" class="form-respuesta">
+
+        <!-- CAJA DE TEXTO DONDE SE ESCRIBE LA RESPUESTA -->
+        <textarea name="respuesta" class="textarea-respuesta"
+                  placeholder="Escribe tu respuesta aquí..." required></textarea>
+
+        <!-- ============================================================
+             🔥 BOTONES DEL FORMULARIO: PUBLICAR Y VOLVER
+             ============================================================ -->
+        <div class="botones-tema">
+
+          <!-- BOTÓN PARA PUBLICAR LA RESPUESTA -->
+          <button type="submit" class="btn-responder">PUBLICAR RESPUESTA</button>
+
+          <!-- BOTÓN PARA VOLVER AL TEMA SIN PUBLICAR -->
+          <a href="/tema/{{ tema.id }}" class="btn-volver">VOLVER</a>
+
+        </div>
+      </form>
+    </div>
+
+  </main>
+
+  <!-- ============================================================
+       🔥 PIE DE PÁGINA — COPYRIGHT Y CRÉDITOS
+       ============================================================ -->
+  <footer class="footer-pz">
+    <p>&copy; 2026 PZVERSE — Todos los derechos reservados.</p>
+    <p>Propiedad de PZVERSE. Diseño y contenido protegido.</p>
+  </footer>
+
+</body>
+</html>

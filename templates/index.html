@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Página Principal</title>
+
+  <!-- ============================
+       Estilos principales
+       ============================ -->
+  <link rel="stylesheet" href="/static/main.css">
+
+  <!-- ============================
+       Fuentes personalizadas
+       ============================ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Trade+Winds&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lugrasimo&display=swap" rel="stylesheet">
+</head>
+
+<!-- ============================================================
+     BODY PRINCIPAL (clase .home para estilos específicos)
+     ============================================================ -->
+<body class="home">
+
+  <!-- ============================================================
+       LOGO FIJO SUPERIOR IZQUIERDA
+       (Se corregirá su fijación en el CSS final)
+       ============================================================ -->
+  <a href="/" class="logo-pz">
+    <img src="/static/logo.png" alt="Logo PZVERSE">
+  </a>
+
+  <!-- ============================================================
+       BANNER PRINCIPAL CON IMAGEN + LOGIN + MENÚ
+       ============================================================ -->
+  <section class="banner-portada">
+    <div class="banner-contenedor">
+
+      <!-- Imagen principal del banner -->
+      <img src="/static/PZ VERSE.png" alt="Banner PZ VERSE">
+
+      <!-- Contador de usuarios conectados -->
+      <div class="online-counter">
+        Usuarios conectados: {{ online_users }}
+      </div>
+
+      <!-- ============================================================
+           LOGIN SUPERPUESTO (esquina superior derecha)
+           ============================================================ -->
+      <div class="login-superpuesto">
+
+        {% if user %}
+          <!-- Usuario logueado -->
+          <div class="user-banner">
+            <img src="{{ user.picture }}" alt="Avatar" class="avatar">
+            <span class="username">{{ user.name }}</span>
+            <span class="platform">({{ user.platform }})</span>
+            <a href="/logout" class="logout-button">Logout</a>
+          </div>
+
+        {% else %}
+          <!-- Usuario no logueado -->
+          <a href="/login/google" class="btn-login google">Google</a>
+          <a href="/login/twitch" class="btn-login twitch">Twitch</a>
+        {% endif %}
+
+      </div>
+
+      <!-- ============================================================
+           MENÚ SUPERPUESTO (parte inferior derecha del banner)
+           ============================================================ -->
+      <nav class="menu-superpuesto">
+        <a href="/" class="btn">Inicio</a>
+        <a href="/twitch-mio" class="btn">Patz Oficial</a>
+        <a href="/twitch-pareja" class="btn">Zhoomn Oficial</a>
+        <a href="/youtube" class="btn">YouTube</a>
+        <a href="/blog" class="btn">Blog</a>
+        <a href="/interactivo" class="btn">Social</a>
+      </nav>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECCIÓN DE PRESENTACIÓN
+       ============================================================ -->
+  <main>
+    <section class="presentacion">
+
+      <h1>Bienvenidos al Universo PZVerse</h1>
+
+      <p>
+        Somos Patz y Zhoomn, creadores de contenido en Twitch y YouTube.
+        Esta web está creada para darnos a conocer y compartir nuestra aventura. Aquí encontrarás nuestros directos,
+        vídeos, calendario y una zona de interacción para nuestra comunidad. También podrás unirte a nuestro servidor
+        de Discord, chatear con gente del mundo del stream, participar en nuestros foros y ser de los primeros en conocer nuestras novedades.
+        <br><br>
+        ¡¡Gracias por formar parte de esta aventura!!
+      </p>
+
+    </section>
+  </main>
+
+  <footer class="footer-pz">
+    <p>&copy; 2026 PZVERSE — Todos los derechos reservados.</p>
+    <p>Propiedad de PZVERSE. Diseño y contenido protegido.</p>
+  </footer>
+
+</body>
+</html>

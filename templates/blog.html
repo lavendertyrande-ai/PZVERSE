@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog</title>
+
+  <!-- ============================
+       Estilos principales
+       ============================ -->
+  <link rel="stylesheet" href="/static/main.css">
+
+  <!-- ============================
+       Fuentes externas
+       ============================ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Trade+Winds&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lugrasimo&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- ============================================================
+       LOGO FIJO SUPERIOR IZQUIERDA
+       ============================================================ -->
+  <a href="/" class="logo-pz">
+    <img src="/static/logo.png" alt="Logo PZVERSE">
+  </a>
+
+  <!-- ============================================================
+       BANNER PRINCIPAL + MENÚ SUPERPUESTO
+       ============================================================ -->
+  <section class="banner-titulo">
+    <div class="banner-contenedor">
+
+      <img src="/static/Blog.png" alt="Banner Blog">
+
+      <nav class="menu-superpuesto">
+        <a href="/" class="btn">Inicio</a>
+        <a href="/twitch-mio" class="btn">Patz Oficial</a>
+        <a href="/twitch-pareja" class="btn">Zhoomm Oficial</a>
+        <a href="/youtube" class="btn">YouTube</a>
+        <a href="/blog" class="btn">Blog</a>
+        <a href="/interactivo" class="btn">Social</a>
+      </nav>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CONTENIDO PRINCIPAL
+       ============================================================ -->
+  <main>
+    <section class="card">
+
+        {% if request.args.publicado %}
+          <p class="mensaje-exito">Post publicado con éxito 💜</p>
+        {% endif %}
+
+
+        {% if not session.admin %}
+            <a href="/admin/login" class="btn-admin">Admin</a>
+        {% endif %}
+
+        {% if session.admin %}
+            <div style="display: flex; justify-content: flex-end; gap: 15px; margin-bottom: 20px;">
+                <a href="/admin/blog" class="btn-admin-neon">🛠 Panel</a>
+                <a href="/admin/blog/gestionar" class="btn-admin-neon">📋 Gestionar publicaciones</a>
+                <a href="/admin/logout" class="btn-admin-neon">🔓 Cerrar sesión</a>
+            </div>
+        {% endif %}
+
+        <h2 class="titulo-blog">Publicaciones</h2>
+
+
+      <!-- ============================
+           GRID DE POSTS DEL BLOG
+           ============================ -->
+      <div class="grid-blog">
+        {% for post in posts %}
+        <div class="tarjeta-blog">
+          <img src="{{ post.image }}" alt="Imagen del post">
+
+          <div class="contenido-tarjeta">
+            <h3>{{ post.title }}</h3>
+            <p class="fecha">{{ post.date }}</p>
+            <p class="resumen">{{ post.summary }}</p>
+
+            <a href="/blog/{{ post.slug }}" class="btn-leer">Leer más</a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+        <!-- =============================
+             PAGINACIÓN
+             ============================= -->
+      <div class="paginador">
+        {% if page > 1 %}
+          <a href="/blog?page={{ page - 1 }}" class="btn-neon">Anterior</a>
+        {% endif %}
+
+        {% for p in range(1, total_pages + 1) %}
+          {% if p == page %}
+            <span class="btn-neon pagina-activa">{{ p }}</span>
+          {% else %}
+            <a href="/blog?page={{ p }}" class="btn-neon pagina">{{ p }}</a>
+          {% endif %}
+        {% endfor %}
+
+        {% if page < total_pages %}
+          <a href="/blog?page={{ page + 1 }}" class="btn-neon">Siguiente</a>
+        {% endif %}
+      </div>
+
+      {% if posts|length == 0 %}
+      <p style="text-align:center; margin-top:20px;">Todavía no hay publicaciones.</p>
+      {% endif %}
+
+    </section>
+  </main>
+
+  <footer class="footer-pz">
+    <p>&copy; 2026 PZVERSE — Todos los derechos reservados.</p>
+    <p>Propiedad de PZVERSE. Diseño y contenido protegido.</p>
+  </footer>
+
+</body>
+</html>
+

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- 🔥 TÍTULO DEL POST -->
+  <title>{{ post["title"] }}</title>
+
+  <!-- 🔥 CSS PRINCIPAL -->
+  <link rel="stylesheet" href="/static/main.css">
+
+  <!-- 🔥 FUENTES -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Trade+Winds&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lugrasimo&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- ============================================================
+       LOGO SUPERIOR IZQUIERDA
+       ============================================================ -->
+  <a href="/" class="logo-pz">
+    <img src="/static/logo.png" alt="Logo PZVERSE">
+  </a>
+
+  <!-- ============================================================
+       BANNER DEL BLOG (SIN MENÚ)
+       ============================================================ -->
+  <section class="banner-titulo">
+    <div class="banner-contenedor">
+      <img src="/static/Blog.png" alt="Banner Blog">
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CONTENIDO DEL POST
+       ============================================================ -->
+  <main>
+    <section class="post-contenedor">
+
+      <!-- TÍTULO -->
+      <h1 class="post-titulo">{{ post["title"] }}</h1>
+
+      <!-- FECHA -->
+      <p class="post-fecha">{{ post["date"] }}</p>
+
+      <!-- IMAGEN DEL POST -->
+      {% if post["image"] %}
+        <img src="{{ post["image"] }}" alt="Imagen del post" class="post-imagen">
+      {% endif %}
+
+      <!-- CONTENIDO DEL POST -->
+      <div class="post-cuerpo">
+        {{ post["content"] | safe }}
+      </div>
+
+      <!-- BOTÓN VOLVER -->
+      <a href="/blog" class="btn-volver">← Volver al blog</a>
+
+    </section>
+  </main>
+
+</body>
+</html>

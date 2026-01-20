@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+
+  <!-- ============================================================
+       CONFIGURACIÓN BÁSICA Y ESTILOS
+       ============================================================ -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social</title>
+  <link rel="stylesheet" href="/static/main.css">
+
+  <!-- Fuentes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Trade+Winds&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lugrasimo&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- ============================================================
+       LOGO FIJO SUPERIOR IZQUIERDA
+       ============================================================ -->
+  <a href="/" class="logo-pz">
+    <img src="/static/logo.png" alt="Logo PZVERSE">
+  </a>
+
+  <!-- ============================================================
+       BANNER PRINCIPAL + MENÚ SUPERPUESTO
+       ============================================================ -->
+  <section class="banner-titulo">
+    <div class="banner-contenedor">
+      <img src="/static/Social.png" alt="Banner Social">
+
+      <nav class="menu-superpuesto">
+        <a href="/" class="btn">Inicio</a>
+        <a href="/twitch-mio" class="btn">Patz Oficial</a>
+        <a href="/twitch-pareja" class="btn">Zhoomm Oficial</a>
+        <a href="/youtube" class="btn">YouTube</a>
+        <a href="/blog" class="btn">Blog</a>
+        <a href="/interactivo" class="btn">Social</a>
+      </nav>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       BLOQUE SUPERIOR — RRSS + DISCORD + BOTONES DE SCROLL
+       ============================================================ -->
+  <div class="bloque-social-superior">
+
+    <!-- Botón RRSS -->
+    <a href="https://doras.to/patz" target="_blank" class="btn-rrss">
+      <img src="/static/rrss.png" alt="Redes Sociales">
+    </a>
+
+    <!-- Botón Discord -->
+    <a href="https://discord.gg/9UnMmjtmFU" target="_blank" class="btn-discord">
+      Únete a mi Discord
+    </a>
+
+    <!-- Botón scroll al chat -->
+    <a href="#chat-en-vivo" class="btn-scroll">Ir al Chat</a>
+
+    <!-- Botón scroll al foro -->
+    <a href="#foro" class="btn-scroll">Ir al Foro</a>
+
+  </div>
+
+  <!-- ============================================================
+       CHAT EN VIVO
+       ============================================================ -->
+  <h2 class="titulo-chat">Chat en Vivo</h2>
+
+  <div class="chat-container">
+
+    <!-- Contenedor del chat (para scroll automático) -->
+    <section id="chat-en-vivo"></section>
+
+    <!-- Lista de usuarios conectados -->
+    <div class="usuarios-conectados" id="usuarios">
+      <h3>Conectados</h3>
+      <ul id="lista-usuarios"></ul>
+    </div>
+
+    <!-- Área del chat -->
+    <div class="chat-area">
+      <div id="chat-box"></div>
+
+      <div class="chat-input">
+        <input type="text" id="mensaje" placeholder="Escribe un mensaje...">
+        <button onclick="enviarMensaje()">ENVIAR</button>
+      </div>
+    </div>
+  </div>
+
+
+  <hr class="separador-chat-foro">
+
+
+  <!-- ============================================================
+     SECCIÓN DEL FORO — Título + Botón + Grid
+     ============================================================ -->
+  <section id="foro" class="foro-section">
+    <div class="foro-header">
+      <h2>FORO</h2>
+      <a href="/nuevo-tema" class="btn-nueva-entrada">+ Nueva entrada</a>
+    </div>
+
+    <div class="foro-grid">
+      {% for tema in temas %}
+      <div class="tarjeta-tema">
+
+        <!-- IMAGEN DEL TEMA (SI EXISTE) -->
+        {% if tema.imagen %}
+          <img src="{{ tema.imagen }}" alt="Imagen del tema">
+        {% endif %}
+
+        <!-- TÍTULO DEL TEMA -->
+        <h3>{{ tema.titulo }}</h3>
+
+        <!-- VISTA PREVIA DEL CONTENIDO (HTML SEGURO) -->
+        <div class="preview-tema">
+          {{ tema.contenido[:300] | safe }}
+        </div>
+
+        <!-- BOTÓN PARA VER EL TEMA COMPLETO -->
+        <a href="/tema/{{ tema.id }}" class="btn-ver-tema">Ver tema</a>
+
+      </div>
+      {% endfor %}
+    </div>
+
+  </section>
+
+
+  <!-- ============================================================
+       SCRIPTS DEL CHAT (REST API)
+       ============================================================ -->
+  <script>
+    function enviarMensaje() {
+      const mensaje = document.getElementById("mensaje").value;
+
+      fetch("/enviar_mensaje", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ mensaje })
+      }).then(() => {
+        document.getElementById("mensaje").value = "";
+        cargarMensajes();
+      });
+    }
+
+    function cargarMensajes() {
+      fetch("/mensajes")
+        .then(r => r.json())
+        .then(data => {
+          let html = "";
+          data.forEach(m => {
+            html += `<p><strong>${m.usuario}</strong>: ${m.texto}</p>`;
+          });
+          document.getElementById("chat-box").innerHTML = html;
+        });
+    }
+
+    setInterval(cargarMensajes, 3000);
+  </script>
+
+  <!-- ============================================================
+       SOCKET.IO — USUARIOS EN TIEMPO REAL
+       ============================================================ -->
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+  <script>
+    const socket = io({ query: { usuario: "Patz" } });
+
+    socket.on("lista_usuarios", data => {
+      const lista = document.getElementById("lista-usuarios");
+      lista.innerHTML = "";
+      data.forEach(u => lista.innerHTML += `<li>${u}</li>`);
+    });
+  </script>
+
+  <!-- ============================================================
+       FIREBASE MESSAGING — NOTIFICACIONES PUSH
+       ============================================================ -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+    import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-messaging.js";
+
+    // Configuración de tu proyecto
+    const firebaseConfig = {
+      apiKey: "{{ firebase_api_key }}",
+      authDomain: "pzverse-chat.firebaseapp.com",
+      projectId: "pzverse-chat",
+      storageBucket: "pzverse-chat.firebasestorage.app",
+      messagingSenderId: "401483325657",
+      appId: "1:401483325657:web:1acf0edcccd6bd9d1e1ec8",
+      measurementId: "G-ZF8SLL5JV6"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const messaging = getMessaging(app);
+
+    // Registrar service worker
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/firebase-messaging-sw.js")
+        .then(reg => {
+          console.log("✅ Service Worker registrado:", reg.scope);
+
+          // Pedir permiso para notificaciones
+          return Notification.requestPermission();
+        })
+        .then(permission => {
+          if (permission === "granted") {
+            console.log("🔔 Permiso de notificaciones concedido");
+
+            // OJO: aquí debes poner tu VAPID KEY de Firebase Cloud Messaging
+            return getToken(messaging, {
+              vapidKey: "{{ firebase_vapid_key }}"
+            });
+          } else {
+            console.warn("⚠️ Permiso de notificaciones denegado");
+          }
+        })
+        .then(currentToken => {
+          if (currentToken) {
+            console.log("📲 Token FCM:", currentToken);
+
+            // Enviar token al backend para guardarlo
+            fetch("/registrar-token", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ token: currentToken })
+            });
+          }
+        })
+        .catch(err => {
+          console.error("❌ Error en registro de notificaciones:", err);
+        });
+    }
+
+    // Notificaciones en primer plano
+    onMessage(messaging, (payload) => {
+      console.log("📩 Notificación recibida en primer plano:", payload);
+      if (payload.notification) {
+        alert(payload.notification.title + "\n" + payload.notification.body);
+      }
+    });
+  </script>
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer class="footer-pz">
+    <p>&copy; 2026 PZVERSE — Todos los derechos reservados.</p>
+    <p>Propiedad de PZVERSE. Diseño y contenido protegido.</p>
+  </footer>
+
+</body>
+</html>

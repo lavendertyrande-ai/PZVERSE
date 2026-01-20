@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Administración</title>
+
+  <link rel="stylesheet" href="/static/main.css">
+
+  <!-- Fuentes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Trade+Winds&display=swap" rel="stylesheet">
+
+  <!-- TinyMCE -->
+  <script src="https://cdn.jsdelivr.net/npm/tinymce@6.7.0/tinymce.min.js"></script>
+
+  <script>
+    tinymce.init({
+      selector: '#content',
+      plugins: 'link image lists table code',
+      toolbar: 'undo redo | bold italic underline | alignleft aligncenter alignright | bullist numlist | link image | code',
+      height: 400
+    });
+  </script>
+</head>
+
+<body>
+
+  <!-- LOGO -->
+  <a href="/" class="logo-pz">
+    <img src="/static/logo.png" alt="Logo PZVERSE">
+  </a>
+
+  <!-- BANNER -->
+  <section class="banner-titulo">
+    <div class="banner-contenedor">
+      <img src="/static/Blog.png" alt="Banner Blog">
+
+      <nav class="menu-superpuesto">
+        <a href="/" class="btn">Inicio</a>
+        <a href="/twitch-mio" class="btn">Patz Oficial</a>
+        <a href="/twitch-pareja" class="btn">Zhoomm Oficial</a>
+        <a href="/youtube" class="btn">YouTube</a>
+        <a href="/blog" class="btn">Blog</a>
+        <a href="/interactivo" class="btn">Social</a>
+      </nav>
+    </div>
+  </section>
+
+  <!-- PANEL ADMIN -->
+  <main>
+    <section class="card" style="max-width: 900px; margin: 40px auto;">
+
+      <h2 class="titulo-blog">Crear nueva entrada</h2>
+
+        <div style="display: flex; justify-content: flex-end; gap: 15px; margin-bottom: 20px;">
+          <a href="/admin/blog" class="btn-panel">🛠 Panel</a>
+          <a href="/admin/blog/gestionar" class="btn-gestionar">📋 Gestionar publicaciones</a>
+            <a href="/admin/logout" class="btn-logout">🔓 Cerrar sesión</a>
+        </div>
+
+
+        {% if request.args.inicio %}
+          <p class="mensaje-exito">🔐 Sesión admin iniciada correctamente</p>
+        {% endif %}
+
+
+      <form action="/admin/blog/publicar" method="POST" enctype="multipart/form-data">
+
+        <label>Título:</label>
+        <input type="text" name="title" required>
+
+        <label>Resumen:</label>
+        <textarea name="summary" required></textarea>
+
+        <label>Imagen destacada:</label>
+        <input type="file" name="image" required>
+
+        <label>Contenido:</label>
+        <textarea id="content" name="content"></textarea>
+
+        <button type="submit" class="btn-neon">Publicar</button>
+        <a href="/blog" class="btn-neon">← Volver al blog</a>
+
+
+      </form>
+    </section>
+  </main>
+
+  <script>
+    document.querySelector('form').addEventListener('submit', function(e) {
+      tinymce.triggerSave();  // ← fuerza que el contenido se copie al textarea
+    });
+  </script>
+
+</body>
+</html>

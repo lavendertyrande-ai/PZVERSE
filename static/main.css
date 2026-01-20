@@ -1,0 +1,1701 @@
+/* ============================================================
+   ESTILO GLOBAL
+   ============================================================ */
+html {
+    font-size: 18px;
+    scroll-behavior: smooth;
+}
+
+
+body {
+    margin: 0;
+    padding: 0;
+    color: #ffffff;
+    font-family: 'Lugrasimo', cursive;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    background: linear-gradient(to bottom, #24243e, #302b63, #0f0c29);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/* Tipografías globales */
+h1, h2, h3 {
+    font-family: 'Trade Winds', cursive;
+    color: #FF00CC !important;
+}
+
+p, li, a, span {
+    font-family: 'Lugrasimo', cursive;
+}
+
+/* ============================================================
+   BANNERS PRINCIPALES
+   ============================================================ */
+.banner-portada,
+.banner-titulo {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.banner-contenedor {
+  position: relative;
+  width: 100%;
+  padding: 0; /* ← elimina el margen interno */
+  margin: 0;
+}
+
+
+.banner-contenedor img {
+  width: 100%;
+  max-width: none;  /* ocupa todo el ancho disponible */
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  box-shadow: 0 0 20px #FF00CC, 0 0 40px #9146FF;
+}
+
+/* ============================================================
+   LOGIN / USUARIO
+   ============================================================ */
+.login-superpuesto {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 30;
+}
+
+.btn-login {
+    background-color: rgba(255, 0, 204, 0.8);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-family: 'Trade Winds', cursive;
+    font-size: 0.75rem;
+    text-decoration: none;
+    box-shadow: 0 0 6px #FF00CC;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-login:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px #FF00CC, 0 0 20px #9146FF;
+}
+
+.btn-login.google { background-color: #4285F4; }
+.btn-login.twitch { background-color: #9146FF; }
+
+.user-banner {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 0, 204, 0.25);
+    padding:4px 8px;
+    border-radius: 6px;
+    box-shadow: 0 0 10px #FF00CC;
+}
+
+.user-banner .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+
+.user-banner .username {
+    display: none;
+}
+
+.user-banner span,
+.user-banner p,
+.user-banner strong {
+    display: none;
+}
+
+
+.logout-button {
+    background: #FF00CC;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.60rem;
+    box-shadow: 0 0 6px #FF00CC;
+    transition: 0.2s ease;
+}
+
+.logout-button:hover {
+    background: #ff33aa;
+    box-shadow: 0 0 12px #FF00CC;
+}
+
+/* ============================================================
+   MENÚ SUPERPUESTO
+   ============================================================ */
+.menu-superpuesto {
+    position: absolute;
+    bottom: 0.9px;
+    right: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    z-index: 10;
+}
+
+.menu-superpuesto .btn {
+    background-color: rgba(255, 0, 204, 0.8);
+    color: #fff;
+    padding: 0px 3px;
+    border-radius: 6px;
+    font-family: 'Trade Winds', cursive;
+    font-size: 0.60rem;
+    text-decoration: none;
+    box-shadow: 0 0 6px #FF00CC;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.menu-superpuesto .btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 12px #FF00CC, 0 0 24px #9146FF;
+}
+
+/* ============================================================
+   LOGO FIJO
+   ============================================================ */
+.logo-pz {
+    position: fixed;
+    top: 1rem;
+    left: 1.2rem;
+    z-index: 50;
+    pointer-events: auto;
+    user-select: none;
+}
+
+.logo-pz img {
+    width: 3rem;
+    transition: 0.3s ease;
+}
+
+/* Estados online/offline */
+.online-patz img {
+    filter: drop-shadow(0 0 1rem #ff00cc);
+    animation: parpadeo 1.2s infinite;
+}
+.offline-patz img {
+    filter: drop-shadow(0 0 0.5rem #ff00cc);
+}
+
+.online-zhoomn img {
+    filter: drop-shadow(0 0 1rem #00c8ff);
+    animation: parpadeo 1.2s infinite;
+}
+.offline-zhoomn img {
+    filter: drop-shadow(0 0 0.5rem #00c8ff);
+}
+
+@keyframes parpadeo {
+    0% { opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1; }
+}
+
+/* ============================================================
+   BOTÓN SEGUIR + ESTADO DEL CANAL
+   ============================================================ */
+.boton-debajo-banner {
+    display: flex;
+    justify-content: flex-end;
+    margin: 1rem 2rem;
+}
+
+.btn-seguir {
+    background-color: #9146ff;
+    color: white;
+    padding: 1px 5px;
+    font-size: 0.60rem;
+    border-radius: 3px;
+    text-decoration: none;
+    font-weight: bold;
+    box-shadow: 0 0 8px #9146ff;
+    transition: transform 0.2s ease;
+}
+
+.btn-seguir:hover {
+    transform: scale(1.05);
+}
+
+.estado-canal {
+    margin: 0.5rem 2rem;
+}
+
+.estado-online {
+    color: #00ff99;
+    font-weight: bold;
+}
+.estado-offline {
+    color: #ff0066;
+    font-weight: bold;
+}
+
+/* ============================================================
+   BOTÓN DE CALENDARIO (encima del chat)
+   ============================================================ */
+.boton-calendario {
+    text-align: right;
+    margin: -30rem 0 1rem 0; /* SUBE EL BOTÓN */
+    width: 100%;
+    z-index: 20;
+    position: relative;
+}
+
+
+
+.btn-calendario {
+    background-color: #FF00CC;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-family: 'Trade Winds', cursive;
+    font-size: 0.75rem;
+    text-decoration: none;
+    box-shadow: 0 0 8px #FF00CC;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: inline-block;
+}
+
+.boton-calendario {
+    flex: 0 0 100%;
+    order: 2;
+}
+
+/* ============================================================
+   STREAM + CHAT (Patz / Zhoomn)
+   ============================================================ */
+.contenedor-stream {
+    display: grid;
+    grid-template-columns: 65% 30%;
+    grid-template-rows: auto auto;
+    gap: 1.5rem;
+    margin: 2rem auto;
+    width: 100%;
+    max-width: 1200px;
+    align-items: start;
+}
+
+
+.stream-frame,
+.chat-frame {
+    background: rgba(20, 0, 30, 0.85);
+    padding: 12px;
+    border-radius: 12px;
+    border: 2px solid #ff00cc;
+    box-shadow: 0 0 20px #ff00cc;
+    animation: glow 2.5s ease-in-out infinite;
+    box-sizing: border-box;
+    position: static;
+    overflow: visible;
+}
+
+.chat-frame iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    pointer-events: auto;
+    z-index: 10;
+}
+
+
+.stream-frame {
+    height: 480px;
+}
+
+.chat-frame {
+    grid-column: 2;
+    grid-row: 2;
+    height: 480px;
+}
+
+
+.stream-frame iframe,
+.chat-frame iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+@keyframes glow {
+    0% { box-shadow: 0 0 10px #ff00cc; }
+    50% { box-shadow: 0 0 20px #ff00cc; }
+    100% { box-shadow: 0 0 10px #ff00cc; }
+}
+
+.bloque-chat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    flex: 0 0 30%;
+}
+
+/* ============================================================
+   CALENDARIO DE DIRECTOS
+   ============================================================ */
+.titulo-calendario {
+    text-align: center;
+    margin-top: 4rem;
+    margin-bottom: 1rem;
+    font-family: 'Trade Winds', cursive;
+    font-size: 2rem;
+    color: #FF00CC;
+    text-shadow: 0 0 10px #FF00CC;
+}
+
+.calendario-directos {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    background: rgba(20, 0, 30, 0.75);
+    border-radius: 12px;
+    border: 2px solid #ff00cc;
+    box-shadow: 0 0 18px #ff00cc;
+    backdrop-filter: blur(4px);
+}
+
+.calendario-directos iframe {
+    width: 100%;
+    height: 400px;
+    border: none;
+}
+
+/* ============================================================
+   TÍTULOS DE TARJETAS
+   ============================================================ */
+.card > h2:first-of-type {
+  text-align: center;
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+
+/* ============================================
+   TÍTULO DEL BLOG
+   ============================================ */
+.titulo-blog {
+  font-family: 'Trade Winds', cursive;
+  text-align: center;
+  font-size: 2em;
+  color: #ff66cc;
+  margin-top: 60px;
+  margin-bottom: 10px;
+  text-shadow: 0 0 10px #ff66cc, 0 0 20px #ff33aa;
+}
+
+.mensaje-vacio {
+  text-align: center;
+  font-family: 'Lugrasimo', cursive;
+  font-size: 1.3em;
+  color: #ff66cc;
+  margin-top: 40px;
+  padding: 10px;
+  border: 2px dashed #ff66cc;
+  border-radius: 10px;
+  background-color: rgba(255, 0, 170, 0.05);
+}
+
+/* ============================================
+   BOTÓN LOGIN ADMIN
+   ============================================ */
+.btn-admin {
+  display: inline-block;
+  font-family: 'Trade Winds', cursive;
+  font-size: 0.5em;
+  color: #fff;
+  background-color: #ff66cc;
+  padding:4px 18px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 0 6px #ff66cc, 0 0 16px #ff33aa;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  margin: 20px auto;
+  text-align: center;
+  margin-left: 1150px;
+}
+
+.btn-admin:hover {
+  background-color: #ff33aa;
+  box-shadow: 0 0 18px #ff66cc, 0 0 30px #ff33aa;
+}
+
+
+.btn-admin-neon {
+  display: inline-block;
+  padding: 4px 10px;
+  background: #00ffff;
+  font-size: 0.5em;
+  color: #000;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 0 12px #00ffff;
+  transition: background 0.3s ease;
+  margin-left: 1150px;
+}
+
+.btn-admin-neon:hover {
+  background: #33ffff;
+  transform: scale(1.05);
+}
+
+
+@keyframes fadeGlow {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+    box-shadow: 0 0 0px transparent;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 20px #ff66cc;
+  }
+}
+
+
+/* ============================================
+   BOTÓN "LEER MÁS"
+   ============================================ */
+.btn-leer {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #ff66cc;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-leer:hover {
+  background-color: #ff33aa;
+  box-shadow: 0 0 15px #ff66cc;
+}
+
+
+/* ============================================
+   CONTENEDOR PRINCIPAL DEL POST
+   ============================================ */
+.tarjeta-blog {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  box-shadow: 0 0 8px #ff00cc;
+  padding: 10px;
+  transition: transform 0.3s ease;
+  width: 100%;
+  max-width: 100%;       /* ← evita que se ensanche */
+  box-sizing: border-box; /* ← asegura que padding no rompa el layout */
+}
+
+
+.tarjeta-blog:hover {
+  transform: scale(1.02);
+}
+
+.grid-blog {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);  /* Fuerza 3 columnas */
+  gap: 30px;
+  padding: 20px;
+}
+
+.card {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  animation: fadeGlow 1.2s ease-in-out;
+}
+
+@media (max-width: 600px) {
+  .btn-admin-neon {
+    display: block;
+    margin-bottom: 10px;
+  }
+}
+
+
+/* Imagen destacada */
+.tarjeta-blog img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  box-shadow: 0 0 10px #ff00cc;
+}
+
+/* Contenido de la tarjeta */
+.contenido-tarjeta {
+  text-align: center;
+  color: #fff;
+  font-family: 'Lugrasimo', cursive;
+}
+
+/* Título del post */
+.contenido-tarjeta h3 {
+  font-size: 1rem;
+  color: #ff00cc;
+  font-family: 'Trade Winds', cursive;
+  text-shadow: 0 0 8px #ff00cc;
+  margin-bottom: 6px;
+}
+
+/* Fecha */
+.fecha {
+  font-size: 0.9em;
+  color: #ccc;
+  margin-bottom: 10px;
+}
+
+/* Resumen */
+.resumen {
+  font-size: 0.75em;
+  margin-bottom: 10px;
+}
+
+/* Botón Leer más */
+.btn-leer {
+  display: inline-block;
+  padding: 2px 6px;
+  background: #ff00cc;
+  color: #fff;
+  border-radius: 2px;
+  font-size: 0.4em;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 0 10px #ff00cc;
+  transition: background 0.3s ease;
+}
+
+.btn-leer:hover {
+  background: #ff33dd;
+}
+
+
+/* ============================================
+   BOTONES NEÓN
+   ============================================ */
+.btn-panel {
+  display: inline-block;
+  padding: 6px 12px;
+  background-color: #0f0c29;
+  color: #00FFFF;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 0 10px #00FFFF, 0 0 20px #00FFFF;
+  transition: transform 0.2s ease;
+  font-size: 0.5em;
+}
+
+.btn-gestionar {
+  display: inline-block;
+  padding: 6px 12px;
+  background-color: #0f0c29;
+  color: #FF00CC;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 0 10px #FF00CC, 0 0 20px #FF00CC;
+  transition: transform 0.2s ease;
+  font-size: 0.5em;
+}
+
+.btn-logout {
+  display: inline-block;
+  padding: 6px 12px;
+  background-color: #0f0c29;
+  color: #FF4444;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 0 10px #FF4444, 0 0 20px #FF4444;
+  transition: transform 0.2s ease;
+  font-size: 0.5em;
+}
+
+.btn-panel:hover,
+.btn-gestionar:hover,
+.btn-logout:hover {
+  transform: scale(1.05);
+}
+
+
+/* ============================================================
+   POST PUBLICADO EXITOSAMENTE
+   ============================================================ */
+.mensaje-exito {
+  text-align: center;
+  font-family: 'Trade Winds', cursive;
+  font-size: 1.4em;
+  color: #ff66cc;
+  margin: 20px auto 30px auto;
+  padding: 12px 20px;
+  border: 2px solid #ff66cc;
+  border-radius: 10px;
+  width: fit-content;
+  box-shadow: 0 0 12px #ff66cc, 0 0 25px #ff33aa;
+  background-color: rgba(255, 0, 170, 0.1);
+  animation: glowPulse 2s infinite ease-in-out;
+}
+
+/* Animación suave neon */
+@keyframes glowPulse {
+  0% {
+    box-shadow: 0 0 12px #ff66cc, 0 0 25px #ff33aa;
+  }
+  50% {
+    box-shadow: 0 0 20px #ff33aa, 0 0 35px #ff66cc;
+  }
+  100% {
+    box-shadow: 0 0 12px #ff66cc, 0 0 25px #ff33aa;
+  }
+}
+
+
+/* ============================================================
+   PAGINADOR
+   ============================================================ */
+
+.paginador {
+  text-align: center;
+  margin: 40px 0;
+}
+
+.pagina, .pagina-activa {
+  display: inline-block;
+  margin: 0 6px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #fff;
+  background: #ff00cc;
+  box-shadow: 0 0 8px #ff00cc;
+  transition: background 0.3s ease;
+}
+
+.pagina:hover {
+  background: #ff33dd;
+}
+
+.pagina-activa {
+  background: #fff;
+  color: #ff00cc;
+  box-shadow: 0 0 12px #fff;
+}
+
+/* ============================================================
+   GESTIONAR BLOG
+   ============================================================ */
+.tabla-posts th, .tabla-posts td {
+  padding: 8px;
+  font-size: 0.9em;
+}
+.tabla-posts th {
+  font-size: 1em;
+}
+.tabla-posts img {
+  max-width: 60px;
+}
+.btn-accion {
+  padding: 6px 10px;
+  font-size: 0.85em;
+}
+
+
+/* ============================================================
+   POST INDIVIDUAL — MARCO NEÓN Y ESTILO ARMÓNICO
+   ============================================================ */
+
+.post-contenedor {
+  max-width: 1000px;
+  margin: 60px auto;
+  padding: 30px;
+  background: rgba(20, 20, 40, 0.85);
+  border: 2px solid #FF00CC;
+  border-radius: 12px;
+  box-shadow: 0 0 15px #FF00CC, 0 0 25px #9146FF;
+  text-align: center;
+}
+
+.post-titulo {
+  font-size: 2.2rem;
+  color: #FF00CC;
+  text-shadow: 0 0 8px #FF00CC;
+  margin-bottom: 10px;
+}
+
+.post-fecha {
+  font-size: 0.9rem;
+  color: #aaa;
+  margin-bottom: 30px;
+}
+
+.post-imagen {
+  max-width: 175px;
+  width: 100%;
+  margin: 0 auto 30px auto;
+  display: block;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #FF00CC;
+  object-fit: cover;
+}
+
+.post-cuerpo {
+  font-size: 1.1rem;
+  color: #ccc;
+  line-height: 1.7;
+  text-align: left;
+  max-width: 800px;
+  margin: 0 auto 40px auto;
+}
+
+/* Botón volver */
+.btn-volver {
+  display: inline-block;
+  background-color: #222;
+  color: #FF00CC;
+  padding: 8px 16px;
+  font-size: 14px;
+  border: 1px solid #FF00CC;
+  border-radius: 6px;
+  text-decoration: none;
+  box-shadow: 0 0 6px #FF00CC;
+}
+
+
+/* ============================================================
+   YOUTUBE GRID
+   ============================================================ */
+.youtube-section {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.titulo-youtube {
+  font-size: 2.5rem;
+  color: #FF00CC;
+  text-shadow: 0 0 10px #FF00CC, 0 0 20px #9146FF;
+  margin-bottom: 30px;
+}
+
+.grid-youtube {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+  padding: 20px;
+}
+
+.video-card {
+  background: rgba(20, 20, 40, 0.7);
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px #FF00CC, 0 0 25px #9146FF;
+}
+
+
+.video-card h3 {
+  color: #fff;
+  margin-top: 10px;
+}
+
+.video-card img,
+.video-card iframe {
+  width: 100%;
+  height: 200px;
+  border-radius: 8px;
+  border: none;
+}
+
+
+.btn-neon {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 20px;
+  color: #FF00CC;
+  background: #0f0c29;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 0 10px #FF00CC, 0 0 20px #9146FF;
+}
+
+/* ============================================================
+   BOTÓN DE SUSCRIPCIÓN YOUTUBE
+   ============================================================ */
+.youtube-subscribe {
+  margin-top: 40px;
+  text-align: center;
+  padding: 20px;
+  background: rgba(20, 20, 40, 0.6);
+  box-shadow: 0 0 15px #FF00CC, 0 0 25px #9146FF;
+  border-radius: 12px;
+}
+
+.boton-suscripcion {
+  text-align: right;
+  margin: 10px 30px 20px 0;
+}
+
+.boton-suscripcion .btn-neon {
+  display: inline-block;
+  padding: 8px 18px;
+  font-size: 0.85rem;
+  color: #FF00CC;
+  background: #0f0c29;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 0 10px #FF00CC, 0 0 20px #9146FF;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.boton-suscripcion .btn-neon:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 19px #FF00CC, 0 0 30px #9146FF;
+}
+
+/* ============================================================
+   CONTENEDOR PRINCIPAL DEL CHAT
+   ============================================================ */
+.chat-container {
+  display: flex;              /* ← Esto alinea horizontalmente */
+  gap: 30px;                  /* ← Espacio entre paneles */
+  margin: 40px auto;
+  width: 90%;
+  max-width: 1200px;
+}
+
+/* ============================================================
+   PANEL IZQUIERDO — USUARIOS CONECTADOS
+   ============================================================ */
+.usuarios-conectados {
+  width: 250px;
+  background: rgba(20, 20, 40, 0.7);
+  padding: 20px;
+  border-radius: 12px;
+  color: #FF00CC;
+  box-shadow: 0 0 12px #FF00CC, 0 0 20px #9146FF;
+}
+
+.usuarios-conectados h3 {
+  margin-bottom: 10px;
+  text-shadow: 0 0 5px #FF00CC;
+}
+
+.usuarios-conectados ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.usuarios-conectados li {
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+/* ============================================================
+   BLOQUE DERECHO — ÁREA DEL CHAT
+   ============================================================ */
+.chat-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+#chat-box {
+  background: rgba(20, 20, 40, 0.7);
+  padding: 15px;
+  border-radius: 12px;
+  height: 350px;
+  overflow-y: auto;
+  box-shadow: 0 0 12px #9146FF;
+  color: white;
+}
+
+.chat-input {
+  display: flex;
+  gap: 10px;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: #0f0c29;
+  color: #FF00CC;
+  box-shadow: 0 0 10px #FF00CC;
+}
+
+.chat-input button {
+  padding: 10px 20px;
+  background: #FF00CC;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 10px #FF00CC;
+}
+
+.chat-input button:hover {
+  box-shadow: 0 0 20px #FF00CC;
+}
+
+/* ============================================================
+   TÍTULO DEL CHAT
+   ============================================================ */
+.titulo-chat {
+  margin-left: 65px;
+  margin-top: 40px;
+  font-size: 2rem;
+  color: #FF00CC;
+  text-shadow: 0 0 8px #FF00CC;
+}
+
+
+/* ============================================================
+   BLOQUE SUPERIOR — RRSS + DISCORD Y BOTÓN SCROLL CHAT Y FORO
+   ============================================================ */
+.bloque-social-superior {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+  padding: 15px 40px;
+  background: rgba(20, 20, 40, 0.8);
+  box-shadow: 0 0 15px #FF00CC;
+  border-bottom: 2px solid #9146FF;
+  margin-top: 10px;              /* Separación suave del banner */
+}
+
+.btn-scroll {
+  height: 25px;
+  line-height: 25px;
+  padding: 0 18px;
+  background: #FF00CC;
+  color: white;
+  font-weight: bold;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  text-decoration: none;
+  box-shadow: 0 0 12px #FF00CC;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  margin-left: 10px;
+}
+
+.btn-scroll:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px #FF00CC;
+}
+
+/* ============================================================
+   BOTÓN RRSS (IMAGEN COMPLETA)
+   ============================================================ */
+.btn-rrss img {
+  height: 85px;
+  object-fit: contain;   /* Ajusta la imagen para que no se distorsione */
+  cursor: pointer;
+  display: block;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.btn-rrss img:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 10px #FF00CC);
+}
+
+/* ============================================================
+   BOTÓN DISCORD (MISMA ALTURA VISUAL)
+   ============================================================ */
+.btn-discord {
+  height: 25px;
+  line-height: 25px;
+  padding: 0 5px;
+  background: #5865F2;
+  color: white;
+  font-weight: bold;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  margin-left: -20px;
+  text-decoration: none;
+  box-shadow: 0 0 12px #5865F2;
+  display: inline-block;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.btn-discord:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px #5865F2;
+}
+
+/* ============================================================
+   SEPARADOR CHAT Y FORO
+   ============================================================ */
+.separador-chat-foro {
+  border: none;
+  height: 2px;
+  background: linear-gradient(to right, #FF00CC, #9146FF);
+  margin: 60px auto 40px auto;
+  width: 80%;
+  box-shadow: 0 0 10px #FF00CC;
+}
+
+
+/* ============================================================
+   SECCIÓN DEL FORO
+   ============================================================ */
+.foro-section {
+  margin: 60px auto;
+  padding: 10px 40px;
+  color: white;
+}
+
+/* Header: Título + Botón */
+.foro-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding: 20px; /* ← igual que el grid */
+  max-width: 1150px;
+  margin: 0 auto;
+  border: 2px solid #FF00CC;
+  border-radius: 12px;
+  box-shadow: 0 0 15px #FF00CC, 0 0 25px #9146FF;
+  background: rgba(20, 20, 40, 0.6);
+  backdrop-filter: blur(4px);
+  animation: glowPulse 2s infinite ease-in-out;
+  box-sizing: border-box; /* asegura que el padding no rompa el ancho */
+}
+
+.foro-header h2 {
+  font-size: 2rem;
+  color: #FF00CC;
+  margin-top: 20px;
+  margin-left: 30px;
+  margin-bottom: 10px;
+  text-shadow: 0 0 8px #FF00CC;
+}
+
+/* Botón Nueva Entrada */
+.btn-nueva-entrada {
+  background: #FF00CC;
+  color: white;
+  font-weight: bold;
+  font-size: 0.9rem;
+  padding: 4px 8px;
+  border-radius: 5px;
+  margin-right: 50px;
+  text-decoration: none;
+  box-shadow: 0 0 8px #FF00CC;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.btn-nueva-entrada:hover {
+  transform: scale(1.05);
+  background: #ff33dd;
+}
+
+@keyframes glowPulse {
+  0% {
+    box-shadow: 0 0 15px #FF00CC, 0 0 25px #9146FF;
+  }
+  50% {
+    box-shadow: 0 0 25px #FF00CC, 0 0 35px #9146FF;
+  }
+  100% {
+    box-shadow: 0 0 15px #FF00CC, 0 0 25px #9146FF;
+  }
+}
+
+
+/* ============================================================
+   GRID DE TEMAS DEL FORO
+   ============================================================ */
+.foro-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);  /* Fuerza 3 columnas como el blog */
+  gap: 30px;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;  /* Centra el grid */
+}
+
+/* Tarjetas de cada tema */
+.tarjeta-tema {
+  background: rgba(20, 20, 40, 0.85);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 0 12px #FF00CC;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform 0.2s ease;
+  box-sizing: border-box;  /* Igual que en el blog */
+}
+
+.tarjeta-tema:hover {
+  transform: scale(1.03);
+}
+
+/* Imagen del tema */
+.tarjeta-tema img {
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 0 8px #FF00CC;
+}
+
+/* Título del tema */
+.tarjeta-tema h3 {
+  font-size: 1.4rem;
+  color: #FF00CC;
+  margin: 0;
+}
+
+/* Fragmento del contenido */
+.tarjeta-tema p {
+  font-size: 0.95rem;
+  color: #ccc;
+  margin: 0;
+}
+
+/* Botón Ver Tema */
+.btn-ver-tema {
+  align-self: flex-start;
+  background: #9146FF;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.6rem;
+  box-shadow: 0 0 6px #9146FF;
+  transition: background 0.2s ease;
+}
+
+.btn-ver-tema:hover {
+  background: #a56bff;
+}
+
+
+/* ============================================================
+   CONTENIDO DEL TEMA
+   ============================================================ */
+.tema-contenido {
+  max-width: 1000px;
+  margin: 60px auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.tema-cuerpo {
+  font-size: 1.1rem;
+  color: #ccc;
+  line-height: 1.7;
+  max-width: 800px;
+  margin: 20px auto;
+  text-align: left;
+}
+
+/* Tarjeta del tema */
+.tarjeta-tema {
+  background: rgba(20, 20, 40, 0.85);
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 0 15px #FF00CC;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: left;
+}
+
+.tarjeta-tema h2 {
+  font-size: 2rem;
+  color: #FF00CC;
+  text-shadow: 0 0 8px #FF00CC;
+  margin: 0;
+  text-align: center;
+}
+
+.tarjeta-tema img {
+   width: 100%;
+  max-width: 600px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 0 12px #FF00CC;
+  margin: 20px auto;
+  display: block;
+}
+
+
+.tarjeta-tema p {
+  font-size: 1.1rem;
+  color: #ccc;
+  line-height: 1.6;
+}
+
+
+.post-imagen {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 0 12px #FF00CC;
+  margin: 20px auto;
+  display: block;
+}
+
+
+/* ============================================================
+   CONTENEDOR GENERAL DE LA SECCIÓN COMENTARIOS
+   ============================================================ */
+.comentarios-section {
+  max-width: 950px;        /* 🔥 Limita el ancho máximo */
+  margin: 40px auto 60px;  /* 🔥 Centrado con espacio arriba y abajo */
+  padding: 20px;
+  border: 2px solid #FF00CC;
+  border-radius: 10px;
+  box-shadow: 0 0 12px #FF00CC;
+  background-color: #0a0a0a;
+}
+
+/* 🔥 Cada comentario individual */
+.comentario {
+  margin-bottom: 20px;
+  padding: 12px;
+  border-left: 3px solid #FF00CC;
+  background-color: #111;
+  border-radius: 6px;
+}
+
+/* 🔥 Texto del autor */
+.comentario-autor {
+  font-weight: bold;
+  color: #FF99DD;
+  margin-bottom: 6px;
+}
+
+/* 🔥 Texto del comentario */
+.comentario-texto {
+  color: #EEE;
+  margin-bottom: 6px;
+}
+
+/* 🔥 Fecha del comentario */
+.comentario-fecha {
+  font-size: 12px;
+  color: #999;
+}
+
+/* 🔥 Botón eliminar dentro de cada comentario */
+.comentario form {
+  margin-top: 6px;
+}
+
+/* ============================================================
+   BANNER FORO — marco neon centrado
+   ============================================================ */
+.banner-foro {
+  max-width: 1150px;
+  margin: 10px auto;
+  padding: 20px 40px;
+  background: rgba(20, 20, 40, 0.8);
+  border: 2px solid #FF00CC;
+  border-radius: 12px;
+  box-shadow: 0 0 15px #FF00CC, 0 0 25px #9146FF;
+  animation: glowPulse 2s infinite ease-in-out;
+}
+
+.banner-contenido {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.titulo-foro {
+  font-family: 'Trade Winds', cursive;
+  font-size: 2rem;
+  color: #FF00CC;
+  text-shadow: 0 0 12px #FF00CC, 0 0 24px #9146FF;
+  margin-bottom: 20px;
+}
+
+
+/* Animación suave */
+@keyframes glowPulse {
+  0% { box-shadow: 0 0 15px #FF00CC, 0 0 25px #9146FF; }
+  50% { box-shadow: 0 0 25px #FF00CC, 0 0 35px #9146FF; }
+  100% { box-shadow: 0 0 15px #FF00CC, 0 0 25px #9146FF; }
+}
+
+/* ============================================================
+   BOTONES RESPONDER / VOLVER / ELIMINAR
+   ============================================================ */
+/* 🔥 Contenedor de botones del tema */
+.botones-tema {
+  display: flex;
+  justify-content: flex-end; /* 🔥 Alinea todos a la derecha */
+  align-items: center;       /* 🔥 Alinea verticalmente */
+  gap: 10px;                 /* 🔥 Espacio entre botones */
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.btn-responder {
+  background-color: #FF00CC;
+  color: white;
+  border: none;
+  padding: 4px 12px;
+  font-size: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 0 6px #FF00CC;
+}
+
+
+.btn-volver {
+  padding: 4px 12px;
+  font-size: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 0 6px #FF00CC;
+  background-color: #222;
+  color: #FF00CC;
+  border: 1px solid #FF00CC;
+  text-decoration: none;
+}
+
+.btn-eliminar {
+  padding: 6px 12px;
+  font-size: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 0 6px #FF00CC;
+  background-color: #440022;
+  color: #FF99DD;
+  border: 1px solid #FF99DD;
+}
+
+
+/* ============================================================
+   COMENTARIOS DEL TEMA
+   ============================================================ */
+.comentarios-section {
+  margin-top: 40px;
+  padding: 25px;
+  background: rgba(20, 20, 40, 0.75);
+  border-radius: 12px;
+  box-shadow: 0 0 15px #FF00CC;
+}
+
+.comentarios-section h3 {
+  font-size: 1.6rem;
+  color: #FF00CC;
+  text-shadow: 0 0 8px #FF00CC;
+  margin-bottom: 20px;
+}
+
+.comentario {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 10px #9146FF;
+  text-align: left;
+}
+
+.comentario-autor {
+  color: #FF00CC;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.comentario-texto {
+  color: #ddd;
+  margin-bottom: 8px;
+}
+
+.comentario-fecha {
+  font-size: 0.8rem;
+  color: #aaa;
+  text-align: right;
+}
+
+.sin-comentarios {
+  color: #ccc;
+  font-style: italic;
+  text-align: center;
+  padding: 10px;
+}
+
+/* ============================================================
+   EDITOR FORO
+   ============================================================ */
+/* CONTENEDOR DEL EDITOR */
+.editor-contenedor {
+    max-width: 900px;
+    margin: 80px auto;
+    padding: 30px;
+    background: rgba(20, 20, 40, 0.85);
+    border-radius: 12px;
+    box-shadow: 0 0 25px #FF00CC;
+    text-align: center;
+}
+
+/* TÍTULO */
+.editor-titulo {
+    font-family: 'Trade Winds', cursive;
+    font-size: 2.5rem;
+    color: #FF00CC;
+    text-shadow: 0 0 12px #FF00CC, 0 0 24px #9146FF;
+    margin-bottom: 25px;
+}
+
+/* MARCO NEÓN */
+.editor-marco {
+    border: 2px solid #FF00CC;
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 0 15px #FF00CC, 0 0 25px #9146FF;
+    margin-bottom: 25px;
+}
+
+/* TEXTAREA */
+.editor-marco textarea {
+    width: 100%;
+    height: 250px;
+    padding: 15px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(0, 0, 0, 0.4);
+    color: white;
+    font-size: 1rem;
+    resize: vertical;
+    outline: none;
+}
+
+/* BOTÓN */
+.editor-boton {
+    background: #0f0c29;
+    color: #FF00CC;
+    padding: 12px 30px;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    text-decoration: none;
+    box-shadow: 0 0 12px #FF00CC, 0 0 24px #9146FF;
+    transition: 0.2s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.editor-boton:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px #FF00CC, 0 0 30px #9146FF;
+}
+
+/* VOLVER */
+.editor-volver {
+    display: inline-block;
+    margin-top: 20px;
+    color: #ccc;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.editor-volver:hover {
+    color: #FF00CC;
+}
+
+/* ============================================================
+   RESPONDER — AJUSTES DEL FORMULARIO
+   ============================================================ */
+
+/* Contenedor del formulario de respuesta */
+.form-respuesta {
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+
+/* Textarea grande y centrado */
+.textarea-respuesta {
+  width: 100%;
+  max-width: 800px;           /* 🔥 Limita el ancho para que no se desborde */
+  height: 180px;              /* 🔥 Más alto para escribir con comodidad */
+  margin: 0 auto 20px auto;   /* 🔥 Centrado con espacio abajo */
+  display: block;
+  padding: 18px;              /* 🔥 Más espacio interior */
+  font-size: 16px;
+  border: 2px solid #FF00CC;
+  border-radius: 10px;
+  background-color: #0a0a0a;
+  color: #fff;
+  box-shadow: 0 0 12px #FF00CC;
+  resize: vertical;
+}
+
+
+/* Botones iguales y alineados */
+.botones-tema .btn-responder {
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+.botones-tema .btn-volver {
+  padding: 6px 14px;
+  font-size: 12px;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 900px) {
+
+    .menu-superpuesto {
+        bottom: 10px;
+        right: 10px;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .logo-pz img {
+        width: 5rem;
+    }
+
+    .contenedor-stream {
+        flex-wrap: wrap;
+    }
+
+    .stream-frame,
+    .chat-frame {
+        flex: 0 0 100%;
+        height: 320px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+  body {
+    padding: 10px;
+    font-size: 16px;
+  }
+
+  header, nav, .botones {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .botones a {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .contenedor {
+    padding: 15px;
+  }
+
+  img, video, iframe {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+
+/* ============================================================
+   HOME — PRESENTACIÓN PRINCIPAL
+   ============================================================ */
+.home main {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.home .presentacion {
+    max-width: 1000px;
+    text-align: center;
+    padding: 2rem;
+    margin: 2rem auto;
+    background: rgba(20, 0, 30, 0.75);
+    border-radius: 12px;
+    border: 2px solid #ff00cc;
+    box-shadow: 0 0 18px #ff00cc;
+    backdrop-filter: blur(4px);
+}
+
+/* ============================================================
+   HOME — CONTADOR DE USUARIOS EN BANNER
+   ============================================================ */
+.banner-contenedor .online-counter {
+    position: absolute;
+    bottom: 12px;
+    left: 30px;
+    background: rgba(255, 0, 204, 0.85);
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-family: 'Trade Winds', cursive;
+    font-size: 0.75rem;
+    border: 2px solid #FF00CC;
+    box-shadow: 0 0 12px #FF00CC;
+    z-index: 40;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer-pz {
+  background: rgba(20, 20, 40, 0.8);
+  color: #FF00CC;
+  text-align: center;
+  padding: 20px;
+  font-size: 0.9rem;
+  text-shadow: 0 0 5px #FF00CC, 0 0 10px #9146FF;
+  box-shadow: 0 -2px 10px #FF00CC;
+  margin-top: 60px;
+  border-top: 1px solid #9146FF;
+}
+
+
+
+@media (max-width: 500px) {
+
+    .menu-superpuesto {
+        bottom: 8px;
+        right: 8px;
+        gap: 8px;
+    }
+
+    h1, h2, h3 {
+        font-size: 1.4rem;
+    }
+
+    .stream-frame,
+    .chat-frame {
+        height: 280px;
+    }
+}
+
+

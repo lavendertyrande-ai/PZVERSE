@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ============================================================
+       🔥 TÍTULO DEL TEMA
+       ============================================================ -->
+  <title>{{ tema.titulo }}</title>
+
+  <!-- ============================================================
+       🔥 CSS PRINCIPAL
+       ============================================================ -->
+  <link rel="stylesheet" href="/static/main.css">
+
+  <!-- ============================================================
+       🔥 FUENTES
+       ============================================================ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Trade+Winds&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lugrasimo&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- ============================================================
+       🔥 LOGO SUPERIOR
+       ============================================================ -->
+  <a href="/" class="logo-pz">
+    <img src="/static/logo.png" alt="Logo PZVERSE">
+  </a>
+
+  <!-- ============================================================
+       🔥 BANNER FORO
+       ============================================================ -->
+  <section class="banner-foro">
+    <div class="banner-contenido">
+      <h1 class="titulo-foro">FORO</h1>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       🔥 CONTENIDO DEL TEMA
+       ============================================================ -->
+  <main>
+    <section class="post-contenedor">
+
+      <!-- ============================================================
+       🔥 TÍTULO
+       ============================================================ -->
+      <h1 class="post-titulo">{{ tema.titulo }}</h1>
+
+      <!-- ============================================================
+       🔥 AUTOR
+       ============================================================ -->
+      <p class="post-fecha">Publicado por: {{ tema.autor }}</p>
+
+      <!-- ============================================================
+       🔥 IMAGEN DEL TEMA
+       ============================================================ -->
+      {% if tema.imagen %}
+        <img src="{{ tema.imagen }}" alt="Imagen del tema" class="post-imagen">
+      {% endif %}
+
+      <!-- ============================================================
+       🔥 CONTENIDO
+       ============================================================ -->
+      <div class="tema-cuerpo">
+        {{ tema.contenido | safe }}
+      </div>
+
+      <!-- ============================================================
+       🔥 BOTONES
+       ============================================================ -->
+      <div class="botones-tema">
+        <a href="/responder/{{ tema.id }}" class="btn-responder">RESPONDER</a>
+        <a href="/interactivo#foro" class="btn-volver">VOLVER</a>
+
+        {% if session.user and session.user.name|lower == tema.autor|lower %}
+        <form action="/eliminar-tema/{{ tema.id }}" method="POST"
+              onsubmit="return confirm('¿Seguro que quieres eliminar este tema?');">
+          <button class="btn-eliminar">Eliminar</button>
+        </form>
+        {% endif %}
+      </div>
+
+    </section>
+  </main>
+
+  <!-- ============================================================
+       🔥 SECCIÓN DE COMENTARIOS
+       ============================================================ -->
+  <div class="comentarios-section">
+    <h3>Comentarios</h3>
+
+    {% if tema.respuestas %}
+      {% for r in tema.respuestas %}
+        <div class="comentario">
+          <p class="comentario-autor">{{ r.autor }}</p>
+          <p class="comentario-texto">{{ r.texto }}</p>
+          <p class="comentario-fecha">{{ r.fecha }}</p>
+
+          {% if session.user and session.user.name|lower == r.autor|lower %}
+          <form action="/eliminar-respuesta/{{ tema.id }}/{{ r.id }}" method="POST"
+                onsubmit="return confirm('¿Eliminar esta respuesta?');">
+            <button class="btn-eliminar">Eliminar</button>
+          </form>
+          {% endif %}
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="sin-comentarios">Aún no hay comentarios. ¡Sé el primero en responder!</p>
+    {% endif %}
+  </div>
+
+  <!-- ============================================================
+       🔥 PIE DE PÁGINA — COPYRIGHT Y CRÉDITOS
+       ============================================================ -->
+  <footer class="footer-pz">
+    <p>&copy; 2026 PZVERSE — Todos los derechos reservados.</p>
+    <p>Propiedad de PZVERSE. Diseño y contenido protegido.</p>
+  </footer>
+
+</body>
+</html>

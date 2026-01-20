@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editar Post</title>
+
+  <link rel="stylesheet" href="/static/main.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Trade+Winds&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lugrasimo&display=swap" rel="stylesheet">
+
+  <!-- TinyMCE -->
+  <script src="https://cdn.jsdelivr.net/npm/tinymce@6.7.0/tinymce.min.js"></script>
+
+  <script>
+    tinymce.init({
+      selector: '#content',
+      plugins: 'link image lists table code',
+      toolbar: 'undo redo | bold italic underline | alignleft aligncenter alignright | bullist numlist | link image | code',
+      height: 400
+    });
+  </script>
+
+  <style>
+    .btn-guardar {
+      display: inline-block;
+      padding: 10px 20px;
+      background: #00ff99;
+      color: #000;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 0 10px #00ff99;
+      margin-top: 20px;
+    }
+
+    .btn-volver {
+      display: inline-block;
+      padding: 10px 20px;
+      background: #ff00cc;
+      color: #fff;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      margin-left: 20px;
+      box-shadow: 0 0 10px #ff00cc;
+    }
+  </style>
+</head>
+
+<body>
+
+  <a href="/" class="logo-pz">
+    <img src="/static/logo.png" alt="Logo PZVERSE">
+  </a>
+
+  <main>
+    <section class="card" style="max-width: 900px; margin: 40px auto;">
+
+      <h2 class="titulo-blog">Editar publicación</h2>
+
+      <form action="/admin/blog/editar/{{ slug }}" method="POST" enctype="multipart/form-data">
+
+        <label>Título:</label>
+        <input type="text" name="title" value="{{ post.title }}" required>
+
+        <label>Resumen:</label>
+        <textarea name="summary" required>{{ post.summary }}</textarea>
+
+        <label>Imagen actual:</label><br>
+        {% if post.image %}
+          <img src="{{ post.image }}" style="width:150px; border-radius:8px; margin-bottom:10px;">
+        {% else %}
+          <p>Sin imagen</p>
+        {% endif %}
+
+        <input type="hidden" name="current_image" value="{{ post.image }}">
+
+        <label>Subir nueva imagen (opcional):</label>
+        <input type="file" name="image">
+
+        <label>Contenido:</label>
+        <textarea id="content" name="content">{{ post.content }}</textarea>
+
+        <button type="submit" class="btn-guardar">Guardar cambios</button>
+        <a href="/admin/blog/gestionar" class="btn-volver">← Volver</a>
+
+      </form>
+
+    </section>
+  </main>
+
+</body>
+</html>

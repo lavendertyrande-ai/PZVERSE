@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube</title>
+
+  <!-- ============================
+       Estilos principales
+       ============================ -->
+  <link rel="stylesheet" href="/static/main.css">
+
+  <!-- ============================
+       Fuentes externas
+       ============================ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Trade+Winds&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lugrasimo&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- ============================================================
+       LOGO FIJO SUPERIOR IZQUIERDA
+       ============================================================ -->
+  <a href="/" class="logo-pz">
+    <img src="/static/logo.png" alt="Logo PZVERSE">
+  </a>
+
+  <!-- ============================================================
+       BANNER PRINCIPAL + MENÚ SUPERPUESTO
+       ============================================================ -->
+  <section class="banner-titulo">
+    <div class="banner-contenedor">
+      <img src="/static/Youtube.png" alt="Banner YouTube">
+
+      <nav class="menu-superpuesto">
+        <a href="/" class="btn">Inicio</a>
+        <a href="/twitch-mio" class="btn">Patz Oficial</a>
+        <a href="/twitch-pareja" class="btn">Zhoomm Oficial</a>
+        <a href="/youtube" class="btn">YouTube</a>
+        <a href="/blog" class="btn">Blog</a>
+        <a href="/interactivo" class="btn">Social</a>
+      </nav>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CONTENIDO PRINCIPAL
+       ============================================================ -->
+  <main>
+    <section class="youtube-section">
+      <h2 class="titulo-youtube">Últimos vídeos</h2>
+
+        <!-- Botón de suscripción YouTube -->
+        <div class="boton-suscripcion">
+          <a class="btn-neon" href="https://www.youtube.com/@PatzOficial?sub_confirmation=1" target="_blank">
+            💖 Suscribirse al canal
+          </a>
+        </div>
+
+
+      <div class="grid-youtube">
+        {% for v in videos %}
+          <div class="video-card">
+            <iframe src="https://www.youtube.com/embed/{{ v.video_id }}" allowfullscreen></iframe>
+            <p class="video-title">{{ v.titulo }}</p>
+            <a class="btn-neon" href="https://www.youtube.com/watch?v={{ v.video_id }}" target="_blank">
+              Ver en YouTube
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+
+    </section>
+  </main>
+
+  <footer class="footer-pz">
+    <p>&copy; 2026 PZVERSE — Todos los derechos reservados.</p>
+    <p>Propiedad de PZVERSE. Diseño y contenido protegido.</p>
+  </footer>
+
+</body>
+</html>
