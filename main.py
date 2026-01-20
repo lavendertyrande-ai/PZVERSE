@@ -13,8 +13,6 @@ from firebase_admin import credentials, messaging
 import platform
 
 
-
-
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -341,7 +339,13 @@ def home():
 def login_google():
     redirect_uri = "https://www.pz-verse.com/authorize/google"
     print("GOOGLE REDIRECT V2:", redirect_uri)
+
+    # 🔥 Guardar el state en la sesión
+    session['state'] = oauth.google.create_authorization_url(redirect_uri)[1]['state']
+
+    # Y ahora sí redirigir
     return oauth.google.authorize_redirect(redirect_uri)
+
 
 
 
