@@ -339,13 +339,7 @@ def home():
 def login_google():
     redirect_uri = "https://www.pz-verse.com/authorize/google"
     print("GOOGLE REDIRECT V2:", redirect_uri)
-
-    # 🔥 Guardar el state en la sesión
-    session['state'] = oauth.google.create_authorization_url(redirect_uri)[1]['state']
-
-    # Y ahora sí redirigir
     return oauth.google.authorize_redirect(redirect_uri)
-
 
 
 
@@ -933,8 +927,17 @@ def enviar_notificacion(titulo, mensaje):
         print("❌ Error enviando notificación:", e)
 
 
-# Confirmando URIs OAuth para producción
-# Intentado que las URIs coincidan exactamente con las registradas en Google Cloud Console y Twitch Developer Console
+# ============================================================
+# CABECERA SCP
+# ============================================================
+
+@app.after_request
+def fix_csp(response):
+    response.headers['Content-Security-Policy'] = (
+        "frame-ancestors 'self' https://www.pz-verse.com https://player.twitch.tv https://www.twitch.tv"
+    )
+    return response
+
 
 # ============================================================
 # ARRANQUE

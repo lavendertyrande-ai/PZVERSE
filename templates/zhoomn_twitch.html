@@ -14,15 +14,19 @@
 
 <body>
 
-  <!-- Logo fijo -->
-  <a href="/" class="logo-pz {% if twitch.online %}online-zhoomn{% else %}offline-zhoomn{% endif %}">
+  <!-- ===============================================
+       Logo fijo
+       =============================================== -->
+  <a href="/" class="logo-pz {% if twitch.online %}online-zhoomm{% else %}offline-zhoomm{% endif %}">
     <img src="/static/logo.png" alt="Logo PZVERSE" />
   </a>
 
-  <!-- Banner -->
+  <!-- ===============================================
+       Banner
+       =============================================== -->
   <section class="banner-titulo">
     <div class="banner-contenedor">
-      <img src="/static/Zhoomn.png" alt="Banner Zhoomn">
+      <img src="/static/Zhoomm.png" alt="Banner Zhoomm">
 
       <nav class="menu-superpuesto">
         <a href="/" class="btn">Inicio</a>
@@ -35,10 +39,12 @@
     </div>
   </section>
 
-  <!-- Botón seguir -->
+  <!-- =============================================
+       Botón seguir
+       ============================================= -->
   <div class="boton-debajo-banner">
-    <a href="https://www.twitch.tv/zhoomnoficial" target="_blank" class="btn-seguir">
-      💖 Seguir canal en Twitch
+    <a href="https://www.twitch.tv/zhoommoficial" target="_blank" class="btn-seguir">
+      ⚡ Seguir canal en Twitch
     </a>
   </div>
 
@@ -46,7 +52,9 @@
     <section class="card">
       <h2>Directo</h2>
 
-      <!-- Estado del canal -->
+      <!-- ==============================================
+           Estado del canal
+           ============================================== -->
       <div class="estado-canal">
         {% if twitch.online %}
           <p class="estado-online">🔴 EN DIRECTO — {{ twitch.title }}</p>
@@ -57,26 +65,40 @@
 
       <div class="contenedor-stream">
         <div class="stream-frame">
-          <iframe src="https://player.twitch.tv/?channel=zhoomnoficial&parent=localhost" allowfullscreen></iframe>
+          <iframe
+            src="https://player.twitch.tv/?channel=zhoommoficial&parent=www.pz-verse.com"
+            height="480"
+            width="100%"
+            allowfullscreen>
+          </iframe>
         </div>
 
-        <!-- Bloque lateral con botón + chat -->
+        <!-- ====================================================
+             Bloque lateral con botón + chat
+             ==================================================== -->
         <div class="bloque-chat">
           <div class="boton-calendario">
             <a href="#calendario-directo" class="btn-calendario">📅 Ver calendario de directos</a>
           </div>
           <div class="chat-frame">
-            <iframe src="https://www.twitch.tv/embed/zhoomnoficial/chat?parent=localhost" frameborder="0"></iframe>
+            <iframe
+              src="https://www.twitch.tv/embed/zhoommoficial/chat?parent=www.pz-verse.com"
+              height="500"
+              width="100%"
+              frameborder="0">
+            </iframe>
           </div>
         </div>
       </div>
 
-      <!-- Calendario -->
+      <!-- ===================================================
+           Calendario
+           =================================================== -->
       <h2 class="titulo-calendario" id="calendario">Calendario de Directos</h2>
 
       <div class="calendario-directos" id="calendario-directo">
         <iframe
-          src="https://calendar.google.com/calendar/embed?src=zhoomnoficial%40gmail.com&ctz=Europe/Madrid"
+          src="https://calendar.google.com/calendar/embed?src=zhoommoficial%40gmail.com&ctz=Europe/Madrid"
           style="border: 0"
           width="100%"
           height="400"
@@ -88,6 +110,9 @@
     </section>
   </main>
 
+  <!-- ==================================================
+       Footer
+       ================================================== -->
   <footer class="footer-pz">
     <p>&copy; 2026 PZVERSE — Todos los derechos reservados.</p>
     <p>Propiedad de ZhoommOficial. Diseño y contenido protegido.</p>
@@ -95,3 +120,4 @@
 
 </body>
 </html>
+
