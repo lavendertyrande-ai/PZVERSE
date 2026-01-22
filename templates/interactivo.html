@@ -137,34 +137,76 @@
   <!-- ============================================================
        SCRIPTS DEL CHAT (REST API)
        ============================================================ -->
-  <script>
-    function enviarMensaje() {
-      const mensaje = document.getElementById("mensaje").value;
+<script>
 
-      fetch("/enviar_mensaje", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ mensaje })
-      }).then(() => {
-        document.getElementById("mensaje").value = "";
-        cargarMensajes();
-      });
-    }
+  /* ------------------------------------------------------------
+     REEMPLAZO AUTOMÁTICO DE EMOJIS
+     ------------------------------------------------------------ */
+  function reemplazarEmojis(texto) {
+    return texto
+      .replace(/\bhola\b/gi, "👋")
+      .replace(/\bgracias\b/gi, "🙏")
+      .replace(/\bfeliz\b/gi, "😊")
+      .replace(/\btriste\b/gi, "😢")
+      .replace(/\bmuerto\b/gi, "💀")
+      .replace(/\bmiedo\b/gi, "😱")
+      .replace(/\bbravo\b/gi, "🔥")
+      .replace(/\bcorazon\b/gi, "❤️")
+      .replace(/\bamor\b/gi, "💖");
+  }
 
-    function cargarMensajes() {
-      fetch("/mensajes")
-        .then(r => r.json())
-        .then(data => {
-          let html = "";
-          data.forEach(m => {
-            html += `<p><strong>${m.usuario}</strong>: ${m.texto}</p>`;
-          });
-          document.getElementById("chat-box").innerHTML = html;
+
+  /* ------------------------------------------------------------
+     ENVIAR MENSAJE
+     ------------------------------------------------------------ */
+  function enviarMensaje() {
+    let mensaje = document.getElementById("mensaje").value;
+
+    // Reemplazar palabras por emojis
+    mensaje = reemplazarEmojis(mensaje);
+
+    fetch("/enviar_mensaje", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ mensaje })
+    }).then(() => {
+      document.getElementById("mensaje").value = "";
+      cargarMensajes();
+    });
+  }
+
+
+  /* ------------------------------------------------------------
+     CARGAR MENSAJES
+     ------------------------------------------------------------ */
+  function cargarMensajes() {
+    fetch("/mensajes")
+      .then(r => r.json())
+      .then(data => {
+        let html = "";
+        data.forEach(m => {
+          html += `<p><strong>${m.usuario}</strong>: ${m.texto}</p>`;
         });
-    }
+        document.getElementById("chat-box").innerHTML = html;
 
-    setInterval(cargarMensajes, 3000);
-  </script>
+        // Auto-scroll al final
+        const box = document.getElementById("chat-box");
+        box.scrollTop = box.scrollHeight;
+      });
+  }
+
+document.getElementById("mensaje").addEventListener("keypress", function(e) {
+  if (e.key === "Enter") enviarMensaje();
+});
+
+
+  /* ------------------------------------------------------------
+     AUTO-REFRESH CADA 3 SEGUNDOS
+     ------------------------------------------------------------ */
+  setInterval(cargarMensajes, 3000);
+
+</script>
+
 
   <!-- ============================================================
        SOCKET.IO — USUARIOS EN TIEMPO REAL
@@ -181,72 +223,113 @@
   </script>
 
   <!-- ============================================================
-       FIREBASE MESSAGING — NOTIFICACIONES PUSH
-       ============================================================ -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-    import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-messaging.js";
+     FIREBASE MESSAGING — NOTIFICACIONES PUSH
+     ============================================================ -->
 
-    // Configuración de tu proyecto
-    const firebaseConfig = {
-      apiKey: "{{ firebase_api_key }}",
-      authDomain: "pzverse-chat.firebaseapp.com",
-      projectId: "pzverse-chat",
-      storageBucket: "pzverse-chat.firebasestorage.app",
-      messagingSenderId: "401483325657",
-      appId: "1:401483325657:web:1acf0edcccd6bd9d1e1ec8",
-      measurementId: "G-ZF8SLL5JV6"
-    };
+<script type="module">
+  /* ============================================================
+     IMPORTS DE FIREBASE
+     ESTO CARGA LAS LIBRERÍAS NECESARIAS PARA NOTIFICACIONES PUSH
+     ============================================================ */
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+  import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-messaging.js";
 
-    const app = initializeApp(firebaseConfig);
-    const messaging = getMessaging(app);
+  /* ============================================================
+     CONFIGURACIÓN DE FIREBASE
+     ESTAS VARIABLES VIENEN DESDE FLASK (Y RAILWAY)
+     ============================================================ */
+  const firebaseConfig = {
+    apiKey: "{{ firebase_api_key }}",   // CLAVE API INYECTADA DESDE VARIABLES DE ENTORNO
+    authDomain: "pzverse-chat.firebaseapp.com",
+    projectId: "pzverse-chat",
+    storageBucket: "pzverse-chat.firebasestorage.app",
+    messagingSenderId: "401483325657",
+    appId: "1:401483325657:web:1acf0edcccd6bd9d1e1ec8",
+    measurementId: "G-ZF8SLL5JV6"
+  };
 
-    // Registrar service worker
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/firebase-messaging-sw.js")
-        .then(reg => {
-          console.log("✅ Service Worker registrado:", reg.scope);
+  // INICIALIZAMOS FIREBASE
+  const app = initializeApp(firebaseConfig);
+  const messaging = getMessaging(app);
 
-          // Pedir permiso para notificaciones
-          return Notification.requestPermission();
-        })
-        .then(permission => {
-          if (permission === "granted") {
-            console.log("🔔 Permiso de notificaciones concedido");
+  /* ============================================================
+     REGISTRO DEL SERVICE WORKER
+     SIN ESTO, NO HAY NOTIFICACIONES PUSH
+     ============================================================ */
+  if ("serviceWorker" in navigator) {
 
-            // OJO: aquí debes poner tu VAPID KEY de Firebase Cloud Messaging
-            return getToken(messaging, {
-              vapidKey: "{{ firebase_vapid_key }}"
-            });
-          } else {
-            console.warn("⚠️ Permiso de notificaciones denegado");
-          }
-        })
-        .then(currentToken => {
-          if (currentToken) {
-            console.log("📲 Token FCM:", currentToken);
+    // SI EXISTE LA FUNCIÓN DEBUG(), MOSTRAMOS MENSAJE EN PANTALLA
+    if (typeof debug === "function") debug("INTENTANDO REGISTRAR SERVICE WORKER...");
 
-            // Enviar token al backend para guardarlo
-            fetch("/registrar-token", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ token: currentToken })
-            });
-          }
-        })
-        .catch(err => {
-          console.error("❌ Error en registro de notificaciones:", err);
-        });
+    // *** RUTA CORRECTA DEL SERVICE WORKER ***
+    navigator.serviceWorker.register("/static/firebase-messaging-sw.js")
+      .then(reg => {
+
+        console.log("✅ SERVICE WORKER REGISTRADO:", reg.scope);
+        if (typeof debug === "function") debug("SERVICE WORKER REGISTRADO CORRECTAMENTE");
+
+        /* ============================================================
+           PEDIR PERMISO DE NOTIFICACIONES AL USUARIO
+           ============================================================ */
+        return Notification.requestPermission();
+      })
+      .then(permission => {
+
+        if (permission === "granted") {
+          console.log("🔔 PERMISO DE NOTIFICACIONES CONCEDIDO");
+          if (typeof debug === "function") debug("PERMISO DE NOTIFICACIONES CONCEDIDO");
+
+          /* ============================================================
+             OBTENER TOKEN FCM
+             ESTA ES LA CLAVE QUE IDENTIFICA TU MÓVIL
+             ============================================================ */
+          return getToken(messaging, {
+            vapidKey: "{{ firebase_vapid_key }}"   // CLAVE VAPID INYECTADA DESDE RAILWAY
+          });
+
+        } else {
+          console.warn("⚠️ PERMISO DE NOTIFICACIONES DENEGADO");
+          if (typeof debug === "function") debug("PERMISO DENEGADO POR EL USUARIO");
+        }
+      })
+      .then(currentToken => {
+
+        if (currentToken) {
+          console.log("📲 TOKEN FCM GENERADO:", currentToken);
+          if (typeof debug === "function") debug("TOKEN GENERADO: " + currentToken);
+
+          /* ============================================================
+             ENVIAR TOKEN AL BACKEND PARA GUARDARLO EN UN ARCHIVO
+             ============================================================ */
+          fetch("/registrar-token", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ token: currentToken })
+          });
+
+          if (typeof debug === "function") debug("TOKEN ENVIADO AL BACKEND");
+        }
+      })
+      .catch(err => {
+        console.error("❌ ERROR EN REGISTRO DE NOTIFICACIONES:", err);
+        if (typeof debug === "function") debug("ERROR: " + err);
+      });
+  }
+
+  /* ============================================================
+     NOTIFICACIONES RECIBIDAS EN PRIMER PLANO
+     (CUANDO LA WEB ESTÁ ABIERTA)
+     ============================================================ */
+  onMessage(messaging, (payload) => {
+    console.log("📩 NOTIFICACIÓN RECIBIDA EN PRIMER PLANO:", payload);
+
+    if (payload.notification) {
+      alert(payload.notification.title + "\n" + payload.notification.body);
     }
+  });
+</script>
 
-    // Notificaciones en primer plano
-    onMessage(messaging, (payload) => {
-      console.log("📩 Notificación recibida en primer plano:", payload);
-      if (payload.notification) {
-        alert(payload.notification.title + "\n" + payload.notification.body);
-      }
-    });
-  </script>
+
 
   <!-- ============================================================
        FOOTER

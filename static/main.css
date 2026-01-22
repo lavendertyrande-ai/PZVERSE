@@ -984,6 +984,13 @@ p, li, a, span {
   box-shadow: 0 0 20px #FF00CC;
 }
 
+#chat-box p {
+  background: rgba(255, 0, 204, 0.15);
+  padding: 8px 12px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
 /* ============================================================
    TÍTULO DEL CHAT
    ============================================================ */
