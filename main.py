@@ -818,6 +818,75 @@ def registrar_token():
 
 
 # ============================================================
+# 🔔 SISTEMA DE NOTIFICACIONES TELEGRAM — PZVERSE
+# ============================================================
+
+import requests
+
+# TOKEN DEL BOT (DE BOTFATHER)
+TELEGRAM_TOKEN = "8439451018:AAEgLqXN26fw0lfCdj7aCMT89euvfTWy5Q"
+
+# CHAT_ID DEL USUARIO (SE RELLENA AUTOMÁTICAMENTE CUANDO ESCRIBAS AL BOT)
+TELEGRAM_CHAT_ID = None
+
+
+# ============================================================
+# FUNCIÓN PARA ENVIAR MENSAJES A TELEGRAM
+# ============================================================
+def enviar_telegram(mensaje):
+    """
+    ENVÍA UN MENSAJE A TU BOT DE TELEGRAM.
+    NECESITA QUE TELEGRAM_CHAT_ID ESTÉ DEFINIDO.
+    """
+    global TELEGRAM_CHAT_ID
+
+    if TELEGRAM_CHAT_ID is None:
+        print("⚠️ No se puede enviar mensaje: CHAT_ID no definido aún.")
+        return
+
+    url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
+    payload = {
+        "chat_id": TELEGRAM_CHAT_ID,
+        "text": mensaje
+    }
+
+    try:
+        requests.post(url, json=payload)
+        print("📨 Mensaje enviado a Telegram:", mensaje)
+    except Exception as e:
+        print("❌ Error enviando mensaje a Telegram:", e)
+
+
+# ============================================================
+# WEBHOOK PARA CAPTURAR TU CHAT_ID AUTOMÁTICAMENTE
+# ============================================================
+@app.route("/telegram-webhook", methods=["POST"])
+def telegram_webhook():
+    """
+    ESTA RUTA RECIBE MENSAJES QUE TÚ ENVÍES A TU BOT.
+    SIRVE PARA CAPTURAR AUTOMÁTICAMENTE TU CHAT_ID.
+    """
+    global TELEGRAM_CHAT_ID
+
+    data = request.get_json()
+    print("📩 Mensaje recibido desde Telegram:", data)
+
+    # EXTRAER CHAT_ID
+    try:
+        TELEGRAM_CHAT_ID = data["message"]["chat"]["id"]
+        print("✅ CHAT_ID DETECTADO:", TELEGRAM_CHAT_ID)
+
+        # GUARDARLO EN ARCHIVO PARA QUE NO SE PIERDA
+        with open("chat_id.txt", "w") as f:
+            f.write(str(TELEGRAM_CHAT_ID))
+
+    except Exception as e:
+        print("❌ Error extrayendo CHAT_ID:", e)
+
+    return "OK"
+
+
+# ============================================================
 # RUTA PARA PROBAR NOTIFICACIONES PUSH
 # ============================================================
 
@@ -958,7 +1027,7 @@ def fix_csp(response):
 
 
 if __name__ == "__main__":
-    socketio.run(app, host="0.0.0.0", port=5000)
+    socketio.run(app, host="0.0.0.0", port=5000, allow_unsafe_werkzeug=True)
 
 
 
