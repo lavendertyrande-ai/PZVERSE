@@ -797,6 +797,7 @@ p, li, a, span {
 .youtube-section {
   text-align: center;
   margin-top: 40px;
+  padding: 0 10px;
 }
 
 .titulo-youtube {
@@ -806,11 +807,16 @@ p, li, a, span {
   margin-bottom: 30px;
 }
 
-.grid-youtube {
+.youtube-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 30px;
-  padding: 20px;
+  padding: 40px 60px;
+  justify-items: center;
+}
+
+.video-title {
+    font-size: 0.85rem;
 }
 
 .video-card {
@@ -819,7 +825,6 @@ p, li, a, span {
   border-radius: 12px;
   box-shadow: 0 0 15px #FF00CC, 0 0 25px #9146FF;
 }
-
 
 .video-card h3 {
   color: #fff;
@@ -1580,62 +1585,6 @@ p, li, a, span {
   font-size: 12px;
 }
 
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
-@media (max-width: 900px) {
-
-    .menu-superpuesto {
-        bottom: 10px;
-        right: 10px;
-        flex-direction: column;
-        align-items: flex-end;
-    }
-
-    .logo-pz img {
-        width: 5rem;
-    }
-
-    .contenedor-stream {
-        flex-wrap: wrap;
-    }
-
-    .stream-frame,
-    .chat-frame {
-        flex: 0 0 100%;
-        height: 320px;
-    }
-}
-
-@media screen and (max-width: 768px) {
-  body {
-    padding: 10px;
-    font-size: 16px;
-  }
-
-  header, nav, .botones {
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .botones a {
-    display: block;
-    width: 100%;
-    margin-bottom: 10px;
-    text-align: center;
-  }
-
-  .contenedor {
-    padding: 15px;
-  }
-
-  img, video, iframe {
-    max-width: 100%;
-    height: auto;
-  }
-}
-
 
 /* ============================================================
    HOME — PRESENTACIÓN PRINCIPAL
@@ -1710,4 +1659,128 @@ p, li, a, span {
     }
 }
 
+
+/* ============================================================
+   RESPONSIVE PARA MÓVILES
+   ============================================================ */
+@media (max-width: 900px) {
+
+    .menu-superpuesto {
+        bottom: 10px;
+        right: 10px;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .logo-pz img {
+        width: 5rem;
+    }
+
+    .contenedor-stream {
+        flex-wrap: wrap;
+    }
+
+    .stream-frame,
+    .chat-frame {
+        flex: 0 0 100%;
+        height: 320px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+  body {
+    padding: 10px;
+    font-size: 16px;
+  }
+
+  header, nav, .botones {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .botones a {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .contenedor {
+    padding: 15px;
+  }
+
+  img, video, iframe {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* Para móviles grandes */
+@media (max-width: 768px) {
+
+  .youtube-grid {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 30px 20px;
+    gap: 25px;
+  }
+
+  .video-card iframe {
+    height: 180px;
+  }
+
+  .titulo-youtube {
+    font-size: 2rem;
+  }
+
+  .boton-suscripcion {
+    margin-bottom: 20px;
+  }
+
+  .menu-superpuesto {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px;
+  }
+}
+
+/* Para móviles pequeños */
+@media (max-width: 480px) {
+
+  .youtube-grid {
+    grid-template-columns: 1fr;
+    padding: 20px 15px;
+    gap: 20px;
+  }
+
+  .video-card {
+    max-width: 100%;
+    padding: 12px;
+  }
+
+  .video-card iframe {
+    height: 160px;
+  }
+
+  .titulo-youtube {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+  }
+
+  .boton-suscripcion .btn-neon {
+    padding: 8px 14px;
+    font-size: 0.9rem;
+  }
+
+  .menu-superpuesto {
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .banner-contenedor img {
+    width: 100%;
+    height: auto;
+  }
+}
 
