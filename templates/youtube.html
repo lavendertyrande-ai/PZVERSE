@@ -53,15 +53,15 @@
     <section class="youtube-section">
       <h2 class="titulo-youtube">Últimos vídeos</h2>
 
-        <!-- Botón de suscripción YouTube -->
-        <div class="boton-suscripcion">
-          <a class="btn-neon" href="https://www.youtube.com/@PatzOficial?sub_confirmation=1" target="_blank">
-            💖 Suscribirse al canal
-          </a>
-        </div>
+      <!-- Botón de suscripción YouTube -->
+      <div class="boton-suscripcion">
+        <a class="btn-neon" href="https://www.youtube.com/@PatzOficial?sub_confirmation=1" target="_blank">
+          💖 Suscribirse al canal
+        </a>
+      </div>
 
-
-      <div class="grid-youtube">
+      <!-- Grid de vídeos -->
+      <div class="youtube-grid">
         {% for v in videos %}
           <div class="video-card">
             <iframe src="https://www.youtube.com/embed/{{ v.video_id }}" allowfullscreen></iframe>
