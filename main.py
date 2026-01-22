@@ -768,6 +768,10 @@ def guardar_mensajes(lista):
 
 @app.route("/enviar_mensaje", methods=["POST"])
 def enviar_mensaje():
+    """
+    Recibe un mensaje desde la web.
+    Lo guarda en mensajes.json y lo envía a Telegram.
+    """
     data = request.get_json()
     texto = data.get("mensaje", "").strip()
 
@@ -776,16 +780,18 @@ def enviar_mensaje():
 
     usuario = session.get("user", {}).get("name", "Anónimo")
 
+    # Guardar en el chat web
     mensajes = cargar_mensajes()
     mensajes.append({
         "usuario": usuario,
         "texto": texto,
         "fecha": datetime.utcnow().strftime("%H:%M:%S")
     })
-
     guardar_mensajes(mensajes)
 
-    # 🔥 ENVIAR MENSAJE A TELEGRAM
+    print(f"💬 Mensaje desde web: {usuario}: {texto}")
+
+    # Enviar a Telegram
     enviar_telegram(f"{usuario}: {texto}")
 
     return "OK", 200
@@ -822,6 +828,7 @@ import requests
 
 # TOKEN DEL BOT (DE BOTFATHER)
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
+print("🔑 TOKEN TELEGRAM cargado:", "OK" if TELEGRAM_TOKEN else "VACÍO")
 
 # CHAT_ID DEL USUARIO (SE RELLENA AUTOMÁTICAMENTE CUANDO ESCRIBAS AL BOT)
 TELEGRAM_CHAT_ID = None
@@ -831,6 +838,11 @@ TELEGRAM_CHAT_ID = None
 # FUNCIÓN PARA ENVIAR MENSAJES A TELEGRAM
 # ============================================================
 def enviar_telegram(mensaje):
+    """
+    Envía un mensaje al bot de Telegram.
+    Si Railway reinicia y la variable global se pierde,
+    se recarga automáticamente desde chat_id.txt.
+    """
     global TELEGRAM_CHAT_ID
 
     # Si la variable global está vacía, cargar desde archivo
@@ -839,10 +851,14 @@ def enviar_telegram(mensaje):
             with open("chat_id.txt") as f:
                 TELEGRAM_CHAT_ID = f.read().strip()
                 print("♻️ CHAT_ID cargado desde archivo:", TELEGRAM_CHAT_ID)
-        except:
-            print("⚠️ No se puede enviar mensaje: CHAT_ID no definido aún.")
+        except FileNotFoundError:
+            print("⚠️ No existe chat_id.txt — Telegram aún no ha enviado ningún mensaje.")
+            return
+        except Exception as e:
+            print("❌ Error leyendo chat_id.txt:", e)
             return
 
+    # Enviar mensaje a Telegram
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
     payload = {
         "chat_id": TELEGRAM_CHAT_ID,
@@ -856,11 +872,17 @@ def enviar_telegram(mensaje):
         print("❌ Error enviando mensaje a Telegram:", e)
 
 
+
 # ============================================================
 # WEBHOOK PARA CAPTURAR TU CHAT_ID AUTOMÁTICAMENTE
 # ============================================================
 @app.route("/telegram-webhook", methods=["POST"])
 def telegram_webhook():
+    """
+    Recibe mensajes desde Telegram.
+    Guarda el chat_id en archivo para persistencia.
+    Guarda el mensaje en el chat web.
+    """
     global TELEGRAM_CHAT_ID
 
     data = request.get_json()
@@ -877,8 +899,13 @@ def telegram_webhook():
         TELEGRAM_CHAT_ID = data["message"]["chat"]["id"]
         print("✅ CHAT_ID DETECTADO:", TELEGRAM_CHAT_ID)
 
-        with open("chat_id.txt", "w") as f:
-            f.write(str(TELEGRAM_CHAT_ID))
+        # Guardar chat_id en archivo
+        try:
+            with open("chat_id.txt", "w") as f:
+                f.write(str(TELEGRAM_CHAT_ID))
+            print("💾 chat_id.txt guardado correctamente")
+        except Exception as e:
+            print("❌ Error guardando chat_id.txt:", e)
 
     except Exception as e:
         print("❌ Error extrayendo CHAT_ID:", e)
@@ -886,7 +913,7 @@ def telegram_webhook():
     # GUARDAR EL MENSAJE EN EL CHAT DE LA WEB
     mensajes = cargar_mensajes()
     mensajes.append({
-        "usuario": "PZVerse",
+        "usuario": "PZVerse",  # Nombre que aparecerá en el chat web
         "texto": texto,
         "fecha": datetime.utcnow().strftime("%H:%M:%S")
     })
@@ -895,14 +922,16 @@ def telegram_webhook():
     return "OK"
 
 
+
 # ============================================================
 # RUTA PARA PROBAR NOTIFICACIONES PUSH
 # ============================================================
-
 @app.route("/probar-push")
 def probar_push():
     enviar_notificacion("🔔 Prueba de notificación", "Todo funciona correctamente.")
     return "Notificación enviada"
+
+
 
 # ============================================================
 # RUTA PARA TOKEN
