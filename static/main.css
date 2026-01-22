@@ -88,8 +88,20 @@ p, li, a, span {
     box-shadow: 0 0 10px #FF00CC, 0 0 20px #9146FF;
 }
 
-.btn-login.google { background-color: #4285F4; }
-.btn-login.twitch { background-color: #9146FF; }
+.btn-login.twitch {
+    background-color: #9146FF;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+
+.twitch-icon {
+    width: 18px;
+    height: 18px;
+    display: block;
+}
+
 
 .user-banner {
     display: flex;

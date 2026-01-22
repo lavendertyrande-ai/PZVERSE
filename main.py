@@ -80,20 +80,6 @@ with app.app_context():
 oauth = OAuth(app)
 
 
-# ============================================================
-# CONFIGURACIÓN OAUTH GOOGLE
-# ============================================================
-
-oauth.register(
-    name='google',
-    client_id=os.getenv("GOOGLE_CLIENT_ID"),
-    client_secret=os.getenv("GOOGLE_CLIENT_SECRET"),
-    access_token_url='https://accounts.google.com/o/oauth2/token',
-    authorize_url='https://accounts.google.com/o/oauth2/auth',
-    api_base_url='https://www.googleapis.com/oauth2/v1/',
-    client_kwargs={'scope': 'email profile'}
-)
-
 
 # ============================================================
 # CONFIGURACIÓN OAUTH TWITCH
@@ -329,40 +315,6 @@ def home():
     videos = get_latest_videos()
     events = get_events()
     return render_template("index.html", twitch=twitch, videos=videos, events=events, user=user)
-
-
-# ============================================================
-# LOGIN GOOGLE
-# ============================================================
-
-@app.route('/login/google')
-def login_google():
-    redirect_uri = "https://www.pz-verse.com/authorize/google"
-    print("GOOGLE REDIRECT V2:", redirect_uri)
-    return oauth.google.authorize_redirect(redirect_uri)
-
-
-
-@app.route('/authorize/google')
-def authorize_google():
-    try:
-        token = oauth.google.authorize_access_token()
-        user = oauth.google.get('userinfo').json()
-
-        session['user'] = {
-            'name': user['name'],
-            'email': user.get('email'),
-            'picture': user.get('picture'),
-            'platform': 'google'
-        }
-
-        save_logged_user(session['user'])
-        return redirect('/')
-
-    except Exception as e:
-        print(f"Error en login de Google: {str(e)}")
-        return f"Error en login de Google: {str(e)}"
-
 
 
 # ============================================================

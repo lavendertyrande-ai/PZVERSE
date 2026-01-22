@@ -62,9 +62,13 @@
 
         {% else %}
           <!-- Usuario no logueado -->
-          <a href="/login/google" class="btn-login google">Google</a>
-          <a href="/login/twitch" class="btn-login twitch">Twitch</a>
-        {% endif %}
+          <a href="/login/twitch" class="btn-login twitch">
+            <svg class="twitch-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="currentColor" d="M4 2L2 6v14h6v2h4l2-2h4l4-4V2H4zm16 12l-2 2h-4l-2 2v-2H8V4h12v10zM14 7h2v5h-2V7zm-4 0h2v5H10V7z"/>
+            </svg>
+            Entrar con Twitch
+          </a>
+          {% endif %}
 
       </div>
 
