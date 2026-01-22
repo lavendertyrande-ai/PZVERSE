@@ -828,7 +828,7 @@ p, li, a, span {
   padding: 15px;
   border-radius: 12px;
   box-shadow: 0 0 15px #FF00CC, 0 0 25px #9146FF;
-  min-height: 340px; /* ajusta el alto */
+  min-height: 360px; /* ajusta el alto */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -843,7 +843,7 @@ p, li, a, span {
 .video-card img,
 .video-card iframe {
   width: 100%;
-  height: 220px;
+  height: 270px;
   border-radius: 8px;
   border: none;
 }
