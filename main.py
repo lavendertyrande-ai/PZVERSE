@@ -877,11 +877,15 @@ def telegram_webhook():
     except Exception as e:
         print("❌ Error extrayendo CHAT_ID:", e)
 
-    # ENVIAR MENSAJE AL CHAT DE LA WEB
-    socketio.emit("nuevo_mensaje", {
+
+    # GUARDAR EL MENSAJE EN EL CHAT DE LA WEB
+    mensajes = cargar_mensajes()
+    mensajes.append({
         "usuario": "Telegram",
-        "mensaje": texto
-    }, broadcast=True)
+        "texto": texto,
+        "fecha": datetime.utcnow().strftime("%H:%M:%S")
+    })
+    guardar_mensajes(mensajes)
 
     return "OK"
 
