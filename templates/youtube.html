@@ -61,18 +61,17 @@
       </div>
 
       <!-- Grid de vídeos -->
-      <div class="youtube-grid">
+      <div class="grid-youtube">
         {% for v in videos %}
-          <div class="video-card">
-            <iframe src="https://www.youtube.com/embed/{{ v.video_id }}" allowfullscreen></iframe>
-            <p class="video-title">{{ v.titulo }}</p>
-            <a class="btn-neon" href="https://www.youtube.com/watch?v={{ v.video_id }}" target="_blank">
-              Ver en YouTube
-            </a>
-          </div>
+            <div class="video-card">
+                <iframe src="https://www.youtube.com/embed/{{ v.video_id }}" allowfullscreen></iframe>
+                <p class="video-title">{{ v.titulo }}</p>
+                <a class="btn-neon" href="https://www.youtube.com/watch?v={{ v.video_id }}" target="_blank">
+                    Ver en YouTube
+                </a>
+            </div>
         {% endfor %}
       </div>
-
     </section>
   </main>
 

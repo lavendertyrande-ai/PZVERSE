@@ -811,9 +811,9 @@ p, li, a, span {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
-  padding: 40px 80px; /* ← aquí aumentamos el margen lateral */
-  justify-items: center;
+  padding: 40px 80px; /* ← aquí está el margen lateral que querías */
 }
+
 
 
 .video-title {
