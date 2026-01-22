@@ -403,7 +403,7 @@ def login_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         if 'user' not in session:
-            return redirect(url_for('login_google'))
+            return redirect(url_for('login_twitch'))
         return f(*args, **kwargs)
     return decorated
 
