@@ -304,9 +304,11 @@ def generar_grafica_mensual():
 
 @app.route("/")
 def home():
-    return "Servidor funcionando"
-
-
+    user = session.get('user')
+    twitch = get_twitch_status()
+    videos = get_latest_videos()
+    events = get_events()
+    return render_template("index.html", twitch=twitch, videos=videos, events=events, user=user)
 
 # ============================================================
 # LOGIN TWITCH
