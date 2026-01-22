@@ -99,13 +99,7 @@ oauth.register(
 # CONFIGURACIÓN SOCKET.IO
 # ============================================================
 
-if platform.system() == "Windows":
-    print("Usando threading (Windows no soporta gevent)")
-    socketio = SocketIO(app, async_mode='threading')
-else:
-    print("Usando gevent (Linux / Railway)")
-    socketio = SocketIO(app, async_mode='gevent')
-
+socketio = SocketIO(app, async_mode='threading')
 
 usuarios_conectados = set()
 
