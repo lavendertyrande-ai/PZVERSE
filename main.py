@@ -768,7 +768,6 @@ def guardar_mensajes(lista):
 
 @app.route("/enviar_mensaje", methods=["POST"])
 def enviar_mensaje():
-    """Recibe un mensaje del chat y lo guarda"""
     data = request.get_json()
     texto = data.get("mensaje", "").strip()
 
@@ -785,7 +784,12 @@ def enviar_mensaje():
     })
 
     guardar_mensajes(mensajes)
+
+    # 🔥 ENVIAR MENSAJE A TELEGRAM
+    enviar_telegram(f"{usuario}: {texto}")
+
     return "OK", 200
+
 
 
 @app.route("/mensajes")
@@ -877,18 +881,16 @@ def telegram_webhook():
     except Exception as e:
         print("❌ Error extrayendo CHAT_ID:", e)
 
-
     # GUARDAR EL MENSAJE EN EL CHAT DE LA WEB
     mensajes = cargar_mensajes()
     mensajes.append({
-        "usuario": "Telegram",
+        "usuario": "PZVerse",
         "texto": texto,
         "fecha": datetime.utcnow().strftime("%H:%M:%S")
     })
     guardar_mensajes(mensajes)
 
     return "OK"
-
 
 
 # ============================================================
