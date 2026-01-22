@@ -831,15 +831,17 @@ TELEGRAM_CHAT_ID = None
 # FUNCIÓN PARA ENVIAR MENSAJES A TELEGRAM
 # ============================================================
 def enviar_telegram(mensaje):
-    """
-    ENVÍA UN MENSAJE A TU BOT DE TELEGRAM.
-    NECESITA QUE TELEGRAM_CHAT_ID ESTÉ DEFINIDO.
-    """
     global TELEGRAM_CHAT_ID
 
+    # Si la variable global está vacía, cargar desde archivo
     if TELEGRAM_CHAT_ID is None:
-        print("⚠️ No se puede enviar mensaje: CHAT_ID no definido aún.")
-        return
+        try:
+            with open("chat_id.txt") as f:
+                TELEGRAM_CHAT_ID = f.read().strip()
+                print("♻️ CHAT_ID cargado desde archivo:", TELEGRAM_CHAT_ID)
+        except:
+            print("⚠️ No se puede enviar mensaje: CHAT_ID no definido aún.")
+            return
 
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
     payload = {
@@ -848,8 +850,8 @@ def enviar_telegram(mensaje):
     }
 
     try:
-        requests.post(url, json=payload)
-        print("📨 Mensaje enviado a Telegram:", mensaje)
+        r = requests.post(url, json=payload)
+        print("📨 Respuesta de Telegram:", r.text)
     except Exception as e:
         print("❌ Error enviando mensaje a Telegram:", e)
 
