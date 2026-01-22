@@ -826,6 +826,17 @@ def probar_push():
     enviar_notificacion("🔔 Prueba de notificación", "Todo funciona correctamente.")
     return "Notificación enviada"
 
+# ============================================================
+# RUTA PARA TOKEN
+# ============================================================
+@app.route("/ver-token")
+def ver_token():
+    try:
+        with open("token_fcm.txt", "r") as f:
+            return f"<pre>{f.read()}</pre>"
+    except Exception as e:
+        return f"Error: {e}"
+
 
 # ============================================================
 # SISTEMA DE FORO — FUNCIONES Y UTILIDADES
