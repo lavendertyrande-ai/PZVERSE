@@ -855,28 +855,36 @@ def enviar_telegram(mensaje):
 # ============================================================
 @app.route("/telegram-webhook", methods=["POST"])
 def telegram_webhook():
-    """
-    ESTA RUTA RECIBE MENSAJES QUE TÚ ENVÍES A TU BOT.
-    SIRVE PARA CAPTURAR AUTOMÁTICAMENTE TU CHAT_ID.
-    """
     global TELEGRAM_CHAT_ID
 
     data = request.get_json()
     print("📩 Mensaje recibido desde Telegram:", data)
+
+    # EXTRAER TEXTO DEL MENSAJE
+    try:
+        texto = data["message"]["text"]
+    except:
+        texto = ""
 
     # EXTRAER CHAT_ID
     try:
         TELEGRAM_CHAT_ID = data["message"]["chat"]["id"]
         print("✅ CHAT_ID DETECTADO:", TELEGRAM_CHAT_ID)
 
-        # GUARDARLO EN ARCHIVO PARA QUE NO SE PIERDA
         with open("chat_id.txt", "w") as f:
             f.write(str(TELEGRAM_CHAT_ID))
 
     except Exception as e:
         print("❌ Error extrayendo CHAT_ID:", e)
 
+    # ENVIAR MENSAJE AL CHAT DE LA WEB
+    socketio.emit("nuevo_mensaje", {
+        "usuario": "Telegram",
+        "mensaje": texto
+    }, broadcast=True)
+
     return "OK"
+
 
 
 # ============================================================
