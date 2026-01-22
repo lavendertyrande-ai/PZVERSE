@@ -753,6 +753,56 @@ def editar_post(slug):
 
 
 # ============================================================
+# CHAT REST API
+# ============================================================
+
+RUTA_MENSAJES = "mensajes.json"
+
+
+def cargar_mensajes():
+    """Lee los mensajes desde mensajes.json"""
+    if os.path.exists(RUTA_MENSAJES):
+        with open(RUTA_MENSAJES, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return []
+
+
+def guardar_mensajes(lista):
+    """Guarda la lista completa de mensajes en mensajes.json"""
+    with open(RUTA_MENSAJES, "w", encoding="utf-8") as f:
+        json.dump(lista, f, indent=2, ensure_ascii=False)
+
+
+@app.route("/enviar_mensaje", methods=["POST"])
+def enviar_mensaje():
+    """Recibe un mensaje del chat y lo guarda"""
+    data = request.get_json()
+    texto = data.get("mensaje", "").strip()
+
+    if not texto:
+        return "Mensaje vacío", 400
+
+    usuario = session.get("user", {}).get("name", "Anónimo")
+
+    mensajes = cargar_mensajes()
+    mensajes.append({
+        "usuario": usuario,
+        "texto": texto,
+        "fecha": datetime.utcnow().strftime("%H:%M:%S")
+    })
+
+    guardar_mensajes(mensajes)
+    return "OK", 200
+
+
+@app.route("/mensajes")
+def mensajes():
+    """Devuelve todos los mensajes del chat"""
+    return jsonify(cargar_mensajes())
+
+
+
+# ============================================================
 # RUTA MENSAJES CHAT - MOVIL
 # ============================================================
 @app.route("/registrar-token", methods=["POST"])
