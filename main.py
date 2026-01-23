@@ -40,13 +40,6 @@ app.config["SQLALCHEMY_DATABASE_URI"] = os.environ["DATABASE_URL"]
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"pool_pre_ping": True}
 print("DEBUG DB URI:", app.config["SQLALCHEMY_DATABASE_URI"])
 
-from sqlalchemy import inspect
-
-with app.app_context():
-    inspector = inspect(db.engine)
-    print("📌 Tablas reales en esta base de datos:", inspector.get_table_names())
-
-
 
 init_db(app)
 
