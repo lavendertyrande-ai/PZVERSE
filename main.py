@@ -276,7 +276,9 @@ def home():
 def login_twitch():
     """Redirige al usuario a Twitch para iniciar sesión."""
     TWITCH_CLIENT_ID = os.getenv("TWITCH_CLIENT_ID")
-    TWITCH_REDIRECT_URI = os.getenv("TWITCH_REDIRECT_URI")
+
+    # Redirect URI fija (la que funciona)
+    TWITCH_REDIRECT_URI = "https://www.pz-verse.com/authorize/twitch"
 
     auth_url = (
         "https://id.twitch.tv/oauth2/authorize"
@@ -287,6 +289,7 @@ def login_twitch():
     )
 
     return redirect(auth_url)
+
 
 
 @app.route("/authorize/twitch")
@@ -325,10 +328,10 @@ def authorize_twitch():
 # ============================================================
 
 def get_token_from_twitch(code):
-    """Intercambia el código de Twitch por un token de acceso."""
     TWITCH_CLIENT_ID = os.getenv("TWITCH_CLIENT_ID")
     TWITCH_CLIENT_SECRET = os.getenv("TWITCH_CLIENT_SECRET")
-    TWITCH_REDIRECT_URI = os.getenv("TWITCH_REDIRECT_URI")
+
+    TWITCH_REDIRECT_URI = "https://www.pz-verse.com/authorize/twitch"
 
     url = "https://id.twitch.tv/oauth2/token"
     payload = {
@@ -346,6 +349,8 @@ def get_token_from_twitch(code):
         raise Exception(f"Error obteniendo token: {data}")
 
     return data
+
+
 
 
 def get_user_info_from_twitch(access_token):
