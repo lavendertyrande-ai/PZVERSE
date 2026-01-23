@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session, abort
+from flask import send_from_directory
 from models import (
     LoggedUser,
     MonthlyUserLog,
@@ -246,6 +247,9 @@ def generar_grafica_mensual():
     plt.close()
 
     return ruta_completa
+
+
+
 
 # ============================================================
 # RUTAS PRINCIPALES
@@ -1083,7 +1087,6 @@ def reset_mes():
 
 @app.route("/admin/estadisticas_usuarios")
 def estadisticas_usuarios():
-    """Genera datos para la página de estadísticas de usuarios."""
     registros = MonthlyUserLog.query.all()
 
     conteo_por_mes = {}
@@ -1103,6 +1106,10 @@ def estadisticas_usuarios():
     )
 
 
+
+@app.route("/graficas/<filename>")
+def graficas(filename):
+    return send_from_directory("graficas", filename)
 
 # ============================================================
 # NOTIFICACIONES PUSH — FIREBASE CLOUD MESSAGING
