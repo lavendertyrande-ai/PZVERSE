@@ -23,6 +23,23 @@ print("DEBUG GOOGLE_JSON:", os.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON"))
 
 
 # ============================================================
+# CREACIÓN AUTOMÁTICA DE TABLAS EN LA BASE DE DATOS
+# ============================================================
+# Este bloque se ejecuta al iniciar la aplicación y garantiza que
+# todas las tablas definidas en los modelos de SQLAlchemy existan
+# en la base de datos. Si alguna tabla no existe, SQLAlchemy la crea.
+
+
+from models import init_db, db
+
+app = Flask(__name__)
+init_db(app)
+
+with app.app_context():
+    db.create_all()
+    print("📦 Tablas creadas/verificadas")
+
+# ============================================================
 # Leer el JSON desde el archivo local
 # ============================================================
 
@@ -832,6 +849,15 @@ print("🔑 TOKEN TELEGRAM cargado:", "OK" if TELEGRAM_TOKEN else "VACÍO")
 
 # CHAT_ID DEL USUARIO (SE RELLENA AUTOMÁTICAMENTE CUANDO ESCRIBAS AL BOT)
 TELEGRAM_CHAT_ID = None
+
+# 🌸 PRECARGAR CHAT_ID AL INICIAR EL SERVIDOR
+try:
+    with open("chat_id.txt") as f:
+        TELEGRAM_CHAT_ID = f.read().strip()
+    print("♻️ CHAT_ID precargado al iniciar:", TELEGRAM_CHAT_ID)
+except:
+    print("⚠️ No se pudo precargar chat_id.txt (aún no existe)")
+
 
 
 # ============================================================

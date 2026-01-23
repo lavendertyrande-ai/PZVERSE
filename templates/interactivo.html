@@ -213,7 +213,8 @@ document.getElementById("mensaje").addEventListener("keypress", function(e) {
        ============================================================ -->
   <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
   <script>
-    const socket = io({ query: { usuario: "Patz" } });
+    const usuario = "{{ session['user']['name'] if session.get('user') else 'Anónimo' }}";
+    const socket = io({ query: { usuario } });
 
     socket.on("lista_usuarios", data => {
       const lista = document.getElementById("lista-usuarios");
