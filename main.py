@@ -1,115 +1,92 @@
-from flask import Flask, render_template, request, jsonify, redirect, url_for, session
-from models import LoggedUser, MonthlyUserLog, db, init_db, get_twitch_status_patz, get_twitch_status_zhoomn
-from models import get_twitch_status, get_latest_videos, get_events
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session, abort
+from models import (
+    LoggedUser,
+    MonthlyUserLog,
+    db,
+    init_db,
+    get_twitch_status_patz,
+    get_twitch_status_zhoomn,
+    get_twitch_status,
+    get_latest_videos,
+    get_events,
+)
 from authlib.integrations.flask_client import OAuth
 from functools import wraps
 from datetime import datetime, timedelta
-import requests, os, json, re
-import matplotlib.pyplot as plt  # Para generar la gráfica
+import requests
+import os
+import json
+import re
+import matplotlib.pyplot as plt
 from flask_socketio import SocketIO, emit, join_room, leave_room
-from flask_login import current_user, login_required
 import firebase_admin
 from firebase_admin import credentials, messaging
 import platform
-
-
 from dotenv import load_dotenv
+
 load_dotenv()
 
+# Debug de variables de entorno
 print("TEST_VAR:", os.getenv("TEST_VAR"))
-import os
 print("DEBUG TEST_VAR:", os.getenv("TEST_VAR"))
 print("DEBUG GOOGLE_JSON:", os.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON"))
 
-
 # ============================================================
-# CREACIÓN AUTOMÁTICA DE TABLAS EN LA BASE DE DATOS
+# FLASK + BASE DE DATOS (NEON / POSTGRESQL)
 # ============================================================
-# Este bloque se ejecuta al iniciar la aplicación y garantiza que
-# todas las tablas definidas en los modelos de SQLAlchemy existan
-# en la base de datos. Si alguna tabla no existe, SQLAlchemy la crea.
-
-
-from models import init_db, db
-
 
 app = Flask(__name__)
+app.secret_key = os.getenv("FLASK_SECRET_KEY")
 
-# Conexión a PostgreSQL usando la variable de entorno
+# Conexión a PostgreSQL usando la variable de entorno (Neon)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ["DATABASE_URL"]
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"pool_pre_ping": True}
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
 print("DEBUG DB URI:", app.config["SQLALCHEMY_DATABASE_URI"])
 
-
+# Inicializar SQLAlchemy con esta app
 init_db(app)
 
+# Crear tablas si no existen
 with app.app_context():
     db.create_all()
     print("📦 Tablas creadas/verificadas")
     print("📌 Tablas registradas por SQLAlchemy:", db.metadata.tables.keys())
 
 # ============================================================
-# Leer el JSON desde el archivo local
+# FIREBASE (NOTIFICACIONES PUSH)
 # ============================================================
 
-
 cred_json = os.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON")
-
 if not cred_json:
     raise RuntimeError("GOOGLE_APPLICATION_CREDENTIALS_JSON no está definida")
 
 cred_dict = json.loads(cred_json)
-
 cred = credentials.Certificate(cred_dict)
 firebase_admin.initialize_app(cred)
 
-
-
 # ============================================================
-# CONFIGURACIÓN INICIAL
+# CONTEXT PROCESSORS
 # ============================================================
-
-
-app = Flask(__name__)
-app.secret_key = os.getenv("FLASK_SECRET_KEY")
-
 
 @app.context_processor
 def inject_user():
-    return dict(current_user=current_user)
+    """Hace disponible current_user en las plantillas (por compatibilidad futura)."""
+    return dict(current_user=None)
 
+# ============================================================
+# CONFIGURACIÓN YOUTUBE (VIDEOS RECIENTES)
+# ============================================================
 
+YOUTUBE_CHANNEL_ID = "UCnt9ud1ghqOsRPEun5p3RQQ"
+YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
 
-# Configuración de YouTube para obtener videos recientes
-params = {
-    "key": os.getenv("YOUTUBE_API_KEY"),
-    "channelId": "UCnt9ud1ghqOsRPEun5p3RQQ",
-    "part": "snippet",
-    "order": "date",
-    "maxResults": 6,
-    "q": ".",
-    "type": "video"
-}
+# ============================================================
+# OAUTH TWITCH
+# ============================================================
 
-# Configuración de SQLite
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///pzverse.db"
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
-# Inicializar base de datos
-init_db(app)
-
-# Crear tablas si no existen
-with app.app_context():
-    db.create_all()
-
-# Inicializar OAuth
 oauth = OAuth(app)
-
-
-
-# ============================================================
-# CONFIGURACIÓN OAUTH TWITCH
-# ============================================================
 
 oauth.register(
     name='twitch',
@@ -122,11 +99,10 @@ oauth.register(
 )
 
 # ============================================================
-# CONFIGURACIÓN SOCKET.IO
+# SOCKET.IO
 # ============================================================
 
 socketio = SocketIO(app, async_mode='threading')
-
 usuarios_conectados = set()
 
 @socketio.on('connect')
@@ -143,46 +119,57 @@ def handle_disconnect():
     emit('lista_usuarios', list(usuarios_conectados), broadcast=True)
 
 # ============================================================
-# FUNCIONES AUXILIARES
+# FUNCIONES AUXILIARES USUARIOS + ONLINE
 # ============================================================
 
-def save_logged_user(user):
-    """Guarda o actualiza un usuario logueado en la tabla del mes actual."""
-    existing = LoggedUser.query.filter_by(email=user["email"]).first()
+def save_logged_user(user_data):
+    """Guarda o actualiza un usuario logueado en la tabla LoggedUser."""
+    existing_user = LoggedUser.query.filter_by(email=user_data['email']).first()
 
-    if existing:
-        existing.last_seen = datetime.utcnow()
+    if existing_user:
+        existing_user.last_seen = datetime.utcnow()
     else:
         new_user = LoggedUser(
-            name=user["name"],
-            email=user["email"],
-            platform=user["platform"],
-            picture=user["picture"],
+            name=user_data['name'],
+            email=user_data['email'],
+            platform=user_data['platform'],
+            picture=user_data['picture'],
             last_seen=datetime.utcnow()
         )
         db.session.add(new_user)
 
     db.session.commit()
 
-
 def get_online_users():
     """Devuelve cuántos usuarios han estado activos en los últimos 5 minutos."""
     five_minutes_ago = datetime.utcnow() - timedelta(minutes=5)
     return LoggedUser.query.filter(LoggedUser.last_seen >= five_minutes_ago).count()
-
 
 @app.context_processor
 def inject_online_users():
     """Hace disponible {{ online_users }} en TODAS las plantillas."""
     return {"online_users": get_online_users()}
 
+# ============================================================
+# YOUTUBE: OBTENER VIDEOS RECIENTES
+# ============================================================
+
+def obtener_playlist_uploads():
+    url = "https://www.googleapis.com/youtube/v3/channels"
+    params = {
+        "key": YOUTUBE_API_KEY,
+        "id": YOUTUBE_CHANNEL_ID,
+        "part": "contentDetails"
+    }
+    response = requests.get(url, params=params).json()
+    return response["items"][0]["contentDetails"]["relatedPlaylists"]["uploads"]
 
 def obtener_videos_recientes():
     playlist_id = obtener_playlist_uploads()
 
     url = "https://www.googleapis.com/youtube/v3/playlistItems"
     params = {
-        "key": os.getenv("YOUTUBE_API_KEY"),
+        "key": YOUTUBE_API_KEY,
         "playlistId": playlist_id,
         "part": "snippet",
         "maxResults": 6
@@ -203,28 +190,13 @@ def obtener_videos_recientes():
 
     return videos
 
-
-
-def obtener_playlist_uploads():
-    url = "https://www.googleapis.com/youtube/v3/channels"
-    params = {
-        "key": os.getenv("YOUTUBE_API_KEY"),
-        "id": "UCnt9ud1ghqOsRPEun5p3RQQ",
-        "part": "contentDetails"
-    }
-
-    response = requests.get(url, params=params).json()
-    return response["items"][0]["contentDetails"]["relatedPlaylists"]["uploads"]
-
-
 # ============================================================
-# ARCHIVADO MENSUAL
+# ARCHIVADO MENSUAL + GRÁFICA
 # ============================================================
 
 def archive_and_reset_users():
     """Guarda los usuarios del mes en MonthlyUserLog y resetea LoggedUser."""
     current_month = datetime.utcnow().strftime("%Y-%m")
-
     users = LoggedUser.query.all()
 
     for user in users:
@@ -237,54 +209,12 @@ def archive_and_reset_users():
         )
         db.session.add(archived)
 
-    # Vaciar tabla del mes actual
     LoggedUser.query.delete()
     db.session.commit()
 
-
-@app.route("/admin/reset_mes")
-def reset_mes():
-    archive_and_reset_users()
-    archivo = generar_grafica_mensual()
-    return f"Usuarios archivados, tabla reseteada y gráfica guardada en: {archivo}"
-
-
-
-@app.route("/admin/estadisticas_usuarios")
-def estadisticas_usuarios():
-    # Obtener todos los meses registrados
-    registros = MonthlyUserLog.query.all()
-
-    # Diccionario: { "2026-01": 34, "2026-02": 21, ... }
-    conteo_por_mes = {}
-
-    for r in registros:
-        if r.month not in conteo_por_mes:
-            conteo_por_mes[r.month] = 0
-        conteo_por_mes[r.month] += 1
-
-    # Ordenar por mes
-    meses = sorted(conteo_por_mes.keys())
-    valores = [conteo_por_mes[m] for m in meses]
-
-    return render_template(
-        "estadisticas.html",
-        meses=meses,
-        valores=valores
-    )
-
 def generar_grafica_mensual():
-    """
-    Genera una gráfica de barras con el número de usuarios por mes
-    usando los datos de la tabla MonthlyUserLog y la guarda como imagen
-    en la carpeta 'graficas'.
-    """
-
-    # 1. Obtener todos los registros históricos de usuarios
+    """Genera una gráfica de usuarios por mes usando MonthlyUserLog."""
     registros = MonthlyUserLog.query.all()
-
-    # 2. Contar cuántos usuarios hay por cada mes
-    #    Ejemplo: {"2026-01": 34, "2026-02": 21, ...}
     conteo_por_mes = {}
 
     for r in registros:
@@ -292,20 +222,16 @@ def generar_grafica_mensual():
             conteo_por_mes[r.month] = 0
         conteo_por_mes[r.month] += 1
 
-    # Si no hay datos, no tiene sentido generar gráfica
     if not conteo_por_mes:
         return None
 
-    # 3. Ordenar los meses y preparar listas para la gráfica
     meses = sorted(conteo_por_mes.keys())
     valores = [conteo_por_mes[m] for m in meses]
 
-    # 4. Crear carpeta 'graficas' si no existe
     carpeta_graficas = "graficas"
     if not os.path.exists(carpeta_graficas):
         os.makedirs(carpeta_graficas)
 
-    # 5. Crear la gráfica con matplotlib
     plt.figure(figsize=(10, 5))
     plt.bar(meses, valores, color="#FF00CC")
     plt.title("Usuarios por mes")
@@ -313,15 +239,12 @@ def generar_grafica_mensual():
     plt.ylabel("Número de usuarios")
     plt.grid(axis="y", alpha=0.3)
 
-    # 6. Definir nombre del archivo con el mes actual
     nombre_archivo = f"usuarios_{datetime.utcnow().strftime('%Y-%m')}.png"
     ruta_completa = os.path.join(carpeta_graficas, nombre_archivo)
 
-    # 7. Guardar la imagen en disco
     plt.savefig(ruta_completa, dpi=200, bbox_inches="tight")
     plt.close()
 
-    # 8. Devolver la ruta del archivo
     return ruta_completa
 
 # ============================================================
@@ -330,81 +253,118 @@ def generar_grafica_mensual():
 
 @app.route("/")
 def home():
+    """Página principal con Twitch, vídeos, eventos y usuario en sesión."""
     user = session.get('user')
     twitch = get_twitch_status()
     videos = get_latest_videos()
     events = get_events()
-    return render_template("index.html", twitch=twitch, videos=videos, events=events, user=user)
+
+    return render_template(
+        "index.html",
+        twitch=twitch,
+        videos=videos,
+        events=events,
+        user=user
+    )
+
 
 # ============================================================
 # LOGIN TWITCH
 # ============================================================
 
-@app.route('/login/twitch')
+@app.route("/login/twitch")
 def login_twitch():
-    redirect_uri = "https://www.pz-verse.com/authorize/twitch"
-    return oauth.twitch.authorize_redirect(
-        redirect_uri,
-        scope="user:read:email"
+    """Redirige al usuario a Twitch para iniciar sesión."""
+    TWITCH_CLIENT_ID = os.getenv("TWITCH_CLIENT_ID")
+    TWITCH_REDIRECT_URI = os.getenv("TWITCH_REDIRECT_URI")
+
+    auth_url = (
+        "https://id.twitch.tv/oauth2/authorize"
+        "?client_id=" + TWITCH_CLIENT_ID +
+        "&redirect_uri=" + TWITCH_REDIRECT_URI +
+        "&response_type=code"
+        "&scope=user:read:email"
     )
 
+    return redirect(auth_url)
 
 
-@app.route('/authorize/twitch')
+@app.route("/authorize/twitch")
 def authorize_twitch():
+    """Recibe el código de Twitch, obtiene token y datos del usuario."""
     try:
-        code = request.args.get('code')
-        if not code:
-            return "Error: falta el código de autorización de Twitch."
+        code = request.args.get("code")
 
-        # MISMA URI EXACTA que en /login/twitch
-        redirect_uri = "https://www.pz-verse.com/authorize/twitch"
+        # 1. Intercambiar código por token
+        token_data = get_token_from_twitch(code)
 
-        token_url = "https://id.twitch.tv/oauth2/token"
-        data = {
-            "client_id": os.getenv("TWITCH_CLIENT_ID"),
-            "client_secret": os.getenv("TWITCH_CLIENT_SECRET"),
-            "code": code,
-            "grant_type": "authorization_code",
-            "redirect_uri": redirect_uri,
-        }
+        # 2. Obtener datos del usuario
+        user_data = get_user_info_from_twitch(token_data['access_token'])
 
-        resp = requests.post(token_url, data=data)
-        token = resp.json()
-
-        if "access_token" not in token:
-            return f"Error al autorizar con Twitch. Token recibido: {token}"
-
-        access_token = token["access_token"]
-
-        headers = {
-            "Client-ID": os.getenv("TWITCH_CLIENT_ID"),
-            "Authorization": f"Bearer {access_token}",
-        }
-
-        user_resp = requests.get("https://api.twitch.tv/helix/users", headers=headers)
-        user_data = user_resp.json()
-
-        if "data" not in user_data or not user_data["data"]:
-            return f"Error al obtener usuario de Twitch. Respuesta: {user_data}"
-
-        user = user_data["data"][0]
-
-        print("DEBUG TWITCH USER:", user)
-
+        # 3. Guardar en sesión
         session['user'] = {
-            'name': user['display_name'],
-            'email': user.get('email'),
-            'picture': user.get('profile_image_url'),
+            'name': user_data.get('display_name'),
+            'email': user_data.get('email'),
+            'picture': user_data.get('profile_image_url'),
             'platform': 'twitch'
         }
 
+        # 4. Guardar en Neon
         save_logged_user(session['user'])
+
         return redirect('/')
 
     except Exception as e:
         print(f"Error en login de Twitch: {str(e)}")
         return f"Error en login de Twitch: {str(e)}"
+
+
+
+# ============================================================
+# TWITCH OAUTH — FUNCIONES NECESARIAS
+# ============================================================
+
+def get_token_from_twitch(code):
+    """Intercambia el código de Twitch por un token de acceso."""
+    TWITCH_CLIENT_ID = os.getenv("TWITCH_CLIENT_ID")
+    TWITCH_CLIENT_SECRET = os.getenv("TWITCH_CLIENT_SECRET")
+    TWITCH_REDIRECT_URI = os.getenv("TWITCH_REDIRECT_URI")
+
+    url = "https://id.twitch.tv/oauth2/token"
+    payload = {
+        "client_id": TWITCH_CLIENT_ID,
+        "client_secret": TWITCH_CLIENT_SECRET,
+        "code": code,
+        "grant_type": "authorization_code",
+        "redirect_uri": TWITCH_REDIRECT_URI
+    }
+
+    response = requests.post(url, data=payload)
+    data = response.json()
+
+    if "access_token" not in data:
+        raise Exception(f"Error obteniendo token: {data}")
+
+    return data
+
+
+def get_user_info_from_twitch(access_token):
+    """Obtiene los datos del usuario desde la API de Twitch."""
+    TWITCH_CLIENT_ID = os.getenv("TWITCH_CLIENT_ID")
+
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "Client-Id": TWITCH_CLIENT_ID
+    }
+
+    url = "https://api.twitch.tv/helix/users"
+    response = requests.get(url, headers=headers)
+    data = response.json()
+
+    if "data" not in data or len(data["data"]) == 0:
+        raise Exception(f"Error obteniendo usuario: {data}")
+
+    return data["data"][0]
 
 
 # ============================================================
@@ -413,6 +373,7 @@ def authorize_twitch():
 
 @app.route('/logout')
 def logout():
+    """Cierra sesión del usuario."""
     session.clear()
     return redirect('/')
 
@@ -422,6 +383,7 @@ def logout():
 # ============================================================
 
 def login_required(f):
+    """Protege rutas que requieren usuario logueado."""
     @wraps(f)
     def decorated(*args, **kwargs):
         if 'user' not in session:
@@ -448,24 +410,29 @@ def twitch_pareja():
     return render_template("zhoomn_twitch.html", twitch=twitch)
 
 
-
 @app.route("/youtube")
 @login_required
 def youtube_page():
     videos = obtener_videos_recientes()
-    print("Videos recibidos:", videos)
     return render_template("youtube.html", videos=videos)
 
 
 
+
+# ============================================================
+# BLOG — LISTADO Y VISUALIZACIÓN
+# ============================================================
+
 @app.route("/blog")
 @login_required
 def blog():
+    """Lista paginada de posts del blog."""
     page = int(request.args.get("page", 1))
     per_page = 12
 
     all_posts = []
 
+    # Cargar todos los posts desde /posts
     for filename in os.listdir("./posts"):
         if filename.endswith(".json"):
             with open(f"./posts/{filename}", "r", encoding="utf-8") as f:
@@ -473,8 +440,10 @@ def blog():
                 data["slug"] = filename.replace(".json", "")
                 all_posts.append(data)
 
+    # Ordenar por fecha descendente
     all_posts.sort(key=lambda x: x["date"], reverse=True)
 
+    # Paginación
     total_pages = (len(all_posts) + per_page - 1) // per_page
     start = (page - 1) * per_page
     end = start + per_page
@@ -483,10 +452,10 @@ def blog():
     return render_template("blog.html", posts=posts, page=page, total_pages=total_pages)
 
 
-
 @app.route("/blog/<slug>")
 @login_required
 def blog_post(slug):
+    """Muestra un post individual."""
     try:
         with open(f"./posts/{slug}.json", "r", encoding="utf-8") as f:
             post = json.load(f)
@@ -498,139 +467,12 @@ def blog_post(slug):
 
 
 # ============================================================
-# RUTA PRINCIPAL DEL FORO — SE MUESTRA DENTRO DE /interactivo
-# ============================================================
-@app.route("/interactivo")
-@login_required
-def interactivo():
-    temas = cargar_temas()
-    return render_template(
-        "interactivo.html",
-        temas=temas,
-        firebase_api_key=os.getenv("FIREBASE_API_KEY"),
-        firebase_vapid_key=os.getenv("FIREBASE_VAPID_KEY")
-    )
-
-# ============================================================
-# RUTA PARA CREAR NUEVO TEMA — MUESTRA EL EDITOR
-# ============================================================
-@app.route("/nuevo-tema")
-@login_required
-def nuevo_tema():
-    return render_template("nuevo_tema.html")
-
-
-# ============================================================
-# RUTA PARA PUBLICAR TEMA — PROCESA EL FORMULARIO
-# ============================================================
-@app.route("/publicar-tema", methods=["POST"])
-@login_required
-def publicar_tema():
-    titulo = request.form["titulo"]
-    contenido = request.form["contenido"]
-
-    # Imagen opcional
-    imagen = None
-    if "imagen" in request.files:
-        archivo = request.files["imagen"]
-        if archivo.filename != "":
-            ruta = f"/static/uploads/{archivo.filename}"
-            archivo.save("." + ruta)
-            imagen = ruta
-
-    guardar_tema(titulo, contenido, imagen)
-    return redirect("/interactivo")
-
-
-
-# ============================================================
-# RUTA PARA VER UN TEMA INDIVIDUAL
-# ============================================================
-@app.route("/tema/<int:id>")
-@login_required
-def ver_tema(id):
-    tema = cargar_tema(id)
-    return render_template("tema.html", tema=tema)
-
-
-# ============================================================
-# RUTA PARA RESPONDER A UN TEMA
-# ============================================================
-# Mostrar editor (GET)
-@app.route("/responder/<int:id>")
-@login_required
-def mostrar_editor(id):
-    tema = cargar_tema(id)
-    return render_template("responder.html", tema=tema)
-
-
-# Guardar respuesta (POST)
-@app.route("/responder/<int:id>", methods=["POST"])
-@login_required
-def guardar_respuesta_post(id):
-    texto = request.form["respuesta"]
-    guardar_respuesta(id, texto)
-    return redirect(f"/tema/{id}")
-
-
-
-# ============================================================
-# RUTA PARA ELIMINAR TEMA
-# ============================================================
-@app.route("/eliminar-tema/<int:id>", methods=["POST"])
-@login_required
-def eliminar_tema(id):
-    temas = cargar_temas()
-
-    for t in temas:
-        if t["id"] == id:
-
-            if t["autor"].lower() != session['user']['name'].lower():
-                abort(403)
-
-            temas.remove(t)
-            break
-
-    with open(RUTA_TEMAS, "w", encoding="utf-8") as f:
-        json.dump(temas, f, indent=2, ensure_ascii=False)
-
-    return redirect("/interactivo#foro")
-
-
-# ============================================================
-# RUTA PARA ELIMINAR RESPUESTA
-# ============================================================
-@app.route("/eliminar-respuesta/<int:tema_id>/<int:respuesta_id>", methods=["POST"])
-@login_required
-def eliminar_respuesta(tema_id, respuesta_id):
-    temas = cargar_temas()
-
-    for t in temas:
-        if t["id"] == tema_id:
-
-            for r in t["respuestas"]:
-                if r["id"] == respuesta_id:
-
-                    if r["autor"].lower() != session['user']['name'].lower():
-                        abort(403)
-
-                    t["respuestas"].remove(r)
-                    break
-
-    with open(RUTA_TEMAS, "w", encoding="utf-8") as f:
-        json.dump(temas, f, indent=2, ensure_ascii=False)
-
-    return redirect(f"/tema/{tema_id}")
-
-
-
-# ============================================================
-# PÁGINA DE ADMINISTRACIÓN BLOG
+# ADMIN BLOG — LOGIN
 # ============================================================
 
-# LOGIN ADMIN
 @app.route("/admin/login", methods=["GET", "POST"])
 def admin_login():
+    """Login simple para administrar el blog."""
     if request.method == "POST":
         password = request.form.get("password")
 
@@ -645,35 +487,39 @@ def admin_login():
 
 @app.route('/admin/logout')
 def admin_logout():
+    """Cerrar sesión del admin."""
     session.pop('admin', None)
     return redirect('/blog')
 
 
+# ============================================================
 # PANEL ADMIN BLOG
+# ============================================================
+
 @app.route("/admin/blog")
 def admin_blog():
+    """Panel principal del blog (solo admin)."""
     if not session.get("admin"):
         return redirect("/admin/login")
 
     return render_template("admin_blog.html")
 
 
+# ============================================================
 # PUBLICAR POST
+# ============================================================
+
 @app.route("/admin/blog/publicar", methods=["POST"])
 def publicar_post():
-    print("🔔 POST recibido en /admin/blog/publicar")
-
+    """Publica un nuevo post en formato JSON."""
     if not session.get("admin"):
-        print("❌ No estás logueada como admin")
         return redirect("/admin/login")
-
-    print("✅ Sesión admin activa — procesando publicación")
-
 
     title = request.form.get("title")
     summary = request.form.get("summary")
     content = request.form.get("content")
 
+    # Imagen opcional
     image_file = request.files.get("image")
     image_path = None
 
@@ -681,9 +527,11 @@ def publicar_post():
         image_path = f"/static/blog/{image_file.filename}"
         image_file.save("." + image_path)
 
+    # Crear slug
     slug = re.sub(r"[^a-zA-Z0-9]+", "-", title.lower()).strip("-")
     date = datetime.today().strftime("%d-%m-%Y")
 
+    # Crear carpeta si no existe
     if not os.path.exists("posts"):
         os.makedirs("posts")
 
@@ -695,16 +543,20 @@ def publicar_post():
         "content": content
     }
 
-    print("📁 Guardando post en:", f"./posts/{date}-{slug}.json")
-
+    # Guardar archivo JSON
     with open(f"./posts/{date}-{slug}.json", "w", encoding="utf-8") as f:
         json.dump(post_data, f, ensure_ascii=False, indent=4)
 
     return redirect("/admin/blog?publicado=1")
 
 
+# ============================================================
+# GESTIONAR POSTS
+# ============================================================
+
 @app.route("/admin/blog/gestionar")
 def gestionar_posts():
+    """Lista todos los posts para editarlos o eliminarlos."""
     if not session.get("admin"):
         return redirect("/admin/login")
 
@@ -723,8 +575,13 @@ def gestionar_posts():
 
 
 
+# ============================================================
+# ELIMINAR POST
+# ============================================================
+
 @app.route("/admin/blog/eliminar/<slug>")
 def eliminar_post(slug):
+    """Elimina un post del blog."""
     if not session.get("admin"):
         return redirect("/admin/login")
 
@@ -735,8 +592,14 @@ def eliminar_post(slug):
     return redirect("/admin/blog/gestionar")
 
 
+
+# ============================================================
+# EDITAR POST
+# ============================================================
+
 @app.route("/admin/blog/editar/<slug>", methods=["GET", "POST"])
 def editar_post(slug):
+    """Editar un post existente."""
     if not session.get("admin"):
         return redirect("/admin/login")
 
@@ -774,26 +637,241 @@ def editar_post(slug):
     return render_template("editar_blog.html", post=post, slug=slug)
 
 
+
 # ============================================================
-# CHAT REST API
+# FORO — FUNCIONES AUXILIARES
+# ============================================================
+
+RUTA_TEMAS = "temas.json"
+
+def cargar_temas():
+    """Carga todos los temas desde temas.json."""
+    if os.path.exists(RUTA_TEMAS):
+        with open(RUTA_TEMAS, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return []
+
+def guardar_temas(lista):
+    """Guarda la lista completa de temas en temas.json."""
+    with open(RUTA_TEMAS, "w", encoding="utf-8") as f:
+        json.dump(lista, f, indent=2, ensure_ascii=False)
+
+def cargar_tema(id):
+    """Carga un tema individual por ID."""
+    temas = cargar_temas()
+    for t in temas:
+        if t["id"] == id:
+            return t
+    return None
+
+def guardar_tema(titulo, contenido, imagen=None):
+    """Crea un nuevo tema y lo guarda en temas.json."""
+    temas = cargar_temas()
+
+    nuevo_id = 1 if not temas else temas[-1]["id"] + 1
+
+    tema = {
+        "id": nuevo_id,
+        "titulo": titulo,
+        "contenido": contenido,
+        "imagen": imagen,
+        "autor": session['user']['name'],
+        "fecha": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),
+        "respuestas": []
+    }
+
+    temas.append(tema)
+    guardar_temas(temas)
+
+def guardar_respuesta(id_tema, texto):
+    """Guarda una respuesta dentro de un tema."""
+    temas = cargar_temas()
+
+    for t in temas:
+        if t["id"] == id_tema:
+
+            nuevo_id = 1 if not t["respuestas"] else t["respuestas"][-1]["id"] + 1
+
+            respuesta = {
+                "id": nuevo_id,
+                "autor": session['user']['name'],
+                "texto": texto,
+                "fecha": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+            }
+
+            t["respuestas"].append(respuesta)
+            break
+
+    guardar_temas(temas)
+
+
+# ============================================================
+# RUTA PRINCIPAL DEL FORO
+# ============================================================
+
+@app.route("/interactivo")
+@login_required
+def interactivo():
+    """Página principal del foro."""
+    temas = cargar_temas()
+    return render_template(
+        "interactivo.html",
+        temas=temas,
+        firebase_api_key=os.getenv("FIREBASE_API_KEY"),
+        firebase_vapid_key=os.getenv("FIREBASE_VAPID_KEY")
+    )
+
+
+
+# ============================================================
+# CREAR NUEVO TEMA — FORMULARIO
+# ============================================================
+
+@app.route("/nuevo-tema")
+@login_required
+def nuevo_tema():
+    """Muestra el editor para crear un nuevo tema."""
+    return render_template("nuevo_tema.html")
+
+
+
+
+# ============================================================
+# PUBLICAR TEMA — PROCESAR FORMULARIO
+# ============================================================
+
+@app.route("/publicar-tema", methods=["POST"])
+@login_required
+def publicar_tema():
+    """Procesa el formulario y crea un nuevo tema."""
+    titulo = request.form["titulo"]
+    contenido = request.form["contenido"]
+
+    imagen = None
+    if "imagen" in request.files:
+        archivo = request.files["imagen"]
+        if archivo.filename != "":
+            ruta = f"/static/uploads/{archivo.filename}"
+            archivo.save("." + ruta)
+            imagen = ruta
+
+    guardar_tema(titulo, contenido, imagen)
+    return redirect("/interactivo")
+
+
+
+# ============================================================
+# VER UN TEMA INDIVIDUAL
+# ============================================================
+
+@app.route("/tema/<int:id>")
+@login_required
+def ver_tema(id):
+    """Muestra un tema individual."""
+    tema = cargar_tema(id)
+    if not tema:
+        return "Tema no encontrado", 404
+
+    return render_template("tema.html", tema=tema)
+
+
+
+# ============================================================
+# RESPONDER A UN TEMA
+# ============================================================
+
+@app.route("/responder/<int:id>")
+@login_required
+def mostrar_editor(id):
+    """Muestra el editor para responder a un tema."""
+    tema = cargar_tema(id)
+    return render_template("responder.html", tema=tema)
+
+
+@app.route("/responder/<int:id>", methods=["POST"])
+@login_required
+def guardar_respuesta_post(id):
+    """Guarda la respuesta enviada por el usuario."""
+    texto = request.form["respuesta"]
+    guardar_respuesta(id, texto)
+    return redirect(f"/tema/{id}")
+
+
+# ============================================================
+# ELIMINAR TEMA
+# ============================================================
+
+@app.route("/eliminar-tema/<int:id>", methods=["POST"])
+@login_required
+def eliminar_tema(id):
+    """Elimina un tema si el autor coincide con el usuario actual."""
+    temas = cargar_temas()
+
+    for t in temas:
+        if t["id"] == id:
+
+            if t["autor"].lower() != session['user']['name'].lower():
+                abort(403)
+
+            temas.remove(t)
+            break
+
+    guardar_temas(temas)
+    return redirect("/interactivo#foro")
+
+
+
+
+# ============================================================
+# ELIMINAR RESPUESTA
+# ============================================================
+
+@app.route("/eliminar-respuesta/<int:tema_id>/<int:respuesta_id>", methods=["POST"])
+@login_required
+def eliminar_respuesta(tema_id, respuesta_id):
+    """Elimina una respuesta si el autor coincide con el usuario actual."""
+    temas = cargar_temas()
+
+    for t in temas:
+        if t["id"] == tema_id:
+
+            for r in t["respuestas"]:
+                if r["id"] == respuesta_id:
+
+                    if r["autor"].lower() != session['user']['name'].lower():
+                        abort(403)
+
+                    t["respuestas"].remove(r)
+                    break
+
+    guardar_temas(temas)
+    return redirect(f"/tema/{tema_id}")
+
+
+
+# ============================================================
+# CHAT — ARCHIVO DE MENSAJES
 # ============================================================
 
 RUTA_MENSAJES = "mensajes.json"
 
-
 def cargar_mensajes():
-    """Lee los mensajes desde mensajes.json"""
+    """Lee los mensajes desde mensajes.json."""
     if os.path.exists(RUTA_MENSAJES):
         with open(RUTA_MENSAJES, "r", encoding="utf-8") as f:
             return json.load(f)
     return []
 
-
 def guardar_mensajes(lista):
-    """Guarda la lista completa de mensajes en mensajes.json"""
+    """Guarda la lista completa de mensajes en mensajes.json."""
     with open(RUTA_MENSAJES, "w", encoding="utf-8") as f:
         json.dump(lista, f, indent=2, ensure_ascii=False)
 
+
+
+# ============================================================
+# ENVIAR MENSAJE DESDE LA WEB
+# ============================================================
 
 @app.route("/enviar_mensaje", methods=["POST"])
 def enviar_mensaje():
@@ -827,42 +905,44 @@ def enviar_mensaje():
 
 
 
+# ============================================================
+# OBTENER MENSAJES DEL CHAT
+# ============================================================
+
 @app.route("/mensajes")
 def mensajes():
-    """Devuelve todos los mensajes del chat"""
+    """Devuelve todos los mensajes del chat."""
     return jsonify(cargar_mensajes())
 
 
 
 # ============================================================
-# RUTA MENSAJES CHAT - MOVIL
+# REGISTRO DE TOKEN PARA NOTIFICACIONES PUSH
 # ============================================================
+
 @app.route("/registrar-token", methods=["POST"])
 def registrar_token():
+    """Guarda el token FCM del móvil para enviar notificaciones push."""
     data = request.get_json()
     token = data.get("token")
 
-    # Guardamos el token en un archivo simple
     with open("token_fcm.txt", "w") as f:
         f.write(token)
 
     return "Token guardado", 200
 
 
+
 # ============================================================
-# 🔔 SISTEMA DE NOTIFICACIONES TELEGRAM — PZVERSE
+# TELEGRAM — CONFIGURACIÓN INICIAL
 # ============================================================
 
-import requests
-
-# TOKEN DEL BOT (DE BOTFATHER)
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 print("🔑 TOKEN TELEGRAM cargado:", "OK" if TELEGRAM_TOKEN else "VACÍO")
 
-# CHAT_ID DEL USUARIO (SE RELLENA AUTOMÁTICAMENTE CUANDO ESCRIBAS AL BOT)
 TELEGRAM_CHAT_ID = None
 
-# 🌸 PRECARGAR CHAT_ID AL INICIAR EL SERVIDOR
+# Precargar chat_id si existe
 try:
     with open("chat_id.txt") as f:
         TELEGRAM_CHAT_ID = f.read().strip()
@@ -872,9 +952,11 @@ except:
 
 
 
+
 # ============================================================
 # FUNCIÓN PARA ENVIAR MENSAJES A TELEGRAM
 # ============================================================
+
 def enviar_telegram(mensaje):
     """
     Envía un mensaje al bot de Telegram.
@@ -883,7 +965,7 @@ def enviar_telegram(mensaje):
     """
     global TELEGRAM_CHAT_ID
 
-    # Si la variable global está vacía, cargar desde archivo
+    # Si no está cargado, intentar leerlo del archivo
     if TELEGRAM_CHAT_ID is None:
         try:
             with open("chat_id.txt") as f:
@@ -896,7 +978,7 @@ def enviar_telegram(mensaje):
             print("❌ Error leyendo chat_id.txt:", e)
             return
 
-    # Enviar mensaje a Telegram
+    # Enviar mensaje
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
     payload = {
         "chat_id": TELEGRAM_CHAT_ID,
@@ -911,9 +993,11 @@ def enviar_telegram(mensaje):
 
 
 
+
 # ============================================================
-# WEBHOOK PARA CAPTURAR TU CHAT_ID AUTOMÁTICAMENTE
+# WEBHOOK DE TELEGRAM — RECIBIR MENSAJES
 # ============================================================
+
 @app.route("/telegram-webhook", methods=["POST"])
 def telegram_webhook():
     """
@@ -926,32 +1010,29 @@ def telegram_webhook():
     data = request.get_json()
     print("📩 Mensaje recibido desde Telegram:", data)
 
-    # EXTRAER TEXTO DEL MENSAJE
+    # Extraer texto
     try:
         texto = data["message"]["text"]
     except:
         texto = ""
 
-    # EXTRAER CHAT_ID
+    # Extraer chat_id
     try:
         TELEGRAM_CHAT_ID = data["message"]["chat"]["id"]
         print("✅ CHAT_ID DETECTADO:", TELEGRAM_CHAT_ID)
 
-        # Guardar chat_id en archivo
-        try:
-            with open("chat_id.txt", "w") as f:
-                f.write(str(TELEGRAM_CHAT_ID))
-            print("💾 chat_id.txt guardado correctamente")
-        except Exception as e:
-            print("❌ Error guardando chat_id.txt:", e)
+        # Guardar chat_id
+        with open("chat_id.txt", "w") as f:
+            f.write(str(TELEGRAM_CHAT_ID))
+        print("💾 chat_id.txt guardado correctamente")
 
     except Exception as e:
         print("❌ Error extrayendo CHAT_ID:", e)
 
-    # GUARDAR EL MENSAJE EN EL CHAT DE LA WEB
+    # Guardar mensaje en el chat web
     mensajes = cargar_mensajes()
     mensajes.append({
-        "usuario": "PZVerse",  # Nombre que aparecerá en el chat web
+        "usuario": "PZVerse",
         "texto": texto,
         "fecha": datetime.utcnow().strftime("%H:%M:%S")
     })
@@ -961,9 +1042,11 @@ def telegram_webhook():
 
 
 
+
 # ============================================================
 # RUTA PARA PROBAR NOTIFICACIONES PUSH
 # ============================================================
+
 @app.route("/probar-push")
 def probar_push():
     enviar_notificacion("🔔 Prueba de notificación", "Todo funciona correctamente.")
@@ -972,117 +1055,88 @@ def probar_push():
 
 
 # ============================================================
-# RUTA PARA TOKEN
-# ============================================================
-@app.route("/ver-token")
-def ver_token():
-    try:
-        with open("token_fcm.txt", "r") as f:
-            return f"<pre>{f.read()}</pre>"
-    except Exception as e:
-        return f"Error: {e}"
-
-
-# ============================================================
-# SISTEMA DE FORO — FUNCIONES Y UTILIDADES
+# ARCHIVADO MENSUAL — GUARDAR USUARIOS Y RESETEAR TABLA
 # ============================================================
 
-# Archivo donde se guardan los temas del foro
-RUTA_TEMAS = "temas.json"
+@app.route("/admin/reset_mes")
+def reset_mes():
+    """Archiva los usuarios del mes y resetea la tabla LoggedUser."""
+    archivo = generar_grafica_mensual()
+    archive_and_reset_users()
 
+    if archivo:
+        return f"Usuarios archivados, tabla reseteada y gráfica generada: {archivo}"
+    else:
+        return "Usuarios archivados y tabla reseteada, pero no había datos para generar gráfica."
 
-def cargar_temas():
-    """
-    Carga todos los temas del foro desde el archivo JSON.
-    Si no existe, devuelve una lista vacía.
-    """
-    if os.path.exists(RUTA_TEMAS):
-        with open(RUTA_TEMAS, "r", encoding="utf-8") as f:
-            return json.load(f)
-    return []
-
-# ============================================================
-
-def cargar_tema(id):
-    """
-    Carga un tema concreto por ID.
-    Devuelve None si no existe.
-    """
-    temas = cargar_temas()
-    for t in temas:
-        if t["id"] == id:
-            return t
-    return None
-
-# ============================================================
-
-def guardar_tema(titulo, contenido, imagen=None):
-    temas = cargar_temas()
-
-    nuevo_tema = {
-        "id": len(temas) + 1,
-        "titulo": titulo,
-        "contenido": contenido.replace("\r", ""),
-        "imagen": imagen,
-        "autor": session['user']['name'],   # AUTOR REAL
-        "respuestas": []
-    }
-
-    temas.append(nuevo_tema)
-
-    with open(RUTA_TEMAS, "w", encoding="utf-8") as f:
-        json.dump(temas, f, indent=2, ensure_ascii=False)
 
 
 
 # ============================================================
-
-def guardar_respuesta(id, texto):
-    temas = cargar_temas()
-
-    for t in temas:
-        if t["id"] == id:
-
-            nueva_respuesta = {
-                "id": len(t["respuestas"]) + 1,
-                "texto": texto,
-                "autor": session['user']['name'],   # AUTOR REAL
-                "fecha": datetime.utcnow().strftime("%d/%m/%Y %H:%M")
-            }
-
-            t["respuestas"].append(nueva_respuesta)
-
-    with open(RUTA_TEMAS, "w", encoding="utf-8") as f:
-        json.dump(temas, f, indent=2, ensure_ascii=False)
-
-
-# ============================================================
-# FUNCIONES ENVIAR NOTIFICACIONES PUSH
+# ESTADÍSTICAS DE USUARIOS — MOSTRAR GRÁFICA EN HTML
 # ============================================================
 
-def enviar_notificacion(titulo, mensaje):
-    try:
-        with open("token_fcm.txt") as f:
-            token = f.read().strip()
-    except:
-        print("⚠️ No hay token registrado todavía")
-        return
+@app.route("/admin/estadisticas_usuarios")
+def estadisticas_usuarios():
+    """Genera datos para la página de estadísticas de usuarios."""
+    registros = MonthlyUserLog.query.all()
 
-    # Crear el mensaje
-    message = messaging.Message(
-        notification=messaging.Notification(
-            title=titulo,
-            body=mensaje
-        ),
-        token=token
+    conteo_por_mes = {}
+
+    for r in registros:
+        if r.month not in conteo_por_mes:
+            conteo_por_mes[r.month] = 0
+        conteo_por_mes[r.month] += 1
+
+    meses = sorted(conteo_por_mes.keys())
+    valores = [conteo_por_mes[m] for m in meses]
+
+    return render_template(
+        "estadisticas.html",
+        meses=meses,
+        valores=valores
     )
 
-    # Enviar notificación
+
+
+# ============================================================
+# NOTIFICACIONES PUSH — FIREBASE CLOUD MESSAGING
+# ============================================================
+
+def enviar_notificacion(titulo, cuerpo):
+    """
+    Envía una notificación push al dispositivo móvil usando FCM.
+    Requiere que el usuario haya registrado su token en /registrar-token.
+    """
     try:
+        # Leer token guardado
+        if not os.path.exists("token_fcm.txt"):
+            print("⚠️ No existe token_fcm.txt — ningún dispositivo ha registrado token aún.")
+            return
+
+        with open("token_fcm.txt", "r") as f:
+            token = f.read().strip()
+
+        if not token:
+            print("⚠️ El token FCM está vacío.")
+            return
+
+        # Crear mensaje
+        message = messaging.Message(
+            notification=messaging.Notification(
+                title=titulo,
+                body=cuerpo
+            ),
+            token=token
+        )
+
+        # Enviar notificación
         response = messaging.send(message)
-        print("📨 Notificación enviada:", response)
+        print("📨 Notificación enviada correctamente:", response)
+
     except Exception as e:
         print("❌ Error enviando notificación:", e)
+
 
 
 # ============================================================
