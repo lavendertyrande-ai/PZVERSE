@@ -33,6 +33,17 @@ print("DEBUG TEST_VAR:", os.getenv("TEST_VAR"))
 print("DEBUG GOOGLE_JSON:", os.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON"))
 
 # ============================================================
+# CONFIGURACIÓN DE LA BASE DE DATOS SEGÚN ENTORNO
+# ============================================================
+if os.environ.get("RAILWAY_ENVIRONMENT") == "production":
+    # En Railway → usar PostgreSQL
+    DATABASE_URL = os.environ.get("DATABASE_URL")
+else:
+    # En tu PC → usar SQLite local
+    DATABASE_URL = "sqlite:///local.db"
+
+
+# ============================================================
 # FLASK + BASE DE DATOS (NEON / POSTGRESQL)
 # ============================================================
 
