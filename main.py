@@ -46,6 +46,7 @@ init_db(app)
 with app.app_context():
     db.create_all()
     print("📦 Tablas creadas/verificadas")
+    print("📌 Tablas registradas por SQLAlchemy:", db.metadata.tables.keys())
 
 # ============================================================
 # Leer el JSON desde el archivo local
