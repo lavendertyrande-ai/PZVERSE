@@ -342,11 +342,12 @@ def home():
 @app.route('/login/twitch')
 def login_twitch():
     redirect_uri = "https://www.pz-verse.com/authorize/twitch"
-    print("TWITCH REDIRECT V2:", redirect_uri)
-    return oauth.twitch.authorize_redirect(redirect_uri)
+    return oauth.twitch.authorize_redirect(
+        redirect_uri,
+        scope="user:read:email"
+    )
 
 
-# probando prints para ver qué llega
 
 @app.route('/authorize/twitch')
 def authorize_twitch():
@@ -387,6 +388,8 @@ def authorize_twitch():
             return f"Error al obtener usuario de Twitch. Respuesta: {user_data}"
 
         user = user_data["data"][0]
+
+        print("DEBUG TWITCH USER:", user)
 
         session['user'] = {
             'name': user['display_name'],
