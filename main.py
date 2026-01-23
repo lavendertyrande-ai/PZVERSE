@@ -32,13 +32,13 @@ print("DEBUG GOOGLE_JSON:", os.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON"))
 
 from models import init_db, db
 
+
 app = Flask(__name__)
 
-# Crear carpeta instance si no existe (Railway no la crea)
-os.makedirs("instance", exist_ok=True)
+# Conexión a PostgreSQL usando la variable de entorno
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"pool_pre_ping": True}
 
-# Conectar SQLite
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///instance/pzverse.db"
 
 init_db(app)
 
