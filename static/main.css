@@ -1639,6 +1639,40 @@ p, li, a, span {
     z-index: 40;
 }
 
+
+/* ============================================================
+   ESTADÍSTICAS — ESTILO NEON PARA LA GRÁFICA DE USUARIOS
+   ============================================================ */
+
+/* Contenedor general de la página de estadísticas */
+body.estadisticas-body {
+    background: #000;
+    color: #fff;
+    font-family: 'Orbitron', Arial, sans-serif;
+    text-align: center;
+    padding: 40px;
+}
+
+/* Título principal */
+.estadisticas-titulo {
+    color: #FF00CC;
+    text-shadow: 0 0 10px #FF00CC, 0 0 20px #FF00CC;
+    margin-bottom: 40px;
+}
+
+/* Marco neon alrededor de la gráfica */
+.grafica-contenedor {
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+    background: rgba(20, 20, 20, 0.8);
+    border: 2px solid #FF00CC;
+    border-radius: 15px;
+    box-shadow: 0 0 20px #FF00CC;
+}
+
+
+
 /* ============================================================
    FOOTER
    ============================================================ */

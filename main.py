@@ -1096,12 +1096,13 @@ def estadisticas_usuarios():
             conteo_por_mes[r.month] = 0
         conteo_por_mes[r.month] += 1
 
-    meses = sorted(conteo_por_mes.keys())
-    valores = [conteo_por_mes[m] for m in meses]
+    # Lista completa de meses del año
+    meses_completos = [f"2026-{str(m).zfill(2)}" for m in range(1, 13)]
+    valores = [conteo_por_mes.get(m, 0) for m in meses_completos]
 
     return render_template(
         "estadisticas.html",
-        meses=meses,
+        meses=meses_completos,
         valores=valores
     )
 

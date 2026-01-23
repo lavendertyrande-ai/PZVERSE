@@ -3,36 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <title>Estadísticas de Usuarios</title>
+
+    <!-- ============================================================
+         CARGA DE CHART.JS (LIBRERÍA PARA GENERAR LA GRÁFICA)
+         ============================================================ -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- ============================================================
+         ENLACE AL CSS EXTERNO (main.css)
+         * Aquí NO añadimos estilos, solo enlazamos tu archivo.
+         ============================================================ -->
+    <link rel="stylesheet" href="/static/main.css">
 </head>
-<body style="background:black; color:white; font-family:Arial;">
 
-<h1>Estadísticas Mensuales de Usuarios</h1>
+<!-- ============================================================
+     AÑADIMOS UNA CLASE AL BODY PARA APLICAR ESTILOS DESDE main.css
+     ============================================================ -->
+<body class="estadisticas-body">
 
-<canvas id="graficaUsuarios" width="600" height="300"></canvas>
+    <!-- ============================================================
+         TÍTULO PRINCIPAL DE LA PÁGINA
+         ============================================================ -->
+    <h1 class="estadisticas-titulo">Estadísticas Mensuales de Usuarios</h1>
 
-<script>
-    const ctx = document.getElementById('graficaUsuarios').getContext('2d');
+    <!-- ============================================================
+         CONTENEDOR DE LA GRÁFICA
+         Chart.js dibuja dentro del <canvas>
+         ============================================================ -->
+    <div class="grafica-contenedor">
+        <canvas id="graficaUsuarios"></canvas>
+    </div>
 
-    const grafica = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: {{ meses|tojson }},
-            datasets: [{
-                label: 'Usuarios por mes',
-                data: {{ valores|tojson }},
-                backgroundColor: 'rgba(255, 0, 204, 0.5)',
-                borderColor: '#FF00CC',
-                borderWidth: 2
-            }]
-        },
-        options: {
-            scales: {
-                y: { beginAtZero: true }
+    <!-- ============================================================
+         SCRIPT QUE GENERA LA GRÁFICA
+         * Los datos vienen desde Flask: meses y valores
+         ============================================================ -->
+    <script>
+        // Obtenemos el contexto del canvas donde se dibujará la gráfica
+        const ctx = document.getElementById('graficaUsuarios').getContext('2d');
+
+        // Inicializamos la gráfica con Chart.js
+        new Chart(ctx, {
+            type: 'bar',  // Tipo de gráfica: barras verticales
+            data: {
+                labels: {{ meses|tojson }},   // Lista completa de meses enviada desde Flask
+                datasets: [{
+                    label: 'Usuarios por mes',
+                    data: {{ valores|tojson }},  // Valores por cada mes
+                    backgroundColor: 'rgba(255, 0, 204, 0.4)', // Color de las barras
+                    borderColor: '#FF00CC',      // Borde neon
+                    borderWidth: 2,              // Grosor del borde
+                    borderRadius: 8              // Bordes redondeados
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true  // El eje Y empieza en 0
+                    }
+                }
             }
-        }
-    });
-</script>
+        });
+    </script>
 
 </body>
 </html>
+
