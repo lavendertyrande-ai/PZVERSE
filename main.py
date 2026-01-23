@@ -38,6 +38,7 @@ app = Flask(__name__)
 # Conexión a PostgreSQL usando la variable de entorno
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"pool_pre_ping": True}
+print("DEBUG DB URI:", app.config["SQLALCHEMY_DATABASE_URI"])
 
 
 init_db(app)
