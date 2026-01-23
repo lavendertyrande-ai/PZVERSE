@@ -33,6 +33,8 @@ print("DEBUG GOOGLE_JSON:", os.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON"))
 from models import init_db, db
 
 app = Flask(__name__)
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///instance/pzverse.db"
+
 init_db(app)
 
 with app.app_context():
