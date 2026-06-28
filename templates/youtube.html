@@ -6,9 +6,15 @@
   <title>YouTube</title>
 
   <!-- ============================
-       Estilos principales
+       CSS NUEVOS
        ============================ -->
-  <link rel="stylesheet" href="/static/main.css">
+  <link rel="stylesheet" href="/static/css/reset.css">
+  <link rel="stylesheet" href="/static/css/variables.css">
+  <link rel="stylesheet" href="/static/css/global.css">
+  <link rel="stylesheet" href="/static/css/menu.css">
+  <link rel="stylesheet" href="/static/css/banner.css">
+  <link rel="stylesheet" href="/static/css/logo.css">
+  <link rel="stylesheet" href="/static/css/youtube.css"> <!-- si existe -->
 
   <!-- ============================
        Fuentes externas
@@ -22,6 +28,49 @@
 <body>
 
   <!-- ============================================================
+       MENÚ HAMBURGUESA NUEVO (SIN LOGOS)
+       ============================================================ -->
+  <div id="menu-btn" class="menu-btn">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <nav id="side-menu" class="side-menu">
+    <ul>
+      <li><a href="/">Inicio</a></li>
+
+      <li class="section-title">Calendarios</li>
+      <li><a href="/calendarios">Calendarios</a></li>
+
+      <li class="section-title">Directos</li>
+      <li><a href="/twitch-mio">Patz Oficial</a></li>
+      <li><a href="/twitch-pareja">Zhoomm Oficial</a></li>
+
+      <li class="section-title">YouTube</li>
+      <li><a href="/youtube">Canal Principal</a></li>
+      <li><a href="/sombras-secretos">Sombras y Secretos</a></li>
+
+      <li class="section-title">Galería</li>
+      <li><a href="/galeria">Galería</a></li>
+
+      <li class="section-title">Blog</li>
+      <li><a href="/blog">Blog</a></li>
+
+      <li class="section-title">Tienda</li>
+      <li><a href="/tienda">Tienda Digital & Merch</a></li>
+
+      <li class="section-title">Comunidad</li>
+      <li><a href="/interactivo">Foro</a></li>
+
+      <li class="section-title">Contacto</li>
+      <li><a href="/contacto">Contacto</a></li>
+    </ul>
+  </nav>
+
+  <div id="overlay" class="overlay"></div>
+
+  <!-- ============================================================
        LOGO FIJO SUPERIOR IZQUIERDA
        ============================================================ -->
   <a href="/" class="logo-pz">
@@ -29,20 +78,11 @@
   </a>
 
   <!-- ============================================================
-       BANNER PRINCIPAL + MENÚ SUPERPUESTO
+       BANNER PRINCIPAL (ACTUALIZADO)
        ============================================================ -->
   <section class="banner-titulo">
     <div class="banner-contenedor">
-      <img src="/static/Youtube.png" alt="Banner YouTube">
-
-      <nav class="menu-superpuesto">
-        <a href="/" class="btn">Inicio</a>
-        <a href="/twitch-mio" class="btn">Patz Oficial</a>
-        <a href="/twitch-pareja" class="btn">Zhoomm Oficial</a>
-        <a href="/youtube" class="btn">YouTube</a>
-        <a href="/blog" class="btn">Blog</a>
-        <a href="/interactivo" class="btn">Social</a>
-      </nav>
+      <img src="/static/banners/YouTube.png" alt="Banner YouTube">
     </div>
   </section>
 
@@ -75,10 +115,33 @@
     </section>
   </main>
 
+  <!-- ============================================================
+       FOOTER NUEVO
+       ============================================================ -->
   <footer class="footer-pz">
     <p>&copy; 2026 PZVERSE — Todos los derechos reservados.</p>
     <p>Propiedad de PZVERSE. Diseño y contenido protegido.</p>
   </footer>
 
+  <!-- ============================================================
+       SCRIPT DEL MENÚ
+       ============================================================ -->
+  <script>
+    const menuBtn = document.getElementById("menu-btn");
+    const sideMenu = document.getElementById("side-menu");
+    const overlay = document.getElementById("overlay");
+
+    menuBtn.addEventListener("click", () => {
+      sideMenu.classList.toggle("open");
+      overlay.classList.toggle("show");
+    });
+
+    overlay.addEventListener("click", () => {
+      sideMenu.classList.remove("open");
+      overlay.classList.remove("show");
+    });
+  </script>
+
 </body>
 </html>
+

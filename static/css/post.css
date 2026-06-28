@@ -1,0 +1,189 @@
+/* ============================================
+   CONTENEDOR PRINCIPAL DEL POST
+   ============================================ */
+.tarjeta-blog {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  box-shadow: 0 0 8px #ff00cc;
+  padding: 10px;
+  transition: transform 0.3s ease;
+  width: 100%;
+  max-width: 100%;       /* ← evita que se ensanche */
+  box-sizing: border-box; /* ← asegura que padding no rompa el layout */
+}
+
+
+.tarjeta-blog:hover {
+  transform: scale(1.02);
+}
+
+.grid-blog {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);  /* Fuerza 3 columnas */
+  gap: 30px;
+  padding: 20px;
+}
+
+.card {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  animation: fadeGlow 1.2s ease-in-out;
+}
+
+@media (max-width: 600px) {
+  .btn-admin-neon {
+    display: block;
+    margin-bottom: 10px;
+  }
+}
+
+
+/* Imagen destacada */
+.tarjeta-blog img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  box-shadow: 0 0 10px #ff00cc;
+}
+
+/* Contenido de la tarjeta */
+.contenido-tarjeta {
+  text-align: center;
+  color: #fff;
+  font-family: 'Lugrasimo', cursive;
+}
+
+/* Título del post */
+.contenido-tarjeta h3 {
+  font-size: 1rem;
+  color: #ff00cc;
+  font-family: 'Trade Winds', cursive;
+  text-shadow: 0 0 8px #ff00cc;
+  margin-bottom: 6px;
+}
+
+/* Fecha */
+.fecha {
+  font-size: 0.9em;
+  color: #ccc;
+  margin-bottom: 10px;
+}
+
+/* Resumen */
+.resumen {
+  font-size: 0.75em;
+  margin-bottom: 10px;
+}
+
+/* Botón Leer más */
+.btn-leer {
+  display: inline-block;
+  padding: 2px 6px;
+  background: #ff00cc;
+  color: #fff;
+  border-radius: 2px;
+  font-size: 0.4em;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 0 10px #ff00cc;
+  transition: background 0.3s ease;
+}
+
+.btn-leer:hover {
+  background: #ff33dd;
+}
+
+/* ============================================================
+   POST PUBLICADO EXITOSAMENTE
+   ============================================================ */
+.mensaje-exito {
+  text-align: center;
+  font-family: 'Trade Winds', cursive;
+  font-size: 1.4em;
+  color: #ff66cc;
+  margin: 20px auto 30px auto;
+  padding: 12px 20px;
+  border: 2px solid #ff66cc;
+  border-radius: 10px;
+  width: fit-content;
+  box-shadow: 0 0 12px #ff66cc, 0 0 25px #ff33aa;
+  background-color: rgba(255, 0, 170, 0.1);
+  animation: glowPulse 2s infinite ease-in-out;
+}
+
+/* Animación suave neon */
+@keyframes glowPulse {
+  0% {
+    box-shadow: 0 0 12px #ff66cc, 0 0 25px #ff33aa;
+  }
+  50% {
+    box-shadow: 0 0 20px #ff33aa, 0 0 35px #ff66cc;
+  }
+  100% {
+    box-shadow: 0 0 12px #ff66cc, 0 0 25px #ff33aa;
+  }
+}
+
+
+/* ============================================================
+   POST INDIVIDUAL — MARCO NEÓN Y ESTILO ARMÓNICO
+   ============================================================ */
+
+.post-contenedor {
+  max-width: 1000px;
+  margin: 60px auto;
+  padding: 30px;
+  background: rgba(20, 20, 40, 0.85);
+  border: 2px solid #FF00CC;
+  border-radius: 12px;
+  box-shadow: 0 0 15px #FF00CC, 0 0 25px #9146FF;
+  text-align: center;
+}
+
+.post-titulo {
+  font-size: 2.2rem;
+  color: #FF00CC;
+  text-shadow: 0 0 8px #FF00CC;
+  margin-bottom: 10px;
+}
+
+.post-fecha {
+  font-size: 0.9rem;
+  color: #aaa;
+  margin-bottom: 30px;
+}
+
+.post-imagen {
+  max-width: 175px;
+  width: 100%;
+  margin: 0 auto 30px auto;
+  display: block;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #FF00CC;
+  object-fit: cover;
+}
+
+.post-cuerpo {
+  font-size: 1.1rem;
+  color: #ccc;
+  line-height: 1.7;
+  text-align: left;
+  max-width: 800px;
+  margin: 0 auto 40px auto;
+}
+
+/* Botón volver */
+.btn-volver {
+  display: inline-block;
+  background-color: #222;
+  color: #FF00CC;
+  padding: 8px 16px;
+  font-size: 14px;
+  border: 1px solid #FF00CC;
+  border-radius: 6px;
+  text-decoration: none;
+  box-shadow: 0 0 6px #FF00CC;
+}

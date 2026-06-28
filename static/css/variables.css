@@ -1,0 +1,47 @@
+/* ============================================================
+   PALETA DE COLORES — BOSQUE MÁGICO NEÓN
+   Inspirada en tu imagen + el color #29676E que pediste
+   ============================================================ */
+
+:root {
+
+  /* ------------------------------------------------------------
+     FONDOS PRINCIPALES (oscuros, profundos, ambientales)
+     ------------------------------------------------------------ */
+  --bosque-profundo: #0A0F1A;     /* Negro azulado profundo */
+  --azul-mistico: #1B2A41;        /* Azul grisáceo místico */
+  --morado-neblina: #3A2E5F;      /* Morado suave y brumoso */
+
+  /* 🔥 NUEVO COLOR QUE PEDISTE (bosque húmedo) */
+  --bosque-humedo: #29676E;       /* Verde azulado profundo, húmedo, mágico */
+
+  --violeta-encantado: #6A4BA3;   /* Violeta suave para transiciones */
+
+  /* ------------------------------------------------------------
+     NEONES MÁGICOS (brillos, acentos, botones)
+     ------------------------------------------------------------ */
+  --rosa-hechizo: #FF4EDB;        /* Rosa brillante mágico */
+  --fucsia-arcano: #FF00CC;       /* Fucsia neón intenso */
+  --magenta-mistico: #D100A8;     /* Magenta profundo */
+  --lavanda-luminosa: #C084F5;    /* Lavanda brillante */
+
+  /* ------------------------------------------------------------
+     AZULES BRILLANTES (contraste, detalles luminosos)
+     ------------------------------------------------------------ */
+  --azul-espiritu: #4CC9F0;       /* Azul brillante */
+  --cian-fantasma: #72F1FF;       /* Cian luminoso */
+  --azul-portal: #4361EE;         /* Azul violeta intenso */
+
+  /* ------------------------------------------------------------
+     NATURALEZA MÁGICA (flores, detalles suaves)
+     ------------------------------------------------------------ */
+  --rosa-sakura: #FF8AD6;         /* Rosa flor de cerezo */
+  --purpura-flor-noche: #A259FF;  /* Púrpura floral */
+  --verde-espiritu: #00FFB7;      /* Verde mágico brillante */
+
+  /* ------------------------------------------------------------
+     TEXTO
+     ------------------------------------------------------------ */
+  --texto-claro: #FFFFFF;
+  --texto-suave: #E0D7F8;
+}

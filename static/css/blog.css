@@ -1,0 +1,106 @@
+/* ============================================================
+   TÍTULOS DE TARJETAS
+   ============================================================ */
+.card > h2:first-of-type {
+  text-align: center;
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+
+/* ============================================
+   TÍTULO DEL BLOG
+   ============================================ */
+.titulo-blog {
+  font-family: 'Trade Winds', cursive;
+  text-align: center;
+  font-size: 2em;
+  color: #ff66cc;
+  margin-top: 60px;
+  margin-bottom: 10px;
+  text-shadow: 0 0 10px #ff66cc, 0 0 20px #ff33aa;
+}
+
+.mensaje-vacio {
+  text-align: center;
+  font-family: 'Lugrasimo', cursive;
+  font-size: 1.3em;
+  color: #ff66cc;
+  margin-top: 40px;
+  padding: 10px;
+  border: 2px dashed #ff66cc;
+  border-radius: 10px;
+  background-color: rgba(255, 0, 170, 0.05);
+}
+
+
+/* ============================================
+   BOTÓN "LEER MÁS"
+   ============================================ */
+.btn-leer {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #ff66cc;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-leer:hover {
+  background-color: #ff33aa;
+  box-shadow: 0 0 15px #ff66cc;
+}
+
+
+/* ============================================================
+   PAGINADOR
+   ============================================================ */
+
+.paginador {
+  text-align: center;
+  margin: 40px 0;
+}
+
+.pagina, .pagina-activa {
+  display: inline-block;
+  margin: 0 6px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #fff;
+  background: #ff00cc;
+  box-shadow: 0 0 8px #ff00cc;
+  transition: background 0.3s ease;
+}
+
+.pagina:hover {
+  background: #ff33dd;
+}
+
+.pagina-activa {
+  background: #fff;
+  color: #ff00cc;
+  box-shadow: 0 0 12px #fff;
+}
+
+/* ============================================================
+   GESTIONAR BLOG
+   ============================================================ */
+.tabla-posts th, .tabla-posts td {
+  padding: 8px;
+  font-size: 0.9em;
+}
+.tabla-posts th {
+  font-size: 1em;
+}
+.tabla-posts img {
+  max-width: 60px;
+}
+.btn-accion {
+  padding: 6px 10px;
+  font-size: 0.85em;
+}
+

@@ -1,0 +1,57 @@
+/* ============================================================
+   BANNERS PRINCIPALES
+   ============================================================ */
+.banner-portada {
+  width: 100%;
+  display: block;
+}
+
+.banner-contenedor {
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+}
+
+.banner-contenedor img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+
+/* ============================================================
+   BANNER FORO — marco neon centrado
+   ============================================================ */
+.banner-foro {
+  max-width: 1150px;
+  margin: 10px auto;
+  padding: 20px 40px;
+  background: rgba(20, 20, 40, 0.8);
+  border: 2px solid #FF00CC;
+  border-radius: 12px;
+  box-shadow: 0 0 15px #FF00CC, 0 0 25px #9146FF;
+  animation: glowPulse 2s infinite ease-in-out;
+}
+
+.banner-contenido {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.titulo-foro {
+  font-family: 'Trade Winds', cursive;
+  font-size: 2rem;
+  color: #FF00CC;
+  text-shadow: 0 0 12px #FF00CC, 0 0 24px #9146FF;
+  margin-bottom: 20px;
+}
+
+
+/* Animación suave */
+@keyframes glowPulse {
+  0% { box-shadow: 0 0 15px #FF00CC, 0 0 25px #9146FF; }
+  50% { box-shadow: 0 0 25px #FF00CC, 0 0 35px #9146FF; }
+  100% { box-shadow: 0 0 15px #FF00CC, 0 0 25px #9146FF; }
+}

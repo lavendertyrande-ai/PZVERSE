@@ -1,0 +1,184 @@
+/* ============================================================
+   GLOBAL — TIPOGRAFÍA, FONDO Y ANIMACIONES
+   ============================================================ */
+
+/* Tamaño base y scroll suave */
+html {
+    font-size: 18px;
+    scroll-behavior: smooth;
+}
+
+/* Fondo general + tipografía */
+body {
+    margin: 0;
+    padding: 0;
+    color: var(--texto-claro);
+    font-family: 'Lugrasimo', cursive;
+    font-size: 1.1rem;
+    line-height: 1.6;
+
+    background: linear-gradient(
+        to bottom,
+        var(--bosque-profundo) 0%,
+        var(--morado-neblina) 35%,
+        var(--bosque-humedo) 100%
+    );
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/* Títulos */
+h1, h2, h3 {
+    font-family: 'Trade Winds', cursive;
+    color: var(--fucsia-arcano);
+}
+
+/* Texto general */
+p, li, a, span {
+    font-family: 'Lugrasimo', cursive;
+}
+
+/* ============================================================
+   ANIMACIONES GLOBALES
+   ============================================================ */
+
+@keyframes parpadeo {
+    0% { opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1; }
+}
+
+@keyframes glow {
+    0% { box-shadow: 0 0 10px var(--fucsia-arcano); }
+    50% { box-shadow: 0 0 20px var(--fucsia-arcano); }
+    100% { box-shadow: 0 0 10px var(--fucsia-arcano); }
+}
+
+@keyframes glowPulse {
+    0% { box-shadow: 0 0 12px var(--rosa-hechizo), 0 0 25px var(--fucsia-arcano); }
+    50% { box-shadow: 0 0 20px var(--magenta-mistico), 0 0 35px var(--rosa-hechizo); }
+    100% { box-shadow: 0 0 12px var(--rosa-hechizo), 0 0 25px var(--fucsia-arcano); }
+}
+
+/* ============================================================
+   BANNER
+   ============================================================ */
+.banner-contenedor img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ============================================================
+   PRESENTACIÓN PÁGINA INICIO
+   ============================================================ */
+
+.presentacion {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 30px;
+  text-align: center;
+  line-height: 1.7;
+  font-size: 1.15rem;
+  color: #fff;
+}
+
+/* Versión limpia para portada */
+.presentacion {
+  background: none !important;
+  backdrop-filter: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 20px !important;
+}
+
+.presentacion h1 {
+  font-size: 2.2rem;
+  margin-bottom: 20px;
+}
+
+.presentacion p {
+  font-family: 'Lugrasimo', cursive;
+}
+
+
+
+/* ============================================================
+   PRESENTACIÓN — CADA COLUMNA
+   ============================================================ */
+.presentacion-col {
+    width: 300px;
+    text-align: center;
+    color: #fff;
+}
+
+/* ============================================================
+   PRESENTACIÓN — LOGOS
+   ============================================================ */
+.presentacion-logo {
+    width: 120px;
+    height: auto;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 0 6px rgba(255,255,255,0.3));
+}
+
+/* ============================================================
+   PRESENTACIÓN — NOMBRES
+   ============================================================ */
+.presentacion-col h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #a8ffff;
+    font-weight: 400;
+}
+
+/* ============================================================
+   PRESENTACIÓN — TEXTO
+   ============================================================ */
+.presentacion-col p {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    opacity: 0.9;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.footer-separator {
+  width: 100%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.6);
+  margin: 60px 0 20px 0;
+}
+
+.footer-pz {
+  margin-top: 60px;
+  padding: 25px 0;
+  text-align: center;
+}
+
+/* ============================================================
+   USUARIOS CONECTADOS
+   ============================================================ */
+.online-counter {
+  position: absolute;
+  bottom: 15px;
+  left: 20px;
+  background: rgba(0,0,0,0.4);
+  padding: 6px 12px;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 0.95rem;
+  z-index: 20;
+}
+
+
+
+.presentacion-container {
+  border: 2px solid red !important;
+  min-height: 100px !important;
+}
+

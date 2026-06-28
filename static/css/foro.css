@@ -1,0 +1,474 @@
+/* ============================================================
+   SECCIÓN DEL FORO
+   ============================================================ */
+.foro-section {
+  margin: 60px auto;
+  padding: 10px 40px;
+  color: white;
+}
+
+/* Header: Título + Botón */
+.foro-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding: 20px; /* ← igual que el grid */
+  max-width: 1150px;
+  margin: 0 auto;
+  border: 2px solid #FF00CC;
+  border-radius: 12px;
+  box-shadow: 0 0 15px #FF00CC, 0 0 25px #9146FF;
+  background: rgba(20, 20, 40, 0.6);
+  backdrop-filter: blur(4px);
+  animation: glowPulse 2s infinite ease-in-out;
+  box-sizing: border-box; /* asegura que el padding no rompa el ancho */
+}
+
+.foro-header h2 {
+  font-size: 2rem;
+  color: #FF00CC;
+  margin-top: 20px;
+  margin-left: 30px;
+  margin-bottom: 10px;
+  text-shadow: 0 0 8px #FF00CC;
+}
+
+/* Botón Nueva Entrada */
+.btn-nueva-entrada {
+  background: #FF00CC;
+  color: white;
+  font-weight: bold;
+  font-size: 0.9rem;
+  padding: 4px 8px;
+  border-radius: 5px;
+  margin-right: 50px;
+  text-decoration: none;
+  box-shadow: 0 0 8px #FF00CC;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.btn-nueva-entrada:hover {
+  transform: scale(1.05);
+  background: #ff33dd;
+}
+
+@keyframes glowPulse {
+  0% {
+    box-shadow: 0 0 15px #FF00CC, 0 0 25px #9146FF;
+  }
+  50% {
+    box-shadow: 0 0 25px #FF00CC, 0 0 35px #9146FF;
+  }
+  100% {
+    box-shadow: 0 0 15px #FF00CC, 0 0 25px #9146FF;
+  }
+}
+
+
+/* ============================================================
+   GRID DE TEMAS DEL FORO
+   ============================================================ */
+.foro-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);  /* Fuerza 3 columnas como el blog */
+  gap: 30px;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;  /* Centra el grid */
+}
+
+/* Tarjetas de cada tema */
+.tarjeta-tema {
+  background: rgba(20, 20, 40, 0.85);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 0 12px #FF00CC;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform 0.2s ease;
+  box-sizing: border-box;  /* Igual que en el blog */
+}
+
+.tarjeta-tema:hover {
+  transform: scale(1.03);
+}
+
+/* Imagen del tema */
+.tarjeta-tema img {
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 0 8px #FF00CC;
+}
+
+/* Título del tema */
+.tarjeta-tema h3 {
+  font-size: 1.4rem;
+  color: #FF00CC;
+  margin: 0;
+}
+
+/* Fragmento del contenido */
+.tarjeta-tema p {
+  font-size: 0.95rem;
+  color: #ccc;
+  margin: 0;
+}
+
+/* Botón Ver Tema */
+.btn-ver-tema {
+  align-self: flex-start;
+  background: #9146FF;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.6rem;
+  box-shadow: 0 0 6px #9146FF;
+  transition: background 0.2s ease;
+}
+
+.btn-ver-tema:hover {
+  background: #a56bff;
+}
+
+
+/* ============================================================
+   CONTENIDO DEL TEMA
+   ============================================================ */
+.tema-contenido {
+  max-width: 1000px;
+  margin: 60px auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.tema-cuerpo {
+  font-size: 1.1rem;
+  color: #ccc;
+  line-height: 1.7;
+  max-width: 800px;
+  margin: 20px auto;
+  text-align: left;
+}
+
+/* Tarjeta del tema */
+.tarjeta-tema {
+  background: rgba(20, 20, 40, 0.85);
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 0 15px #FF00CC;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: left;
+}
+
+.tarjeta-tema h2 {
+  font-size: 2rem;
+  color: #FF00CC;
+  text-shadow: 0 0 8px #FF00CC;
+  margin: 0;
+  text-align: center;
+}
+
+.tarjeta-tema img {
+   width: 100%;
+  max-width: 600px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 0 12px #FF00CC;
+  margin: 20px auto;
+  display: block;
+}
+
+
+.tarjeta-tema p {
+  font-size: 1.1rem;
+  color: #ccc;
+  line-height: 1.6;
+}
+
+
+.post-imagen {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 0 12px #FF00CC;
+  margin: 20px auto;
+  display: block;
+}
+
+
+/* ============================================================
+   CONTENEDOR GENERAL DE LA SECCIÓN COMENTARIOS
+   ============================================================ */
+.comentarios-section {
+  max-width: 950px;        /* 🔥 Limita el ancho máximo */
+  margin: 40px auto 60px;  /* 🔥 Centrado con espacio arriba y abajo */
+  padding: 20px;
+  border: 2px solid #FF00CC;
+  border-radius: 10px;
+  box-shadow: 0 0 12px #FF00CC;
+  background-color: #0a0a0a;
+}
+
+/* 🔥 Cada comentario individual */
+.comentario {
+  margin-bottom: 20px;
+  padding: 12px;
+  border-left: 3px solid #FF00CC;
+  background-color: #111;
+  border-radius: 6px;
+}
+
+/* 🔥 Texto del autor */
+.comentario-autor {
+  font-weight: bold;
+  color: #FF99DD;
+  margin-bottom: 6px;
+}
+
+/* 🔥 Texto del comentario */
+.comentario-texto {
+  color: #EEE;
+  margin-bottom: 6px;
+}
+
+/* 🔥 Fecha del comentario */
+.comentario-fecha {
+  font-size: 12px;
+  color: #999;
+}
+
+/* 🔥 Botón eliminar dentro de cada comentario */
+.comentario form {
+  margin-top: 6px;
+}
+
+
+/* ============================================================
+   BOTONES RESPONDER / VOLVER / ELIMINAR
+   ============================================================ */
+/* 🔥 Contenedor de botones del tema */
+.botones-tema {
+  display: flex;
+  justify-content: flex-end; /* 🔥 Alinea todos a la derecha */
+  align-items: center;       /* 🔥 Alinea verticalmente */
+  gap: 10px;                 /* 🔥 Espacio entre botones */
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.btn-responder {
+  background-color: #FF00CC;
+  color: white;
+  border: none;
+  padding: 4px 12px;
+  font-size: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 0 6px #FF00CC;
+}
+
+
+.btn-volver {
+  padding: 4px 12px;
+  font-size: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 0 6px #FF00CC;
+  background-color: #222;
+  color: #FF00CC;
+  border: 1px solid #FF00CC;
+  text-decoration: none;
+}
+
+.btn-eliminar {
+  padding: 6px 12px;
+  font-size: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 0 6px #FF00CC;
+  background-color: #440022;
+  color: #FF99DD;
+  border: 1px solid #FF99DD;
+}
+
+
+/* ============================================================
+   COMENTARIOS DEL TEMA
+   ============================================================ */
+.comentarios-section {
+  margin-top: 40px;
+  padding: 25px;
+  background: rgba(20, 20, 40, 0.75);
+  border-radius: 12px;
+  box-shadow: 0 0 15px #FF00CC;
+}
+
+.comentarios-section h3 {
+  font-size: 1.6rem;
+  color: #FF00CC;
+  text-shadow: 0 0 8px #FF00CC;
+  margin-bottom: 20px;
+}
+
+.comentario {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 10px #9146FF;
+  text-align: left;
+}
+
+.comentario-autor {
+  color: #FF00CC;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.comentario-texto {
+  color: #ddd;
+  margin-bottom: 8px;
+}
+
+.comentario-fecha {
+  font-size: 0.8rem;
+  color: #aaa;
+  text-align: right;
+}
+
+.sin-comentarios {
+  color: #ccc;
+  font-style: italic;
+  text-align: center;
+  padding: 10px;
+}
+
+/* ============================================================
+   EDITOR FORO
+   ============================================================ */
+/* CONTENEDOR DEL EDITOR */
+.editor-contenedor {
+    max-width: 900px;
+    margin: 80px auto;
+    padding: 30px;
+    background: rgba(20, 20, 40, 0.85);
+    border-radius: 12px;
+    box-shadow: 0 0 25px #FF00CC;
+    text-align: center;
+}
+
+/* TÍTULO */
+.editor-titulo {
+    font-family: 'Trade Winds', cursive;
+    font-size: 2.5rem;
+    color: #FF00CC;
+    text-shadow: 0 0 12px #FF00CC, 0 0 24px #9146FF;
+    margin-bottom: 25px;
+}
+
+/* MARCO NEÓN */
+.editor-marco {
+    border: 2px solid #FF00CC;
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 0 15px #FF00CC, 0 0 25px #9146FF;
+    margin-bottom: 25px;
+}
+
+/* TEXTAREA */
+.editor-marco textarea {
+    width: 100%;
+    height: 250px;
+    padding: 15px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(0, 0, 0, 0.4);
+    color: white;
+    font-size: 1rem;
+    resize: vertical;
+    outline: none;
+}
+
+/* BOTÓN */
+.editor-boton {
+    background: #0f0c29;
+    color: #FF00CC;
+    padding: 12px 30px;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    text-decoration: none;
+    box-shadow: 0 0 12px #FF00CC, 0 0 24px #9146FF;
+    transition: 0.2s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.editor-boton:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px #FF00CC, 0 0 30px #9146FF;
+}
+
+/* VOLVER */
+.editor-volver {
+    display: inline-block;
+    margin-top: 20px;
+    color: #ccc;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.editor-volver:hover {
+    color: #FF00CC;
+}
+
+/* ============================================================
+   RESPONDER — AJUSTES DEL FORMULARIO
+   ============================================================ */
+
+/* Contenedor del formulario de respuesta */
+.form-respuesta {
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+
+/* Textarea grande y centrado */
+.textarea-respuesta {
+  width: 100%;
+  max-width: 800px;           /* 🔥 Limita el ancho para que no se desborde */
+  height: 180px;              /* 🔥 Más alto para escribir con comodidad */
+  margin: 0 auto 20px auto;   /* 🔥 Centrado con espacio abajo */
+  display: block;
+  padding: 18px;              /* 🔥 Más espacio interior */
+  font-size: 16px;
+  border: 2px solid #FF00CC;
+  border-radius: 10px;
+  background-color: #0a0a0a;
+  color: #fff;
+  box-shadow: 0 0 12px #FF00CC;
+  resize: vertical;
+}
+
+
+/* Botones iguales y alineados */
+.botones-tema .btn-responder {
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+.botones-tema .btn-volver {
+  padding: 6px 14px;
+  font-size: 12px;
+}
+

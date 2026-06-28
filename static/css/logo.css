@@ -1,0 +1,41 @@
+
+/* ============================================================
+   LOGO FIJO
+   ============================================================ */
+.logo-pz {
+  position: fixed;
+  top: 9px;      /* MISMA ALTURA QUE EL MENÚ */
+  left: 80px;     /* lo movemos un poco a la derecha */
+  z-index: 9999;  /* por encima del menú */
+  width: 70px;
+  height: auto;
+}
+
+
+.logo-pz img {
+    width: 3rem;
+    transition: 0.3s ease;
+}
+
+/* Estados online/offline */
+.online-patz img {
+    filter: drop-shadow(0 0 1rem #ff00cc);
+    animation: parpadeo 1.2s infinite;
+}
+.offline-patz img {
+    filter: drop-shadow(0 0 0.5rem #ff00cc);
+}
+
+.online-zhoomn img {
+    filter: drop-shadow(0 0 1rem #00c8ff);
+    animation: parpadeo 1.2s infinite;
+}
+.offline-zhoomn img {
+    filter: drop-shadow(0 0 0.5rem #00c8ff);
+}
+
+@keyframes parpadeo {
+    0% { opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1; }
+}

@@ -1,0 +1,88 @@
+/* ============================================================
+   LOGIN / USUARIO
+   ============================================================ */
+.login-superpuesto {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 30;
+}
+
+.btn-login {
+    background-color: rgba(255, 0, 204, 0.8);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-family: 'Trade Winds', cursive;
+    font-size: 0.75rem;
+    text-decoration: none;
+    box-shadow: 0 0 6px #FF00CC;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-login:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px #FF00CC, 0 0 20px #9146FF;
+}
+
+.btn-login.twitch {
+    background-color: #9146FF;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+
+.twitch-icon {
+    width: 18px;
+    height: 18px;
+    display: block;
+}
+
+
+.user-banner {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 0, 204, 0.25);
+    padding:4px 8px;
+    border-radius: 6px;
+    box-shadow: 0 0 10px #FF00CC;
+}
+
+.user-banner .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+
+.user-banner .username {
+    display: none;
+}
+
+.user-banner span,
+.user-banner p,
+.user-banner strong {
+    display: none;
+}
+
+
+.logout-button {
+    background: #FF00CC;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.60rem;
+    box-shadow: 0 0 6px #FF00CC;
+    transition: 0.2s ease;
+}
+
+.logout-button:hover {
+    background: #ff33aa;
+    box-shadow: 0 0 12px #FF00CC;
+}

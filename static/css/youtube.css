@@ -1,0 +1,103 @@
+/* ============================================================
+   YOUTUBE GRID
+   ============================================================ */
+.youtube-section {
+  text-align: center;
+  margin-top: 40px;
+  padding: 0 10px;
+}
+
+.titulo-youtube {
+  font-size: 2.5rem;
+  color: #FF00CC;
+  text-shadow: 0 0 10px #FF00CC, 0 0 20px #9146FF;
+  margin-bottom: 30px;
+}
+
+.grid-youtube {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  padding: 40px 80px; /* ← aquí está el margen lateral que querías */
+}
+
+
+
+.video-title {
+  font-size: 0.85rem;
+  margin: 10px 0;
+  text-align: center;
+  color: white;
+  line-height: 1.2;
+  min-height: 40px; /* fuerza espacio uniforme */
+}
+
+
+.video-card {
+  background: rgba(20, 20, 40, 0.7);
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px #FF00CC, 0 0 25px #9146FF;
+}
+
+
+.video-card h3 {
+  color: #fff;
+  margin-top: 10px;
+}
+
+.video-card img,
+.video-card iframe {
+  width: 100%;
+  height: 270px;
+  border-radius: 8px;
+  border: none;
+}
+
+
+.btn-neon {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 20px;
+  color: #FF00CC;
+  background: #0f0c29;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 0 10px #FF00CC, 0 0 20px #9146FF;
+}
+
+/* ============================================================
+   BOTÓN DE SUSCRIPCIÓN YOUTUBE
+   ============================================================ */
+.youtube-subscribe {
+  margin-top: 40px;
+  text-align: center;
+  padding: 20px;
+  background: rgba(20, 20, 40, 0.6);
+  box-shadow: 0 0 15px #FF00CC, 0 0 25px #9146FF;
+  border-radius: 12px;
+}
+
+.boton-suscripcion {
+  text-align: right;
+  margin: 10px 30px 20px 0;
+}
+
+.boton-suscripcion .btn-neon {
+  display: inline-block;
+  padding: 8px 18px;
+  font-size: 0.85rem;
+  color: #FF00CC;
+  background: #0f0c29;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 0 10px #FF00CC, 0 0 20px #9146FF;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.boton-suscripcion .btn-neon:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 19px #FF00CC, 0 0 30px #9146FF;
+}

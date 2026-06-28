@@ -3,92 +3,291 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Página Principal</title>
+  <title>PZ VERSE — Página Principal</title>
 
-  <!-- ============================
-       Estilos principales
-       ============================ -->
-  <link rel="stylesheet" href="/static/main.css">
+  <!-- CSS -->
+  <link rel="stylesheet" href="/static/css/reset.css">
+  <link rel="stylesheet" href="/static/css/variables.css">
+  <link rel="stylesheet" href="/static/css/global.css">
+  <link rel="stylesheet" href="/static/css/menu.css">
+  <link rel="stylesheet" href="/static/css/banner.css">
+  <link rel="stylesheet" href="/static/css/home.css">
+  <link rel="stylesheet" href="/static/css/logo.css">
+  <link rel="stylesheet" href="/static/css/login.css">
 
-  <!-- ============================
-       Fuentes personalizadas
-       ============================ -->
+  <!-- Fuentes -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Trade+Winds&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Lugrasimo&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============================================================
+       BANNER — ANCHO COMPLETO DEL VIEWPORT IGNORANDO EL MENÚ
+       ============================================================ */
+    .banner-portada {
+      position: relative;
+      width: 100vw;
+      left: 50%;
+      right: 50%;
+      margin-left: -50vw;
+      margin-right: -50vw;
+    }
+
+    .banner-contenedor {
+      position: relative;
+      width: 100%;
+    }
+
+    .banner-contenedor img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* ============================================================
+       SECCIÓN PRESENTACIÓN — TARJETAS PERSONAS
+       ============================================================ */
+    .presentacion-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 40px;
+      margin-top: 40px;
+      margin-bottom: 60px;
+      flex-wrap: wrap;
+      border: none !important; /* limpia el borde rojo de debug */
+    }
+
+    .presentacion-col {
+      width: 300px;
+      text-align: center;
+      color: #fff;
+    }
+
+    .presentacion-logo {
+      width: 120px;
+      height: auto;
+      margin-bottom: 15px;
+      filter: drop-shadow(0 0 6px rgba(255,255,255,0.3));
+    }
+
+    .presentacion-col h3 {
+      font-family: 'Trade Winds', cursive;
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: #a8ffff;
+    }
+
+    .presentacion-col p {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      opacity: 0.9;
+    }
+
+    /* ============================================================
+       SECCIÓN MINIATURAS DE PÁGINAS
+       ============================================================ */
+    .seccion-miniaturas {
+      max-width: 1200px;
+      margin: 20px auto 80px auto;
+      padding: 0 20px;
+    }
+
+    .titulo-miniaturas {
+      font-family: 'Trade Winds', cursive;
+      font-size: 1.8rem;
+      color: #FF00CC;
+      text-align: center;
+      margin-bottom: 40px;
+      text-shadow: 0 0 10px #FF00CC, 0 0 20px #9146FF;
+    }
+
+    .grid-miniaturas {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    /* Tarjeta miniatura */
+    .tarjeta-miniatura {
+      background: rgba(20, 20, 40, 0.75);
+      border: 1px solid rgba(255, 0, 204, 0.4);
+      border-radius: 14px;
+      padding: 28px 20px 22px;
+      text-align: center;
+      text-decoration: none;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      backdrop-filter: blur(6px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tarjeta-miniatura::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,0,204,0.06), rgba(145,70,255,0.06));
+      pointer-events: none;
+    }
+
+    .tarjeta-miniatura:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 0 20px rgba(255, 0, 204, 0.5), 0 0 35px rgba(145, 70, 255, 0.3);
+      border-color: #FF00CC;
+    }
+
+    /* Icono emoji grande */
+    .miniatura-icono {
+      font-size: 2.8rem;
+      line-height: 1;
+      filter: drop-shadow(0 0 8px rgba(255,0,204,0.6));
+    }
+
+    /* Nombre de la sección */
+    .miniatura-nombre {
+      font-family: 'Trade Winds', cursive;
+      font-size: 1rem;
+      color: #FF00CC;
+      text-shadow: 0 0 6px #FF00CC;
+      letter-spacing: 0.05em;
+    }
+
+    /* Descripción breve */
+    .miniatura-desc {
+      font-family: 'Lugrasimo', cursive;
+      font-size: 0.78rem;
+      color: #ccc;
+      line-height: 1.4;
+    }
+
+    /* Badge "LIVE" cuando el canal está online */
+    .badge-live {
+      background: #ff0040;
+      color: #fff;
+      font-size: 0.6rem;
+      font-weight: bold;
+      padding: 2px 7px;
+      border-radius: 20px;
+      letter-spacing: 0.08em;
+      box-shadow: 0 0 8px #ff0040;
+      animation: parpadeo 1.2s infinite;
+    }
+
+    @keyframes parpadeo {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* Separador antes de la sección */
+    .separador-neon {
+      width: 80%;
+      max-width: 800px;
+      height: 1px;
+      background: linear-gradient(to right, transparent, #FF00CC, #9146FF, transparent);
+      margin: 0 auto 50px auto;
+      opacity: 0.5;
+    }
+
+    /* ============================================================
+       RESPONSIVE — MÓVIL
+       ============================================================ */
+    @media (max-width: 768px) {
+      .grid-miniaturas {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .grid-miniaturas {
+        grid-template-columns: 1fr;
+      }
+
+      .presentacion-container {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
 </head>
 
-<!-- ============================================================
-     BODY PRINCIPAL (clase .home para estilos específicos)
-     ============================================================ -->
 <body class="home">
 
   <!-- ============================================================
-       LOGO FIJO SUPERIOR IZQUIERDA
-       (Se corregirá su fijación en el CSS final)
+       MENÚ HAMBURGUESA
+       ============================================================ -->
+  <div id="menu-btn" class="menu-btn">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <nav id="side-menu" class="side-menu">
+    <ul>
+      <li><a href="/">Inicio</a></li>
+      <li><a href="/calendarios">Calendarios</a></li>
+      <li><a href="/twitch-mio">Patz Oficial</a></li>
+      <li><a href="/twitch-pareja">Zhoomn Oficial</a></li>
+      <li><a href="/youtube">YouTube</a></li>
+      <li><a href="/galeria">Galería</a></li>
+      <li><a href="/blog">Blog</a></li>
+      <li><a href="/tienda">Tienda Digital &amp; Merch</a></li>
+      <li><a href="/interactivo">Foro</a></li>
+      <li><a href="/contacto">Contacto</a></li>
+    </ul>
+  </nav>
+
+  <div id="overlay" class="overlay"></div>
+
+  <!-- ============================================================
+       LOGO FIJO
        ============================================================ -->
   <a href="/" class="logo-pz">
-    <img src="/static/logo.png" alt="Logo PZVERSE">
+    <img src="/static/logos/logo_pzverse.png" alt="Logo PZVERSE">
   </a>
 
   <!-- ============================================================
-       BANNER PRINCIPAL CON IMAGEN + LOGIN + MENÚ
+       BANNER PRINCIPAL
        ============================================================ -->
   <section class="banner-portada">
     <div class="banner-contenedor">
 
-      <!-- Imagen principal del banner -->
-      <img src="/static/PZ VERSE.png" alt="Banner PZ VERSE">
+      <img src="/static/banners/PZ VERSE.png" alt="Banner PZ VERSE">
 
-      <!-- Contador de usuarios conectados -->
+      <!-- Usuarios conectados -->
       <div class="online-counter">
         Usuarios conectados: {{ online_users }}
       </div>
 
-      <!-- ============================================================
-           LOGIN SUPERPUESTO (esquina superior derecha)
-           ============================================================ -->
+      <!-- LOGIN -->
       <div class="login-superpuesto">
-
         {% if user %}
-          <!-- Usuario logueado -->
           <div class="user-banner">
             <img src="{{ user.picture }}" alt="Avatar" class="avatar">
             <span class="username">{{ user.name }}</span>
-            <span class="platform">({{ user.platform }})</span>
             <a href="/logout" class="logout-button">Logout</a>
           </div>
-
         {% else %}
-          <!-- Usuario no logueado -->
           <a href="/login/twitch" class="btn-login twitch">
             <svg class="twitch-icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path fill="currentColor" d="M4 2L2 6v14h6v2h4l2-2h4l4-4V2H4zm16 12l-2 2h-4l-2 2v-2H8V4h12v10zM14 7h2v5h-2V7zm-4 0h2v5H10V7z"/>
+              <path fill="currentColor" d="M4 2L2 6v14h6v2h4l2-2h4l4-4V2H4zm16 12l-2 2h-4l-2 2v-2H8V4h12v10zM14 7h2v5h-2V7zm-4 0h2v5H10V7z"/>
             </svg>
             Entrar con Twitch
           </a>
-          {% endif %}
-
+        {% endif %}
       </div>
-
-      <!-- ============================================================
-           MENÚ SUPERPUESTO (parte inferior derecha del banner)
-           ============================================================ -->
-      <nav class="menu-superpuesto">
-        <a href="/" class="btn">Inicio</a>
-        <a href="/twitch-mio" class="btn">Patz Oficial</a>
-        <a href="/twitch-pareja" class="btn">Zhoomn Oficial</a>
-        <a href="/youtube" class="btn">YouTube</a>
-        <a href="/blog" class="btn">Blog</a>
-        <a href="/interactivo" class="btn">Social</a>
-      </nav>
 
     </div>
   </section>
 
   <!-- ============================================================
-       SECCIÓN DE PRESENTACIÓN
+       PRESENTACIÓN
        ============================================================ -->
   <main>
     <section class="presentacion">
@@ -104,13 +303,153 @@
         ¡¡Gracias por formar parte de esta aventura!!
       </p>
 
+      <!-- Columnas Patz y Zhoomn -->
+      <div class="presentacion-container">
+
+        <div class="presentacion-col">
+          <img src="/static/logos/patz_logo.png" alt="Logo Patz" class="presentacion-logo">
+          <h3>Patz</h3>
+          <p>
+            Soy Patz, creadora de contenido, desarrolladora creativa y amante del diseño.
+            En PZVerse me encargo de la parte visual, técnica y de la experiencia de usuario.
+          </p>
+        </div>
+
+        <div class="presentacion-col">
+          <img src="/static/logos/zhoomn_logo.png" alt="Logo Zhoomn" class="presentacion-logo">
+          <h3>Zhoomn</h3>
+          <p>
+            Soy Zhoomn, creador de contenido, streamer y explorador del mundo digital.
+            En PZVerse aporto energía, humor y la esencia de nuestras aventuras.
+          </p>
+        </div>
+
+      </div>
+
     </section>
+
+    <!-- ============================================================
+         SEPARADOR
+         ============================================================ -->
+    <div class="separador-neon"></div>
+
+    <!-- ============================================================
+         MINIATURAS DE SECCIONES
+         ============================================================ -->
+    <section class="seccion-miniaturas">
+
+      <h2 class="titulo-miniaturas">¿Qué encontrarás aquí?</h2>
+
+      <div class="grid-miniaturas">
+
+        <!-- Directo Patz -->
+        <a href="/twitch-mio" class="tarjeta-miniatura">
+          <span class="miniatura-icono">📺</span>
+          <span class="miniatura-nombre">Patz en Directo</span>
+          {% if twitch and twitch.live %}
+            <span class="badge-live">🔴 EN VIVO</span>
+          {% endif %}
+          <p class="miniatura-desc">
+            Sigue los directos de Patz en Twitch. Gaming, charlas y mucha energía.
+          </p>
+        </a>
+
+        <!-- Directo Zhoomn -->
+        <a href="/twitch-pareja" class="tarjeta-miniatura">
+          <span class="miniatura-icono">⚡</span>
+          <span class="miniatura-nombre">Zhoomn en Directo</span>
+          <p class="miniatura-desc">
+            El canal de Zhoomn: partidas épicas, momentos únicos y humor garantizado.
+          </p>
+        </a>
+
+        <!-- YouTube -->
+        <a href="/youtube" class="tarjeta-miniatura">
+          <span class="miniatura-icono">🎬</span>
+          <span class="miniatura-nombre">YouTube</span>
+          <p class="miniatura-desc">
+            Vídeos, vlogs y highlights del canal de PatzOficial en YouTube.
+          </p>
+        </a>
+
+        <!-- Blog -->
+        <a href="/blog" class="tarjeta-miniatura">
+          <span class="miniatura-icono">✍️</span>
+          <span class="miniatura-nombre">Blog</span>
+          <p class="miniatura-desc">
+            Artículos, reflexiones y novedades del universo PZVerse.
+          </p>
+        </a>
+
+        <!-- Tienda -->
+        <a href="/tienda" class="tarjeta-miniatura">
+          <span class="miniatura-icono">🛍️</span>
+          <span class="miniatura-nombre">Tienda &amp; Merch</span>
+          <p class="miniatura-desc">
+            Consigue tu merch oficial y productos digitales exclusivos de PZVerse.
+          </p>
+        </a>
+
+        <!-- Foro / Social -->
+        <a href="/interactivo" class="tarjeta-miniatura">
+          <span class="miniatura-icono">💬</span>
+          <span class="miniatura-nombre">Foro &amp; Social</span>
+          <p class="miniatura-desc">
+            Únete a la comunidad, abre temas, responde y chatea con otros seguidores.
+          </p>
+        </a>
+
+        <!-- Galería -->
+        <a href="/galeria" class="tarjeta-miniatura">
+          <span class="miniatura-icono">🖼️</span>
+          <span class="miniatura-nombre">Galería</span>
+          <p class="miniatura-desc">
+            Imágenes, fanarts y momentos especiales del universo PZVerse.
+          </p>
+        </a>
+
+        <!-- Contacto -->
+        <a href="/contacto" class="tarjeta-miniatura">
+          <span class="miniatura-icono">📩</span>
+          <span class="miniatura-nombre">Contacto</span>
+          <p class="miniatura-desc">
+            ¿Tienes algo que decirnos? Escríbenos, colaboraciones o simplemente saluda.
+          </p>
+        </a>
+
+      </div>
+    </section>
+
   </main>
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <div class="footer-separator"></div>
 
   <footer class="footer-pz">
     <p>&copy; 2026 PZVERSE — Todos los derechos reservados.</p>
     <p>Propiedad de PZVERSE. Diseño y contenido protegido.</p>
   </footer>
+
+  <!-- ============================================================
+       JAVASCRIPT DEL MENÚ
+       ============================================================ -->
+  <script>
+    const menuBtn = document.getElementById("menu-btn");
+    const sideMenu = document.getElementById("side-menu");
+    const overlay  = document.getElementById("overlay");
+
+    menuBtn.addEventListener("click", () => {
+      sideMenu.classList.toggle("open");
+      overlay.classList.toggle("show");
+    });
+
+    overlay.addEventListener("click", () => {
+      sideMenu.classList.remove("open");
+      overlay.classList.remove("show");
+    });
+  </script>
 
 </body>
 </html>

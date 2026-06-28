@@ -1,0 +1,106 @@
+
+/* ============================================================
+   BOTÓN SEGUIR + ESTADO DEL CANAL
+   ============================================================ */
+.boton-debajo-banner {
+    display: flex;
+    justify-content: flex-end;
+    margin: 1rem 2rem;
+}
+
+.btn-seguir {
+    background-color: #9146ff;
+    color: white;
+    padding: 1px 5px;
+    font-size: 0.60rem;
+    border-radius: 3px;
+    text-decoration: none;
+    font-weight: bold;
+    box-shadow: 0 0 8px #9146ff;
+    transition: transform 0.2s ease;
+}
+
+.btn-seguir:hover {
+    transform: scale(1.05);
+}
+
+.estado-canal {
+    margin: 0.5rem 2rem;
+}
+
+.estado-online {
+    color: #00ff99;
+    font-weight: bold;
+}
+.estado-offline {
+    color: #ff0066;
+    font-weight: bold;
+}
+
+/* ============================================================
+   STREAM + CHAT (Patz / Zhoomn)
+   ============================================================ */
+.contenedor-stream {
+    display: grid;
+    grid-template-columns: 65% 30%;
+    grid-template-rows: auto auto;
+    gap: 1.5rem;
+    margin: 2rem auto;
+    width: 100%;
+    max-width: 1200px;
+    align-items: start;
+}
+
+
+.stream-frame,
+.chat-frame {
+    background: rgba(20, 0, 30, 0.85);
+    padding: 12px;
+    border-radius: 12px;
+    border: 2px solid #ff00cc;
+    box-shadow: 0 0 20px #ff00cc;
+    animation: glow 2.5s ease-in-out infinite;
+    box-sizing: border-box;
+    position: static;
+    overflow: visible;
+}
+
+.chat-frame iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    pointer-events: auto;
+    z-index: 10;
+}
+
+
+.stream-frame {
+    height: 480px;
+}
+
+.chat-frame {
+    grid-column: 2;
+    grid-row: 2;
+    height: 480px;
+}
+
+
+.stream-frame iframe,
+.chat-frame iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+@keyframes glow {
+    0% { box-shadow: 0 0 10px #ff00cc; }
+    50% { box-shadow: 0 0 20px #ff00cc; }
+    100% { box-shadow: 0 0 10px #ff00cc; }
+}
+
+.bloque-chat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    flex: 0 0 30%;
+}

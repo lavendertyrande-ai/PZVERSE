@@ -1,0 +1,96 @@
+/* ============================================================
+   BOTÓN HAMBURGUESA (3 rayitas)
+   ============================================================ */
+.menu-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 35px;
+    height: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    z-index: 9999;
+}
+
+.menu-btn span {
+    display: block;
+    height: 4px;
+    background: #fff;
+    border-radius: 4px;
+}
+
+/* ============================================================
+   PANEL LATERAL DEL MENÚ
+   ============================================================ */
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 240px;
+    height: 100%;
+    padding-top: 70px;
+    padding-bottom: 20px;
+
+    background: rgba(0, 200, 200, 0.35);
+    backdrop-filter: blur(12px);
+    border-right: 1px solid rgba(255, 255, 255, 0.25);
+
+    transition: left 0.3s ease;
+    z-index: 9000;          /* ← AÑADIDO: por encima del banner y contenido */
+}
+
+/* Cuando el menú está abierto */
+.side-menu.open {
+    left: 0;
+}
+
+/* ============================================================
+   LISTA DEL MENÚ
+   ============================================================ */
+.side-menu ul {
+    padding: 0;
+    margin: 0;
+}
+
+.side-menu li {
+    margin: 2px 0;
+}
+
+.side-menu a {
+    color: rgba(255, 255, 255, 0.95);
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: 400;
+    padding: 6px 16px;
+    display: block;
+}
+
+.side-menu a:hover {
+    color: #fff;
+}
+
+/* ============================================================
+   ELIMINAR TÍTULOS DE SECCIÓN
+   ============================================================ */
+.section-title,
+.section-title::before,
+.section-title::after {
+    display: none !important;
+}
+
+/* ============================================================
+   OVERLAY — DESACTIVADO
+   ============================================================ */
+.overlay {
+    display: none !important;
+}
+
+/* ============================================================
+   BANNER — z-index bajo para no tapar el menú
+   ============================================================ */
+.banner-portada {
+    position: relative;
+    z-index: 1;
+}

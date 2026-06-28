@@ -5,7 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Patz Oficial</title>
 
-  <link rel="stylesheet" href="/static/main.css" />
+  <link rel="stylesheet" href="/static/css/reset.css" />
+  <link rel="stylesheet" href="/static/css/variables.css" />
+  <link rel="stylesheet" href="/static/css/global.css" />
+  <link rel="stylesheet" href="/static/css/menu.css" />
+  <link rel="stylesheet" href="/static/css/banner.css" />
+  <link rel="stylesheet" href="/static/css/home.css" />
+  <link rel="stylesheet" href="/static/css/logo.css" />
+  <link rel="stylesheet" href="/static/css/login.css" />
+  <link rel="stylesheet" href="/static/css/stream.css" />
+  <link rel="stylesheet" href="/static/css/calendario.css" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Trade+Winds&display=swap" rel="stylesheet" />
@@ -13,6 +23,48 @@
 </head>
 
 <body>
+
+  <!-- MENÚ HAMBURGUESA NUEVO -->
+  <div id="menu-btn" class="menu-btn">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <nav id="side-menu" class="side-menu">
+    <ul>
+        <li><a href="/">Inicio</a></li>
+
+        <li class="section-title">Calendarios</li>
+        <li><a href="/calendarios">Calendarios</a></li>
+
+        <li class="section-title">Directos</li>
+        <li><a href="/twitch-mio">Patz Oficial</a></li>
+        <li><a href="/twitch-pareja">Zhoomn Oficial</a></li>
+
+        <li class="section-title">YouTube</li>
+        <li><a href="/youtube">Canal Principal</a></li>
+        <li><a href="/sombras-secretos">Sombras y Secretos</a></li>
+
+        <li class="section-title">Galería</li>
+        <li><a href="/galeria">Galería</a></li>
+
+        <li class="section-title">Blog</li>
+        <li><a href="/blog">Blog</a></li>
+
+        <li class="section-title">Tienda</li>
+        <li><a href="/tienda">Tienda Digital & Merch</a></li>
+
+        <li class="section-title">Comunidad</li>
+        <li><a href="/interactivo">Foro</a></li>
+
+        <li class="section-title">Contacto</li>
+        <li><a href="/contacto">Contacto</a></li>
+    </ul>
+  </nav>
+
+
+  <div id="overlay" class="overlay"></div>
 
   <!-- =================================================
        Logo fijo
@@ -24,16 +76,7 @@
   <!-- Banner -->
   <section class="banner-titulo">
     <div class="banner-contenedor">
-      <img src="/static/Patz.png" alt="Banner Patz">
-
-      <nav class="menu-superpuesto">
-        <a href="/" class="btn">Inicio</a>
-        <a href="/twitch-mio" class="btn">Patz Oficial</a>
-        <a href="/twitch-pareja" class="btn">Zhoomm Oficial</a>
-        <a href="/youtube" class="btn">YouTube</a>
-        <a href="/blog" class="btn">Blog</a>
-        <a href="/interactivo" class="btn">Social</a>
-      </nav>
+      <img src="/static/banners/Patz.png" alt="Banner Patz">
     </div>
   </section>
 
@@ -114,5 +157,20 @@
     <p>Propiedad de PatzOficial. Diseño y contenido protegido.</p>
   </footer>
 
+  <script>
+    const menuBtn = document.getElementById("menu-btn");
+    const sideMenu = document.getElementById("side-menu");
+    const overlay = document.getElementById("overlay");
+
+    menuBtn.addEventListener("click", () => {
+      sideMenu.classList.toggle("open");
+      overlay.classList.toggle("show");
+    });
+
+    overlay.addEventListener("click", () => {
+      sideMenu.classList.remove("open");
+      overlay.classList.remove("show");
+    });
+  </script>
 </body>
 </html>

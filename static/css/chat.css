@@ -1,0 +1,107 @@
+/* ============================================================
+   CONTENEDOR PRINCIPAL DEL CHAT
+   ============================================================ */
+.chat-container {
+  display: flex;              /* ← Esto alinea horizontalmente */
+  gap: 30px;                  /* ← Espacio entre paneles */
+  margin: 40px auto;
+  width: 90%;
+  max-width: 1200px;
+}
+
+/* ============================================================
+   PANEL IZQUIERDO — USUARIOS CONECTADOS
+   ============================================================ */
+.usuarios-conectados {
+  width: 250px;
+  background: rgba(20, 20, 40, 0.7);
+  padding: 20px;
+  border-radius: 12px;
+  color: #FF00CC;
+  box-shadow: 0 0 12px #FF00CC, 0 0 20px #9146FF;
+}
+
+.usuarios-conectados h3 {
+  margin-bottom: 10px;
+  text-shadow: 0 0 5px #FF00CC;
+}
+
+.usuarios-conectados ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.usuarios-conectados li {
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+/* ============================================================
+   BLOQUE DERECHO — ÁREA DEL CHAT
+   ============================================================ */
+.chat-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+#chat-box {
+  background: rgba(20, 20, 40, 0.7);
+  padding: 15px;
+  border-radius: 12px;
+  height: 350px;
+  overflow-y: auto;
+  box-shadow: 0 0 12px #9146FF;
+  color: white;
+}
+
+.chat-input {
+  display: flex;
+  gap: 10px;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background: #0f0c29;
+  color: #FF00CC;
+  box-shadow: 0 0 10px #FF00CC;
+}
+
+.chat-input button {
+  padding: 10px 20px;
+  background: #FF00CC;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 10px #FF00CC;
+}
+
+.chat-input button:hover {
+  box-shadow: 0 0 20px #FF00CC;
+}
+
+#chat-box p {
+  background: rgba(255, 0, 204, 0.15);
+  padding: 8px 12px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+/* ============================================================
+   TÍTULO DEL CHAT
+   ============================================================ */
+.titulo-chat {
+  margin-left: 65px;
+  margin-top: 40px;
+  font-size: 2rem;
+  color: #FF00CC;
+  text-shadow: 0 0 8px #FF00CC;
+}
+

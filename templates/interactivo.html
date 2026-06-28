@@ -7,8 +7,15 @@
        CONFIGURACIÓN BÁSICA Y ESTILOS
        ============================================================ -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Social</title>
-  <link rel="stylesheet" href="/static/main.css">
+  <title>Foro</title>
+
+  <link rel="stylesheet" href="/static/css/reset.css">
+  <link rel="stylesheet" href="/static/css/variables.css">
+  <link rel="stylesheet" href="/static/css/global.css">
+  <link rel="stylesheet" href="/static/css/menu.css">
+  <link rel="stylesheet" href="/static/css/banner.css">
+  <link rel="stylesheet" href="/static/css/logo.css">
+  <link rel="stylesheet" href="/static/css/foro.css">
 
   <!-- Fuentes -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,6 +27,50 @@
 <body>
 
   <!-- ============================================================
+       MENÚ HAMBURGUESA NUEVO
+       ============================================================ -->
+  <div id="menu-btn" class="menu-btn">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <nav id="side-menu" class="side-menu">
+    <ul>
+        <li><a href="/">Inicio</a></li>
+
+        <li class="section-title">Calendarios</li>
+        <li><a href="/calendarios">Calendarios</a></li>
+
+        <li class="section-title">Directos</li>
+        <li><a href="/twitch-mio">Patz Oficial</a></li>
+        <li><a href="/twitch-pareja">Zhoomn Oficial</a></li>
+
+        <li class="section-title">YouTube</li>
+        <li><a href="/youtube">Canal Principal</a></li>
+        <li><a href="/sombras-secretos">Sombras y Secretos</a></li>
+
+        <li class="section-title">Galería</li>
+        <li><a href="/galeria">Galería</a></li>
+
+        <li class="section-title">Blog</li>
+        <li><a href="/blog">Blog</a></li>
+
+        <li class="section-title">Tienda</li>
+        <li><a href="/tienda">Tienda Digital & Merch</a></li>
+
+        <li class="section-title">Comunidad</li>
+        <li><a href="/interactivo">Foro</a></li>
+
+        <li class="section-title">Contacto</li>
+        <li><a href="/contacto">Contacto</a></li>
+    </ul>
+  </nav>
+
+
+  <div id="overlay" class="overlay"></div>
+
+  <!-- ============================================================
        LOGO FIJO SUPERIOR IZQUIERDA
        ============================================================ -->
   <a href="/" class="logo-pz">
@@ -27,80 +78,17 @@
   </a>
 
   <!-- ============================================================
-       BANNER PRINCIPAL + MENÚ SUPERPUESTO
+       BANNER PRINCIPAL (FORO)
        ============================================================ -->
   <section class="banner-titulo">
     <div class="banner-contenedor">
-      <img src="/static/Social.png" alt="Banner Social">
-
-      <nav class="menu-superpuesto">
-        <a href="/" class="btn">Inicio</a>
-        <a href="/twitch-mio" class="btn">Patz Oficial</a>
-        <a href="/twitch-pareja" class="btn">Zhoomm Oficial</a>
-        <a href="/youtube" class="btn">YouTube</a>
-        <a href="/blog" class="btn">Blog</a>
-        <a href="/interactivo" class="btn">Social</a>
-      </nav>
+      <img src="/static/banners/Interaccion.png" alt="Banner Foro">
     </div>
   </section>
 
   <!-- ============================================================
-       BLOQUE SUPERIOR — RRSS + DISCORD + BOTONES DE SCROLL
+       SECCIÓN DEL FORO — Título + Botón + Grid
        ============================================================ -->
-  <div class="bloque-social-superior">
-
-    <!-- Botón RRSS -->
-    <a href="https://doras.to/patz" target="_blank" class="btn-rrss">
-      <img src="/static/rrss.png" alt="Redes Sociales">
-    </a>
-
-    <!-- Botón Discord -->
-    <a href="https://discord.gg/9UnMmjtmFU" target="_blank" class="btn-discord">
-      Únete a mi Discord
-    </a>
-
-    <!-- Botón scroll al chat -->
-    <a href="#chat-en-vivo" class="btn-scroll">Ir al Chat</a>
-
-    <!-- Botón scroll al foro -->
-    <a href="#foro" class="btn-scroll">Ir al Foro</a>
-
-  </div>
-
-  <!-- ============================================================
-       CHAT EN VIVO
-       ============================================================ -->
-  <h2 class="titulo-chat">Chat en Vivo</h2>
-
-  <div class="chat-container">
-
-    <!-- Contenedor del chat (para scroll automático) -->
-    <section id="chat-en-vivo"></section>
-
-    <!-- Lista de usuarios conectados -->
-    <div class="usuarios-conectados" id="usuarios">
-      <h3>Conectados</h3>
-      <ul id="lista-usuarios"></ul>
-    </div>
-
-    <!-- Área del chat -->
-    <div class="chat-area">
-      <div id="chat-box"></div>
-
-      <div class="chat-input">
-        <input type="text" id="mensaje" placeholder="Escribe un mensaje...">
-        <button onclick="enviarMensaje()">ENVIAR</button>
-      </div>
-    </div>
-  </div>
-
-
-  <hr class="separador-chat-foro">
-
-
-  <!-- ============================================================
-     SECCIÓN DEL FORO — Título + Botón + Grid
-     ============================================================ -->
   <section id="foro" class="foro-section">
     <div class="foro-header">
       <h2>FORO</h2>
@@ -111,20 +99,16 @@
       {% for tema in temas %}
       <div class="tarjeta-tema">
 
-        <!-- IMAGEN DEL TEMA (SI EXISTE) -->
         {% if tema.imagen %}
           <img src="{{ tema.imagen }}" alt="Imagen del tema">
         {% endif %}
 
-        <!-- TÍTULO DEL TEMA -->
         <h3>{{ tema.titulo }}</h3>
 
-        <!-- VISTA PREVIA DEL CONTENIDO (HTML SEGURO) -->
         <div class="preview-tema">
           {{ tema.contenido[:300] | safe }}
         </div>
 
-        <!-- BOTÓN PARA VER EL TEMA COMPLETO -->
         <a href="/tema/{{ tema.id }}" class="btn-ver-tema">Ver tema</a>
 
       </div>
@@ -133,212 +117,32 @@
 
   </section>
 
-
   <!-- ============================================================
-       SCRIPTS DEL CHAT (REST API)
-       ============================================================ -->
-<script>
-
-  /* ------------------------------------------------------------
-     REEMPLAZO AUTOMÁTICO DE EMOJIS
-     ------------------------------------------------------------ */
-  function reemplazarEmojis(texto) {
-    return texto
-      .replace(/\bhola\b/gi, "👋")
-      .replace(/\bgracias\b/gi, "🙏")
-      .replace(/\bfeliz\b/gi, "😊")
-      .replace(/\btriste\b/gi, "😢")
-      .replace(/\bmuerto\b/gi, "💀")
-      .replace(/\bmiedo\b/gi, "😱")
-      .replace(/\bbravo\b/gi, "🔥")
-      .replace(/\bcorazon\b/gi, "❤️")
-      .replace(/\bamor\b/gi, "💖");
-  }
-
-
-  /* ------------------------------------------------------------
-     ENVIAR MENSAJE
-     ------------------------------------------------------------ */
-  function enviarMensaje() {
-    let mensaje = document.getElementById("mensaje").value;
-
-    // Reemplazar palabras por emojis
-    mensaje = reemplazarEmojis(mensaje);
-
-    fetch("/enviar_mensaje", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ mensaje })
-    }).then(() => {
-      document.getElementById("mensaje").value = "";
-      cargarMensajes();
-    });
-  }
-
-
-  /* ------------------------------------------------------------
-     CARGAR MENSAJES
-     ------------------------------------------------------------ */
-  function cargarMensajes() {
-    fetch("/mensajes")
-      .then(r => r.json())
-      .then(data => {
-        let html = "";
-        data.forEach(m => {
-          html += `<p><strong>${m.usuario}</strong>: ${m.texto}</p>`;
-        });
-        document.getElementById("chat-box").innerHTML = html;
-
-        // Auto-scroll al final
-        const box = document.getElementById("chat-box");
-        box.scrollTop = box.scrollHeight;
-      });
-  }
-
-document.getElementById("mensaje").addEventListener("keypress", function(e) {
-  if (e.key === "Enter") enviarMensaje();
-});
-
-
-  /* ------------------------------------------------------------
-     AUTO-REFRESH CADA 3 SEGUNDOS
-     ------------------------------------------------------------ */
-  setInterval(cargarMensajes, 3000);
-
-</script>
-
-
-  <!-- ============================================================
-       SOCKET.IO — USUARIOS EN TIEMPO REAL
-       ============================================================ -->
-  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-  <script>
-    const usuario = "{{ session['user']['name'] if session.get('user') else 'Anónimo' }}";
-    const socket = io({ query: { usuario } });
-
-    socket.on("lista_usuarios", data => {
-      const lista = document.getElementById("lista-usuarios");
-      lista.innerHTML = "";
-      data.forEach(u => lista.innerHTML += `<li>${u}</li>`);
-    });
-  </script>
-
-  <!-- ============================================================
-     FIREBASE MESSAGING — NOTIFICACIONES PUSH
-     ============================================================ -->
-
-<script type="module">
-  /* ============================================================
-     IMPORTS DE FIREBASE
-     ESTO CARGA LAS LIBRERÍAS NECESARIAS PARA NOTIFICACIONES PUSH
-     ============================================================ */
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-  import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-messaging.js";
-
-  /* ============================================================
-     CONFIGURACIÓN DE FIREBASE
-     ESTAS VARIABLES VIENEN DESDE FLASK (Y RAILWAY)
-     ============================================================ */
-  const firebaseConfig = {
-    apiKey: "{{ firebase_api_key }}",   // CLAVE API INYECTADA DESDE VARIABLES DE ENTORNO
-    authDomain: "pzverse-chat.firebaseapp.com",
-    projectId: "pzverse-chat",
-    storageBucket: "pzverse-chat.firebasestorage.app",
-    messagingSenderId: "401483325657",
-    appId: "1:401483325657:web:1acf0edcccd6bd9d1e1ec8",
-    measurementId: "G-ZF8SLL5JV6"
-  };
-
-  // INICIALIZAMOS FIREBASE
-  const app = initializeApp(firebaseConfig);
-  const messaging = getMessaging(app);
-
-  /* ============================================================
-     REGISTRO DEL SERVICE WORKER
-     SIN ESTO, NO HAY NOTIFICACIONES PUSH
-     ============================================================ */
-  if ("serviceWorker" in navigator) {
-
-    // SI EXISTE LA FUNCIÓN DEBUG(), MOSTRAMOS MENSAJE EN PANTALLA
-    if (typeof debug === "function") debug("INTENTANDO REGISTRAR SERVICE WORKER...");
-
-    // *** RUTA CORRECTA DEL SERVICE WORKER ***
-    navigator.serviceWorker.register("/static/firebase-messaging-sw.js")
-      .then(reg => {
-
-        console.log("✅ SERVICE WORKER REGISTRADO:", reg.scope);
-        if (typeof debug === "function") debug("SERVICE WORKER REGISTRADO CORRECTAMENTE");
-
-        /* ============================================================
-           PEDIR PERMISO DE NOTIFICACIONES AL USUARIO
-           ============================================================ */
-        return Notification.requestPermission();
-      })
-      .then(permission => {
-
-        if (permission === "granted") {
-          console.log("🔔 PERMISO DE NOTIFICACIONES CONCEDIDO");
-          if (typeof debug === "function") debug("PERMISO DE NOTIFICACIONES CONCEDIDO");
-
-          /* ============================================================
-             OBTENER TOKEN FCM
-             ESTA ES LA CLAVE QUE IDENTIFICA TU MÓVIL
-             ============================================================ */
-          return getToken(messaging, {
-            vapidKey: "{{ firebase_vapid_key }}"   // CLAVE VAPID INYECTADA DESDE RAILWAY
-          });
-
-        } else {
-          console.warn("⚠️ PERMISO DE NOTIFICACIONES DENEGADO");
-          if (typeof debug === "function") debug("PERMISO DENEGADO POR EL USUARIO");
-        }
-      })
-      .then(currentToken => {
-
-        if (currentToken) {
-          console.log("📲 TOKEN FCM GENERADO:", currentToken);
-          if (typeof debug === "function") debug("TOKEN GENERADO: " + currentToken);
-
-          /* ============================================================
-             ENVIAR TOKEN AL BACKEND PARA GUARDARLO EN UN ARCHIVO
-             ============================================================ */
-          fetch("/registrar-token", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ token: currentToken })
-          });
-
-          if (typeof debug === "function") debug("TOKEN ENVIADO AL BACKEND");
-        }
-      })
-      .catch(err => {
-        console.error("❌ ERROR EN REGISTRO DE NOTIFICACIONES:", err);
-        if (typeof debug === "function") debug("ERROR: " + err);
-      });
-  }
-
-  /* ============================================================
-     NOTIFICACIONES RECIBIDAS EN PRIMER PLANO
-     (CUANDO LA WEB ESTÁ ABIERTA)
-     ============================================================ */
-  onMessage(messaging, (payload) => {
-    console.log("📩 NOTIFICACIÓN RECIBIDA EN PRIMER PLANO:", payload);
-
-    if (payload.notification) {
-      alert(payload.notification.title + "\n" + payload.notification.body);
-    }
-  });
-</script>
-
-
-
-  <!-- ============================================================
-       FOOTER
+       FOOTER NUEVO
        ============================================================ -->
   <footer class="footer-pz">
     <p>&copy; 2026 PZVERSE — Todos los derechos reservados.</p>
     <p>Propiedad de PZVERSE. Diseño y contenido protegido.</p>
   </footer>
+
+  <!-- ============================================================
+       SCRIPT DEL MENÚ
+       ============================================================ -->
+  <script>
+    const menuBtn = document.getElementById("menu-btn");
+    const sideMenu = document.getElementById("side-menu");
+    const overlay = document.getElementById("overlay");
+
+    menuBtn.addEventListener("click", () => {
+      sideMenu.classList.toggle("open");
+      overlay.classList.toggle("show");
+    });
+
+    overlay.addEventListener("click", () => {
+      sideMenu.classList.remove("open");
+      overlay.classList.remove("show");
+    });
+  </script>
 
 </body>
 </html>
